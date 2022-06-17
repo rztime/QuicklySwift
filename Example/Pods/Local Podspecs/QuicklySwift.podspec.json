@@ -1,7 +1,7 @@
 {
   "name": "QuicklySwift",
   "version": "0.1.0",
-  "summary": "A short description of QuicklySwift.",
+  "summary": "swift 常用",
   "description": "TODO: Add long description of the pod here.",
   "homepage": "https://github.com/rztime/QuicklySwift",
   "license": {
@@ -18,10 +18,15 @@
   "platforms": {
     "ios": "9.0"
   },
+  "swift_versions": [
+    "4.2",
+    "5.0"
+  ],
   "source_files": "QuicklySwift/Classes/**/*",
   "dependencies": {
     "SnapKit": [
 
     ]
-  }
+  },
+  "swift_version": "5.0"
 }

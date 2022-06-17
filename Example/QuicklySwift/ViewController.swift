@@ -13,16 +13,12 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        let btn = UIButton.init(type: .custom).qtitle("去首页").qtitleColor(.white).qbackgroundColor(.red).qcornerRadius(5, true)
+        let btn = UIButton.init(type: .custom).qtitle("去首页").qtitle("去首页 +", .selected).qtitleColor(.white).qbackgroundColor(.red).qcornerRadius(5, true)
         
         let label = UILabel().qtext("a").qbackgroundColor(.red)
         
         self.view.qbody([
-            btn.qmakeConstraints({ make in
-                make.center.equalToSuperview()
-                make.width.equalTo(100)
-                make.height.equalTo(60)
-            }),
+            btn.qframe(.init(x: 100, y: 400, width: 100, height: 60)),
             label.qmakeConstraints({ make in
                 make.left.top.equalToSuperview().inset(100)
                 make.size.equalTo(100)
@@ -31,8 +27,13 @@ class ViewController: UIViewController {
         btn.qtap { view in
             let vc = IndexViewController()
             qAppFrame.pushViewController(vc, animated: true)
-        }
-        
+            if let view = view as? UIButton {
+                view.isSelected = !view.isSelected
+            }
+        }.qisSelectedChanged({ sender in
+            sender.backgroundColor = sender.isSelected ? .lightGray : .red
+        })
+        // 设置拖拽，则不能使用约束，否则改变状态之后，会还原
         .qdrag(.nearBorder(edge: .init(top: qnavigationbarHeight, left: 10, bottom: qbottomSafeHeight, right: 10)))
         
         label

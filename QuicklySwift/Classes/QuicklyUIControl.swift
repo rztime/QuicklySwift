@@ -62,21 +62,60 @@ public extension UIControl {
         v.handler = handler
         return self
     }
+    /// control isSelected 状态发生改变之后的回调
+    @discardableResult
+    func qisSelectedChanged(_ changed: ((_ sender: UIControl) -> Void)?) -> Self {
+        let _ = QControlHelper.init(target: self, key: "selected", changed: changed)
+        return self
+    }
+    /// control isEnabled 状态发生改变之后的回调
+    @discardableResult
+    func qisEnabledChanged(_ changed: ((_ sender: UIControl) -> Void)?) -> Self {
+        let _ = QControlHelper.init(target: self, key: "enabled", changed: changed)
+        return self
+    }
 }
 
 open class QControlHelper: UIView {
     open var handler: ((_ sender: UIControl) -> Void)?
+    weak var target: UIControl?
+    open var key: String = ""
     public init(target: UIControl, event: UIControl.Event) {
         super.init(frame: .zero)
         self.isHidden = true
         target.addSubview(self)
         target.addTarget(self, action: #selector(targetActions), for: event)
     }
+    
+    public init(target: UIControl, key: String, changed:((_ changed: UIControl) -> Void)?) {
+        super.init(frame: .zero)
+        self.handler = changed
+        self.isHidden = true
+        target.addSubview(self)
+        self.key = key
+        target.addObserver(self, forKeyPath: key, options: [.new, .old], context: nil)
+        self.target = target
+    }
+
+    open override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+        guard let object = object as? UIControl, object == self.target else {
+            return
+        }
+        if keyPath == self.key {
+            self.handler?(object)
+        }
+    }
+    
     @objc func targetActions(_ sender: UIControl) {
         self.handler?(sender)
     }
     
     required public init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    deinit {
+        if !self.key.isEmpty {
+            self.target?.removeObserver(self, forKeyPath: self.key)
+        } 
     }
 }

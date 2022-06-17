@@ -15,9 +15,17 @@ class QuickLayoutViewController: UIViewController {
     let label2 = UILabel().qtext("文本框2文本框2文本框2文本框2")
     let label3 = UILabel().qtext("文本框3文本框3文本框3文本框3")
     
-    let btn1 = UIButton.init(type: .custom).qtitle("按钮1按钮1按钮1按钮1").qtitleColor(.black).qbackgroundColor(.lightGray)
+    let btn1 = UIButton.init(type: .custom).qtitle("按钮1按钮1按钮1按钮1").qtitleColor(.black).qbackgroundColor(.lightGray).qisSelectedChanged { sender in
+        sender.backgroundColor = sender.isSelected ? .red : .lightGray
+    }.qactionFor(.touchUpInside) { sender in
+        sender.isSelected = !sender.isSelected
+    }.qisEnabledChanged { sender in
+        sender.alpha = sender.isEnabled ? 1 : 0.3
+    }
+    
     let btn2 = UIButton.init(type: .custom).qtitle("按钮2按钮2按钮2按钮2").qtitleColor(.black).qbackgroundColor(.lightGray)
     let btn3 = UIButton.init(type: .custom).qtitle("按钮3按钮3按钮3按钮3").qtitleColor(.black).qbackgroundColor(.lightGray)
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = .white
@@ -53,5 +61,9 @@ class QuickLayoutViewController: UIViewController {
 //                    make.top.equalTo(self.label3.snp.bottom).offset(50)
 //                })
         ])
+        btn2.qtap { [weak self] view in
+            guard let self = self else { return }
+            self.btn1.isEnabled = !self.btn1.isEnabled
+        }
     }
 }

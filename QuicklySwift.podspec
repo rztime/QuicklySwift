@@ -9,7 +9,7 @@
 Pod::Spec.new do |s|
   s.name             = 'QuicklySwift'
   s.version          = '0.1.0'
-  s.summary          = 'swift 常用'
+  s.summary          = 'swift 常用方法扩展，便捷使用'
 
 # This description is used to generate tags and improve search results.
 #   * Think: What does it do? Why did you write it? What is the focus?
@@ -18,7 +18,7 @@ Pod::Spec.new do |s|
 #   * Finally, don't worry about the indent, CocoaPods strips it!
 
   s.description      = <<-DESC
-TODO: Add long description of the pod here.
+  swift 常用方法扩展，便捷使用，所有方法以“q”开头，使用链式语法
                        DESC
 
   s.homepage         = 'https://github.com/rztime/QuicklySwift'
@@ -29,6 +29,7 @@ TODO: Add long description of the pod here.
   # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
 
   s.ios.deployment_target = '9.0'
+  s.swift_versions = ['4.2', '5.0']
 
   s.source_files = 'QuicklySwift/Classes/**/*'
   

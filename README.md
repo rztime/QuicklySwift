@@ -33,12 +33,14 @@ QuicklySwift is available under the MIT license. See the LICENSE file for more i
 ## 说明
 
 如何提高 UI 的开发效率：
+
     1. 写UI时，能快速布局，层级清晰
-    1. 代码写着顺手
-    2. 代码简洁、少
-    3. 代码功能封装完善
+    2. 代码写着顺手
+    3. 代码简洁、少
+    4. 代码功能封装完善
 
 如何降低 UI 维护成本
+
     1. 代码少、出错的少、修改的时候更容易
     2. 代码简洁易读、view所属层级清晰、约束依赖清晰
     3. view相关配置、使用更集中，要查找更改更轻松
@@ -107,11 +109,19 @@ let textField = UITextField.init(frame: .zero)
 |方法|说明|
 |:---|:----|
 |qactionFor|使用block方式实现事件的回调|
+|qisSelectedChanged| control isselected 设置改变之后的回调|
+|qisEnabledChanged| control isEnabled 状态改变之后的回调|
 
 ```
 let btn = UIButton.init(type: .custom).qactionFor(.touchUpInside, handler: { sender in
     print("按钮点击")
-})
+}).qisSelectedChanged { sender in
+    // isSelected 状态改变
+    sender.backgroundColor = sender.isSelected ? .red : .lightGray
+}.qisEnabledChanged { sender in
+    // isEnabled 状态改变
+    sender.alpha = sender.isEnabled ? 1 : 0.3
+}
 ```
 
 - UIStackView:
@@ -495,6 +505,12 @@ let btn = UIButton.init(type: .custom)
         print("点击了按钮 事件响应")
     }.qtap { view in
         print("点击了按钮 tap响应 如果设置了tap， qactionFor touchUpInside方法无效 将被覆盖")
+    }.qisSelectedChanged { sender in
+        // isSelected 状态改变
+        sender.backgroundColor = sender.isSelected ? .red : .lightGray
+    }.qisEnabledChanged { sender in
+        // isEnabled 状态改变
+        sender.alpha = sender.isEnabled ? 1 : 0.3
     }
 ```
 
