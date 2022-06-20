@@ -10,30 +10,38 @@ import UIKit
 import QuicklySwift
 
 class CollectionViewDemoViewController: UIViewController {
-    
+    var items: [Model] = []
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.qbackgroundColor(.white)
+        for _ in 0..<40 {
+            items.append(.init())
+        }
         
         let layout = UICollectionViewFlowLayout.init()
-        layout.qitemSize(.init(width: CGFloat.qscreenWidth / 2 - 10, height: .qscreenHeight / 3 - 10))
+        layout.qitemSize(.init(width: (CGFloat.qscreenWidth - 30 - 5) / 2, height: .qscreenHeight / 3 - 10))
             .qscrollDirection(.vertical)
-            .qminimumLineSpacing(10)
+            .qminimumLineSpacing(5)
             .qminimumInteritemSpacing(5)
         
         let collectionView = UICollectionView.init(frame: .qfull, collectionViewLayout: layout)
             .qbackgroundColor(.white)
             .qregistercell(TestCollectionViewCell.self, "cell")
             .qnumberofSections {
-                return 3
-            }.qnumberofRows { section in
-                return 10
-            }.qcell { collectionView, indexPath in
+                return 2
+            }.qnumberofRows { [weak self] section in
+                return self?.items.count ?? 0
+            }.qcell { [weak self] collectionView, indexPath in
                 let cell: TestCollectionViewCell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! TestCollectionViewCell
-                cell.qbackgroundColor(.random)
-                cell.fromeLable.text = "@来自chengdu"
-                cell.contentLabel.text = "ad烧烤里解放啦开始减肥垃圾分类看挨少了看地方"
-                cell.timeLabel.text = "03:22"
+                let item = self?.items[qsafe: indexPath.row]
+                cell.contentView.qbackgroundColor(.random)
+                cell.fromeLable.text = "@来自\(item?.ip ?? "")"
+                cell.fromeLable.isHidden = item?.ip.isEmpty ?? true
+                
+                cell.contentLabel.text = item?.content
+                cell.contentLabel.isHidden = item?.content.isEmpty ?? true
+                
+                cell.timeLabel.text = item?.time
                 return cell
             }.qdidSelectItem { collectionView, indexPath in
                 UIAlertController.qwith(title: "点击了", "\(indexPath)", actions: ["ok"], cancelTitle: "no", style: .alert) { index in
@@ -44,7 +52,7 @@ class CollectionViewDemoViewController: UIViewController {
             }
         self.view.qbody([
             collectionView.qmakeConstraints({ make in
-                make.edges.equalToSuperview()
+                make.edges.equalToSuperview().inset(UIEdgeInsets.init(top: 0, left: 15, bottom: 0, right: 15))
             })
         ])
         let actions = ["按钮1", "按钮2", "按钮3"]
@@ -63,20 +71,20 @@ class TestCollectionViewCell : UICollectionViewCell {
     let btn4 = UIButton.init(type: .custom).qcornerRadius(20, true).qbackgroundColor(.random).qtitle("分享")
     
     let fromeLable = UILabel().qtextColor(.white).qfont(.systemFont(ofSize: 15)).qnumberOfLines(0)
-    let contentLabel = UILabel().qtextColor(.white).qfont(.systemFont(ofSize: 14)).qnumberOfLines(0)
+    let contentLabel = UILabel().qtextColor(.white).qfont(.systemFont(ofSize: 14)).qnumberOfLines(3)
     
     let timeLabel = UILabel().qfont(.systemFont(ofSize: 12)).qtextColor(.qhex(0xcccccc, a: 0.8))
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        let right = VStackView.qbody([btn1, btn2, btn3, btn4])
+        let right = VStackView.qbody([btn1, btn2, btn3, btn4]).qspacing(10)
         [btn1, btn2, btn3, btn4].forEach { btn in
             btn.snp.makeConstraints { make in
                 make.size.equalTo(40)
             }
         }
-        let content = VStackView.qbody([fromeLable, UIView(), contentLabel, timeLabel])
+        let content = VStackView.qbody([fromeLable, UIView(), contentLabel, timeLabel]).qspacing(10)
         
         self.contentView.qbody([
             right.qmakeConstraints({ make in
@@ -89,6 +97,7 @@ class TestCollectionViewCell : UICollectionViewCell {
                 make.right.lessThanOrEqualTo(right.snp.left).offset(-15)
             })
         ])
+        .qcornerRadiusCustom([.topRight, .bottomLeft], radii: 10)
     }
     
     required init?(coder: NSCoder) {

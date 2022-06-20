@@ -11,48 +11,52 @@ import QuicklySwift
 
 class LedDemoViewController: UIViewController {
 
-    let contentView = UIView()
-    let ledCirculateView = HStackView.qbody([])
+    let textLabel = UILabel().qfont(.systemFont(ofSize: 16)).qtextColor(.red)
+
+    var texts = ["循环滚动",
+                 "循环滚动循环滚动",
+                 "循环滚动循环滚动循环滚动",
+                 "循环滚动循环滚动循环滚动循环滚动",
+                 "循环滚动循环滚动循环滚动循环滚动循环滚动",]
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.qbackgroundColor(.white)
         
         self.view.qbody([
-            contentView.qmakeConstraints({ make in
-                make.left.right.equalToSuperview()
-                make.center.equalToSuperview()
-                make.height.equalTo(60)
-            })
+            textLabel.qframe(.init(x: 15, y: qnavigationbarHeight + 30, width: 15, height: 30))
         ])
-    
-        contentView.qbody([
-            ledCirculateView.qmakeConstraints({ make in
-                make.left.centerY.equalToSuperview()
-            })
-        ])
-        contentView.qsizeChanged { [weak self] _ in
-            self?.updateText()
-        }
         
-        ledCirculateView.qspacing(50)
+        let btn = UIButton.init().qtitle("刷新").qtitleColor(.red)
+            .qtap { [weak self] view in
+                self?.updateText()
+            }
+        self.navigationItem.rightBarButtonItem = .init(customView: btn)
         
-        ledCirculateView.qsizeChanged { [weak self] view in
-            print("---size:\(view.frame.size)")
-            self?.circulate()
-        }
+        self.updateText()
     }
     func updateText() {
-        let text = "加油呀晕晕晕晕晕晕晕晕晕"
-        let label = UILabel().qtext(text)
-        let label1 = UILabel().qtext(text)
-        let label2 = UILabel().qtext(text)
-        let label3 = UILabel().qtext(text)
-        ledCirculateView.qbody([label, label1, label2, label3])
-    }
-    func circulate() {
-        /// 滚动一个label 的宽度，就还原重复
-        ledCirculateView.qtransform(x: -(208 + 50), y: 0, .animate(3, delay: 1, options: [.curveLinear, .repeat])) { view in
+        /// 还原位置
+        textLabel.qtransform(x: 0, y: 0)
+        let text = texts[Int.random(in: 0..<5)] + "                "
+        textLabel.text = text
+        /// 计算出原本位置的宽度
+        let rect = textLabel.textRect(forBounds: .init(x: 0, y: 0, width: CGFloat.greatestFiniteMagnitude, height: 30), limitedToNumberOfLines: 1)
+        let count = Int(ceilf(Float(qscreenwidth / rect.width)))
+        var newText = text
+        /// 宽度不够，则补全
+        for _ in 0..<count {
+            newText += text
+        }
+        textLabel.text = newText
+        /// 计算完整的宽度，设置textLabel
+        let newrect = textLabel.textRect(forBounds: .init(x: 0, y: 0, width: CGFloat.greatestFiniteMagnitude, height: 30), limitedToNumberOfLines: 1)
+        var frame = textLabel.frame
+        frame.size.width = newrect.width
+        textLabel.frame = frame
+        let time = rect.width / 60
+        /// 匀速、循环
+        textLabel.qtransform(x: -rect.width, y: 0, .animate(time, delay: 1, options: [.curveLinear, .repeat])) { view in
             
         }
     }

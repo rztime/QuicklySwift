@@ -11,20 +11,29 @@ import QuicklySwift
 
 class TableViewDemoViewController: UIViewController {
     
+    var items: [Model] = []
+    
     let tableView = UITableView.init(frame: .qfull, style: .plain)
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = .white
-        let btn = UIButton.init(type: .custom).qtitle("编辑").qtitleColor(.red).qactionFor(.touchUpInside) { [weak self] sender in
-            guard let self = self else { return }
-            let edit = self.tableView.isEditing
-            self.tableView.setEditing(!edit, animated: true)
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                self.tableView.reloadData()
+        let btn = UIButton.init(type: .custom)
+            .qtitle("编辑")
+            .qtitleColor(.red)
+            .qactionFor(.touchUpInside) { [weak self] sender in
+                guard let self = self else { return }
+                let edit = self.tableView.isEditing
+                self.tableView.setEditing(!edit, animated: true)
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                    self.tableView.reloadData()
+                }
             }
-        }
         self.navigationItem.rightBarButtonItem = .init(customView: btn)
+        
+        for _ in 0..<40 {
+            items.append(.init())
+        }
         
         self.view.qbody([
             tableView.qmakeConstraints({ make in
@@ -36,14 +45,14 @@ class TableViewDemoViewController: UIViewController {
             .qregister(TestTableViewCell.self, identifier: "cell")
             .qnumberofSections {
                 return 1
-            }.qnumberofRows { section in
-                return 100
-            }.qcell { tableView, indexPath in
+            }.qnumberofRows { [weak self] section in
+                return self?.items.count ?? 0
+            }.qcell { [weak self] tableView, indexPath in
                 let cell: TestTableViewCell = (tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as? TestTableViewCell) ?? .init(style: .default, reuseIdentifier: "cell")
-                let rad = indexPath.row
-                cell.nameLabel.text = "阿斯加德发按理阿斯加德发按理"
-                cell.timeLabel.text = "05:20"
-                cell.cover.isHidden = rad % 3 == 0
+                let item = self?.items[qsafe: indexPath.row]
+                cell.nameLabel.text = item?.content
+                cell.timeLabel.text = item?.time
+                cell.cover.isHidden = item?.images.filter({!$0.isEmpty}).isEmpty ?? true
                 return cell
             }.qdidSelectRow { tableView, indexPath in
                 tableView.deselectRow(at: indexPath, animated: false)
@@ -86,7 +95,7 @@ class TestTableViewCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
-        let s1 = VStackView.qbody([nameLabel, timeLabel])
+        let s1 = VStackView.qbody([nameLabel, timeLabel]).qspacing(10)
         let c = HStackView.qbody([
             s1.qmakeConstraints({ make in
                 make.height.equalToSuperview() // 设置高度约束，保证当name过短的时候，timelabel底部和cover底部对齐

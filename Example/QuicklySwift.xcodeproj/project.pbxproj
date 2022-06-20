@@ -24,6 +24,9 @@
 		B2921D65285C1FF700CBC001 /* FriendView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2921D64285C1FF700CBC001 /* FriendView.swift */; };
 		B2C4BC05284F3A1C00B7C25B /* IndexViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2C4BC04284F3A1C00B7C25B /* IndexViewController.swift */; };
 		B2D5CB3D2852DA5A00C6C6EF /* CollectionViewDemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2D5CB3C2852DA5A00C6C6EF /* CollectionViewDemoViewController.swift */; };
+		B2E5853C286002C300921A91 /* LayoutIndexViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2E5853B286002C300921A91 /* LayoutIndexViewController.swift */; };
+		B2E5853E286011D500921A91 /* LayoutDemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2E5853D286011D500921A91 /* LayoutDemoViewController.swift */; };
+		B2E585402860128200921A91 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2E5853F2860128200921A91 /* Model.swift */; };
 		D58799F0923A0BADDD7AEE1F /* Pods_QuicklySwift_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E94721E4F9ED514869279E6 /* Pods_QuicklySwift_Example.framework */; };
 /* End PBXBuildFile section */
 
@@ -64,6 +67,9 @@
 		B2921D64285C1FF700CBC001 /* FriendView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendView.swift; sourceTree = "<group>"; };
 		B2C4BC04284F3A1C00B7C25B /* IndexViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IndexViewController.swift; sourceTree = "<group>"; };
 		B2D5CB3C2852DA5A00C6C6EF /* CollectionViewDemoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewDemoViewController.swift; sourceTree = "<group>"; };
+		B2E5853B286002C300921A91 /* LayoutIndexViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayoutIndexViewController.swift; sourceTree = "<group>"; };
+		B2E5853D286011D500921A91 /* LayoutDemoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayoutDemoViewController.swift; sourceTree = "<group>"; };
+		B2E5853F2860128200921A91 /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
 		B95236E3F1BEC8113E648E5D /* Pods-QuicklySwift_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-QuicklySwift_Tests.release.xcconfig"; path = "Target Support Files/Pods-QuicklySwift_Tests/Pods-QuicklySwift_Tests.release.xcconfig"; sourceTree = "<group>"; };
 		F8377E7118CD6A80026F3DDD /* QuicklySwift.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = QuicklySwift.podspec; path = ../QuicklySwift.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		F92772CC4E67BBCE51EEBDB1 /* Pods-QuicklySwift_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-QuicklySwift_Example.debug.xcconfig"; path = "Target Support Files/Pods-QuicklySwift_Example/Pods-QuicklySwift_Example.debug.xcconfig"; sourceTree = "<group>"; };
@@ -180,18 +186,29 @@
 		B2C4BC03284F3A0A00B7C25B /* Demo */ = {
 			isa = PBXGroup;
 			children = (
+				B2E5853A286002A200921A91 /* LayoutDemo */,
 				B2C4BC04284F3A1C00B7C25B /* IndexViewController.swift */,
-				B27EEAE12857266B00C55EA5 /* QuickLayoutViewController.swift */,
 				B27EEADF2857261E00C55EA5 /* BaseViewDemoViewController.swift */,
 				B26C6A7E2850519E009512EC /* QuicklyDemoViewController.swift */,
 				B26C6A80285073CC009512EC /* TableViewDemoViewController.swift */,
 				B2D5CB3C2852DA5A00C6C6EF /* CollectionViewDemoViewController.swift */,
 				B20131BA285818A0004FE458 /* AnimateDemoViewController.swift */,
 				B20131BE28585CE3004FE458 /* LedDemoViewController.swift */,
-				B2921D5F285C070E00CBC001 /* FriendDemoViewController.swift */,
-				B2921D63285C1FDB00CBC001 /* View */,
+				B2E5853F2860128200921A91 /* Model.swift */,
 			);
 			path = Demo;
+			sourceTree = "<group>";
+		};
+		B2E5853A286002A200921A91 /* LayoutDemo */ = {
+			isa = PBXGroup;
+			children = (
+				B2921D63285C1FDB00CBC001 /* View */,
+				B2921D5F285C070E00CBC001 /* FriendDemoViewController.swift */,
+				B27EEAE12857266B00C55EA5 /* QuickLayoutViewController.swift */,
+				B2E5853B286002C300921A91 /* LayoutIndexViewController.swift */,
+				B2E5853D286011D500921A91 /* LayoutDemoViewController.swift */,
+			);
+			path = LayoutDemo;
 			sourceTree = "<group>";
 		};
 		CB85AF045F6EFE5EC59944B7 /* Pods */ = {
@@ -398,7 +415,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B2E585402860128200921A91 /* Model.swift in Sources */,
 				B27EEAE02857261E00C55EA5 /* BaseViewDemoViewController.swift in Sources */,
+				B2E5853E286011D500921A91 /* LayoutDemoViewController.swift in Sources */,
 				B20131BB285818A0004FE458 /* AnimateDemoViewController.swift in Sources */,
 				B26C6A7F2850519E009512EC /* QuicklyDemoViewController.swift in Sources */,
 				B20131BF28585CE3004FE458 /* LedDemoViewController.swift in Sources */,
@@ -407,6 +426,7 @@
 				B27EEAE22857266B00C55EA5 /* QuickLayoutViewController.swift in Sources */,
 				B2921D60285C070E00CBC001 /* FriendDemoViewController.swift in Sources */,
 				607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */,
+				B2E5853C286002C300921A91 /* LayoutIndexViewController.swift in Sources */,
 				B26C6A81285073CC009512EC /* TableViewDemoViewController.swift in Sources */,
 				B2921D65285C1FF700CBC001 /* FriendView.swift in Sources */,
 				B2C4BC05284F3A1C00B7C25B /* IndexViewController.swift in Sources */,

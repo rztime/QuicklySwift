@@ -10,68 +10,75 @@ import UIKit
 import QuicklySwift
 
 class AnimateDemoViewController: UIViewController {
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = .white
         
         
         self.view.qbody([
-            [
-                UILabel().qtext("滚动").qsizeChanged({ view in
-                    
-                }),
-                UILabel().qtext("测试"),
+            UIButton.init(type: .custom)
+                .qimage(UIImage.init(named: "zan_h"))
+                /// 抖动
+                .qshake(0.3, 15, repeatcount: .greatestFiniteMagnitude)
+                .qframe(.init(x: 15, y: qnavigationbarHeight + 15, width: 60, height: 44)),
+            
+            UIButton.init(type: .custom)
+                .qtitle("拖动吸边")
+                .qbackgroundColor(.lightGray)
+                /// 拖动 吸边
+                .qdrag(.nearHorizontal(edge: .init(top: qnavigationbarHeight + 10, left: 15, bottom: qbottomSafeHeight, right: 15)))
+                .qframe(.init(x: 15, y: qnavigationbarHeight + 80, width: 100, height: 50))
+                .qcornerRadius(25, true),
+            
+            UIImageView.init(image: UIImage.init(named: "1111"))
+                .qcornerRadius(1, true)
+                .qframe(.init(x: 30, y: qnavigationbarHeight + 150, width: 60, height: 60))
+                .qcontentMode(.scaleAspectFit)
+                /// 旋转45度
+                .qtransform(rotation: 45),
             
             
-            ].qjoined(aixs: .vertical, spacing: 15, align: .leading, distribution: .fill)
-                .qmakeConstraints({ make in
-                    make.left.right.equalToSuperview().inset(15)
-                    make.center.equalToSuperview()
-                }),
+            UIImageView.init(image: UIImage.init(named: "1111"))
+                .qcornerRadius(1, true)
+                .qframe(.init(x: 30, y: qnavigationbarHeight + 230, width: 60, height: 60))
+                .qcontentMode(.scaleAspectFit)
+                // 缩放
+                .qtransform(scale: 1.1, 1.1),
             
-//            UILabel().qtext("抖动测试").qmakeConstraints({ make in
-//                make.center.equalToSuperview()
-//            })
-//            .qtap({ view in
-//                view.qtransform(x: -100, y: 0, .animate(time: 1, options: [.autoreverse, .repeat])) {
-//
-//                }
-//            }),
-//
-            
-            UILabel.init(frame: .init(x: 10, y: 100, width: 50, height: 50))
-                .qbackgroundColor(.red)
-            .qtext("哈")
-//            .qdrag(.nearBorder(edge: .init(top: qnavigationbarHeight + 10, left: 10, bottom: qbottomSafeHeight + 10, right: 10)))
-                .qdrag(.normal(edge: .init(top: qnavigationbarHeight + 10, left: 10, bottom: qbottomSafeHeight + 10, right: 10)))
-            .qshowToWindow({ view, showed in
-                print("show:\(showed)")
-            }),
-            
-             
             UIButton.init(type: .custom)
                 .qimage(UIImage.init(named: "zan"), .normal)
                 .qimage(UIImage.init(named: "zan_h"), .selected)
-                .qmakeConstraints({ make in
-                    make.top.equalToSuperview().inset(qnavigationbarHeight + 30)
-                    make.centerX.equalToSuperview()
-                })
+                .qframe(.init(x: 15, y: qnavigationbarHeight + 300, width: 40, height: 40))
                 .qactionFor(.touchUpInside, handler: { sender in
                     sender.isSelected = !sender.isSelected
+                })
+                .qisSelectedChanged({ sender in
                     if sender.isSelected {
-                        sender.qtransform(scale: 1.3, 1.5, .animate(0.3, delay: 0, options: .curveEaseInOut)) { view in
+                        /// 缩放动画
+                        sender.qtransform(scale: 1.3, 1.3, .animate(0.3, delay: 0, options: .curveLinear)) { view in
+                            // 还原
                             view.qtransform(scale: 1, 1)
                         }
                     }
-                    let vc = UIViewController()
-                    vc.view.backgroundColor = .white 
-                    qAppFrame.pushViewController(vc, animated: true)
+                }),
+            
+            UILabel().qtext("点击按钮点赞动画（缩放）").qframe(.init(x: 80, y: qnavigationbarHeight + 310, width: 300, height: 20)),
+            
+            UILabel().qtext("循环平移").qframe(.init(x: 15, y: qnavigationbarHeight + 380, width: 100, height: 20))
+                // 循环平移
+                .qtransform(x: 300, y: 0, .animate(5, delay: 0, options: [.curveLinear, .repeat]), complete: { view in
+                    
+                }),
+            
+            UILabel().qtext("来回循环平移").qframe(.init(x: 15, y: qnavigationbarHeight + 420, width: 120, height: 20))
+                // 来回循环平移
+                .qtransform(x: 300, y: 0, .animate(5, delay: 0, options: [.curveLinear, .autoreverse, .repeat]), complete: { view in
+                    
                 })
-        
         ])
-     
+        
     }
-     
-
+    
+    
 }
