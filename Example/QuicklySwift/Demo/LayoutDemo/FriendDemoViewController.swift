@@ -52,13 +52,13 @@ class FriendDemoViewController: UIViewController {
 }
 
 class FriendCell: UITableViewCell {
-    let headerView : HeaderView = .init(frame: .init(x: 0, y: 0, width: CGFloat.qscreenWidth, height: 70))
+    let headerView : HeaderView = .init(frame: .init(x: 0, y: 0, width: qscreenwidth, height: 70))
     let contentLabel = UILabel().qfont(.systemFont(ofSize: 15)).qnumberOfLines(5).qshowType(.vertical, type: .height)
-    let imageContainer = ImageContainerView.init(frame: .init(x: 0, y: 0, width: CGFloat.qscreenWidth, height: 100))
+    let imageContainer = ImageContainerView.init(frame: .init(x: 0, y: 0, width: qscreenwidth, height: 100))
     
     let flagLabel = UILabel().qnumberOfLines(0).qfont(.systemFont(ofSize: 13)).qtextColor(.red)
     
-    let bottomView = FriendBottomView.init(frame: .init(x: 0, y: 0, width: CFloat.qscreenWidth, height: 50))
+    let bottomView = FriendBottomView.init(frame: .init(x: 0, y: 0, width: qscreenwidth, height: 50))
     override func prepareForReuse() {
         super.prepareForReuse()
         contentLabel.text = nil
@@ -81,7 +81,7 @@ class FriendCell: UITableViewCell {
             v.qmakeConstraints({ make in
                 make.top.bottom.equalToSuperview().inset(10)
                 make.left.equalTo(15)
-                make.width.equalTo(CGFloat.qscreenWidth - 30)
+                make.width.equalTo(qscreenwidth - 30)
             }),
             // 分割线
             UIView().qmakeConstraints({ make in

@@ -74,6 +74,12 @@ public extension UIControl {
         let _ = QControlHelper.init(target: self, key: "enabled", changed: changed)
         return self
     }
+    /// control isEnabled 状态发生改变之后的回调
+    @discardableResult
+    func qisHighlightedChanged(_ changed: ((_ sender: UIControl) -> Void)?) -> Self {
+        let _ = QControlHelper.init(target: self, key: "highlighted", changed: changed)
+        return self
+    }
 }
 
 open class QControlHelper: UIView {

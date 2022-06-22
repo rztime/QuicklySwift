@@ -7,6 +7,14 @@
 
 import UIKit
 // MARK: - 一些常量
+
+public var qscreenwidth: CGFloat {
+    return UIScreen.main.bounds.width
+}
+public var qscreenheight: CGFloat {
+    return UIScreen.main.bounds.height
+}
+
 public extension CGRect {
     /// 屏幕满屏
     static var qfull: CGRect {
@@ -24,36 +32,6 @@ public extension CGSize {
     }
 }
 
-public extension CGFloat {
-    /// 屏幕宽度
-    static var qscreenWidth: CGFloat {
-        return UIScreen.main.bounds.width
-    }
-    /// 屏幕高度
-    static var qscreenHeight: CGFloat {
-        return UIScreen.main.bounds.height
-    }
-}
-public extension Float {
-    /// 屏幕宽度
-    static var qscreenWidth: CGFloat {
-        return UIScreen.main.bounds.width
-    }
-    /// 屏幕高度
-    static var qscreenHeight: CGFloat {
-        return UIScreen.main.bounds.height
-    }
-}
-public extension Double {
-    /// 屏幕宽度
-    static var qscreenWidth: Double {
-        return UIScreen.main.bounds.width
-    }
-    /// 屏幕高度
-    static var qscreenHeight: Double {
-        return UIScreen.main.bounds.height
-    }
-}
 /// app 的 keywindow
 public var qappKeyWindow: UIWindow {
     if let window = UIApplication.shared.delegate?.window, let window = window {
@@ -124,11 +102,4 @@ public var qisdeviceLandscape: Bool {
     @unknown default:
         return false
     }
-}
-
-public var qscreenwidth: CGFloat {
-    return UIScreen.main.bounds.width
-}
-public var qscreenheight: CGFloat {
-    return UIScreen.main.bounds.height
 }

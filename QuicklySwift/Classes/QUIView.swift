@@ -68,6 +68,9 @@ open class QUIView: UIView {
             }
         }
     }
+    /// 手指拖动开始时，是否需要视图中心点居手指中
+    var dragStarCenter: Bool = false
+    
     open var deinitAction: (() -> Void)?
     public init(target: UIView) {
         self.target = target
@@ -123,8 +126,10 @@ open class QUIView: UIView {
         switch gesture.state {
         case .began:
             /// 使手指在view中间
-            let point = gesture.location(in: transView)
-            target.center = point
+            if dragStarCenter {
+                let point = gesture.location(in: transView)
+                target.center = point
+            }
         case .changed:
             let point = gesture.translation(in: target)
             target.center = CGPoint(x: target.center.x + point.x, y: target.center.y + point.y)

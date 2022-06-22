@@ -7,6 +7,68 @@
 
 import UIKit
 
+public extension UICollectionViewFlowLayout {
+   @discardableResult
+   func qminimumLineSpacing(_ space: CGFloat) -> Self {
+       self.minimumLineSpacing = space
+       return self
+   }
+   @discardableResult
+   func qminimumInteritemSpacing(_ space: CGFloat) -> Self {
+       self.minimumInteritemSpacing = space
+       return self
+   }
+   @discardableResult
+   func qitemSize(_ size: CGSize) -> Self {
+       self.itemSize = size
+       return self
+   }
+   @available(iOS 8.0, *)
+   @discardableResult
+   func qestimatedItemSize(_ size: CGSize) -> Self {
+       self.estimatedItemSize = size
+       return self
+   }
+   @discardableResult
+   func qscrollDirection(_ direction: UICollectionView.ScrollDirection) -> Self {
+       self.scrollDirection = direction
+       return self
+   }
+   @discardableResult
+   func qheaderReferenceSize(_ size: CGSize) -> Self {
+       self.headerReferenceSize = size
+       return self
+   }
+   @discardableResult
+   func qfooterReferenceSize(_ size: CGSize) -> Self {
+       self.footerReferenceSize = size
+       return self
+   }
+   @discardableResult
+   func qsectionInset(_ inset: UIEdgeInsets) -> Self {
+       self.sectionInset = inset
+       return self
+   }
+   @available(iOS 11.0, *)
+   @discardableResult
+   func qsectionInsetReference(_ reference: UICollectionViewFlowLayout.SectionInsetReference) -> Self {
+       self.sectionInsetReference = reference
+       return self
+   }
+   @discardableResult
+   @available(iOS 9.0, *)
+   func qsectionHeadersPinToVisibleBounds(_ value: Bool) -> Self {
+       self.sectionHeadersPinToVisibleBounds = value
+       return self
+   }
+   @discardableResult
+   @available(iOS 9.0, *)
+   func qsectionFootersPinToVisibleBounds(_ value: Bool) -> Self {
+       self.sectionFootersPinToVisibleBounds = value
+       return self
+   }
+}
+
 public extension UICollectionView {
     @discardableResult
     func qdelegate(_ delegate: UICollectionViewDelegate?) -> Self {
@@ -18,8 +80,6 @@ public extension UICollectionView {
         self.dataSource = dataSource
         return self
     }
-}
-public extension UICollectionView {
     /// 注册cell
     @discardableResult
     func qregistercell(_ cellClass: AnyClass?, _ identifier: String) -> Self {
@@ -32,7 +92,9 @@ public extension UICollectionView {
         self.register(viewClass, forSupplementaryViewOfKind: elementKind, withReuseIdentifier: identifier)
         return self
     }
-    
+}
+// MARK: - dataSource
+public extension UICollectionView {
     /// 设置section数量
     /// 使用quickly方法时 内部会设置QTableViewHelper 此时请勿设置tableView的delagte 和 DataSource，
     @discardableResult
@@ -54,6 +116,12 @@ public extension UICollectionView {
         self.qcollectionViewHelper.cell = cell
         return self
     }
+    /// 设置头、尾view
+    @discardableResult
+    func qviewForSupplementary(_ view: ((_ collectionView: UICollectionView, _ kind: String, _ indexPath: IndexPath) -> UICollectionReusableView?)?) -> Self {
+        self.qcollectionViewHelper.viewForSupplementary = view
+        return self
+    }
     @discardableResult
     func qcanMove(_ canMove: ((_ indexPath: IndexPath) -> Bool)?) -> Self {
         self.qcollectionViewHelper.canMove = canMove
@@ -64,6 +132,21 @@ public extension UICollectionView {
         self.qcollectionViewHelper.moveAction = move
         return self
     }
+    /// 只有iOS 14有效, 右侧小导引
+    @discardableResult
+    func qindexTitles(_ titles: ((_ collectionView: UICollectionView) -> [String]?)?) -> Self {
+        self.qcollectionViewHelper.indexTitlesFor = titles
+        return self
+    }
+    /// 只有iOS 14有效 点击右侧小导引的时候跳转的位置
+    @discardableResult
+    func qindexPathForIndexTitle(_ indexPath: ((_ collectionView: UICollectionView, _ title: String, _ index: Int) -> IndexPath)?) -> Self {
+        self.qcollectionViewHelper.indexPathForIndexTitle = indexPath
+        return self
+    }
+}
+// MARK: - delagte
+public extension UICollectionView {
     @discardableResult
     func qdidSelectItem(_ item: ((_ collectionView: UICollectionView, _ indexPath: IndexPath) -> Void)?) -> Self {
         self.qcollectionViewHelper.didSelectItem = item
@@ -79,6 +162,25 @@ public extension UICollectionView {
         self.qcollectionViewHelper.didEndDisplayCell = cell
         return self
     }
+    @discardableResult
+    func qwillDisplaySupplementaryView(_ view: ((_ view: UICollectionReusableView, _ kind: String, _ indexPath: IndexPath) -> Void)?) -> Self {
+        self.qcollectionViewHelper.willDisplaySupplementaryView = view
+        return self
+    }
+    @discardableResult
+    func qdidEndDisplaySupplementaryView(_ view: ((_ view: UICollectionReusableView, _ kind: String, _ indexPath: IndexPath) -> Void)?) -> Self {
+        self.qcollectionViewHelper.didEndDisplaySupplementaryView = view
+        return self
+    }
+    /// iOS 14有效
+    @discardableResult
+    func qcanEditItem(_ edit: ((_ indexPath: IndexPath) -> Bool)?) -> Self {
+        self.qcollectionViewHelper.canEditItem = edit
+        return self
+    }
+}
+// MARK: - UICollectionViewDelegateFlowLayoutDelegate
+public extension UICollectionView {
     /// 需要设置为UICollectionViewDelegateFlowLayout
     @discardableResult
     func qsizeForItem(_ item: ((_ layout: UICollectionViewLayout, _ indexPath: IndexPath) -> CGSize)?) -> Self {
@@ -116,166 +218,4 @@ public extension UICollectionView {
         return self
     }
 }
-
-open class QCollectionViewHelper: QScrollViewHelper {
-    open var numberofSections: (() -> Int)?
-    open var numberofRows: ((_ section: Int) -> Int)?
-    open var cell: ((_ collectionView: UICollectionView, _ indexPath: IndexPath) -> UICollectionViewCell)?
-    open var canMove: ((_ indexPath: IndexPath) -> Bool)?
-    open var moveAction: ((_ indexPath: IndexPath, _ toIndexPath: IndexPath) -> Void)?
-    open var didSelectItem:((_ collectionView: UICollectionView, _ indexPath: IndexPath) -> Void)?
-    open var willDisplayCell: ((_ cell: UICollectionViewCell, _ indexPath: IndexPath) -> Void)?
-    open var didEndDisplayCell: ((_ cell: UICollectionViewCell, _ indexPath: IndexPath) -> Void)?
-    open var sizeForItem: ((_ layout: UICollectionViewLayout, _ indexPath: IndexPath) -> CGSize)?
-    open var insetForSection: ((_ layout: UICollectionViewLayout, _ section: Int) -> UIEdgeInsets)?
-    open var minimumLineSpacing: ((_ layout: UICollectionViewLayout, _ section: Int) -> CGFloat)?
-    open var minimumInteritemSpacing: ((_ layout: UICollectionViewLayout, _ section: Int) -> CGFloat)?
-    open var referenceSizeForHeader: ((_ layout: UICollectionViewLayout, _ section: Int) -> CGSize)?
-    open var referenceSizeForFooter: ((_ layout: UICollectionViewLayout, _ section: Int) -> CGSize)?
-}
-extension QCollectionViewHelper: UICollectionViewDataSource {
-    public func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return numberofSections?() ?? 1
-    }
-    public func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return numberofRows?(section) ?? 0
-    }
-    public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        return cell?(collectionView, indexPath) ?? .init()
-    }
-    public func collectionView(_ collectionView: UICollectionView, canMoveItemAt indexPath: IndexPath) -> Bool {
-        return canMove?(indexPath) ?? false
-    }
-    public func collectionView(_ collectionView: UICollectionView, moveItemAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
-        moveAction?(sourceIndexPath, destinationIndexPath)
-    }
-}
-extension QCollectionViewHelper: UICollectionViewDelegate {
-    public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        didSelectItem?(collectionView, indexPath)
-    }
-    public func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        willDisplayCell?(cell, indexPath)
-    }
-    public func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        didEndDisplayCell?(cell, indexPath)
-    }
-}
-extension QCollectionViewHelper: UICollectionViewDelegateFlowLayout {
-    public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        if let item = sizeForItem {
-            return item(collectionViewLayout, indexPath)
-        }
-        if let layout = collectionViewLayout as? UICollectionViewFlowLayout {
-            return layout.itemSize
-        }
-        return .zero
-    }
-    public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        if let item = insetForSection {
-            return item(collectionViewLayout, section)
-        }
-        if let layout = collectionViewLayout as? UICollectionViewFlowLayout {
-            return layout.sectionInset
-        }
-        return .zero
-    }
-    public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        if let item = minimumLineSpacing {
-            return item(collectionViewLayout, section)
-        }
-        if let layout = collectionViewLayout as? UICollectionViewFlowLayout {
-            return layout.minimumLineSpacing
-        }
-        return .zero
-    }
-    public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        if let item = minimumInteritemSpacing {
-            return item(collectionViewLayout, section)
-        }
-        if let layout = collectionViewLayout as? UICollectionViewFlowLayout {
-            return layout.minimumInteritemSpacing
-        }
-        return .zero
-    }
-    public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        if let item = referenceSizeForHeader {
-            return item(collectionViewLayout, section)
-        }
-        if let layout = collectionViewLayout as? UICollectionViewFlowLayout {
-            return layout.headerReferenceSize
-        }
-        return .zero
-    }
-    public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
-        if let item = referenceSizeForFooter {
-            return item(collectionViewLayout, section)
-        }
-        if let layout = collectionViewLayout as? UICollectionViewFlowLayout {
-            return layout.footerReferenceSize
-        }
-        return .zero
-    }
-}
-
-public extension UICollectionViewFlowLayout {
-    @discardableResult
-    func qminimumLineSpacing(_ space: CGFloat) -> Self {
-        self.minimumLineSpacing = space
-        return self
-    }
-    @discardableResult
-    func qminimumInteritemSpacing(_ space: CGFloat) -> Self {
-        self.minimumInteritemSpacing = space
-        return self
-    }
-    @discardableResult
-    func qitemSize(_ size: CGSize) -> Self {
-        self.itemSize = size
-        return self
-    }
-    @available(iOS 8.0, *)
-    @discardableResult
-    func qestimatedItemSize(_ size: CGSize) -> Self {
-        self.estimatedItemSize = size
-        return self
-    }
-    @discardableResult
-    func qscrollDirection(_ direction: UICollectionView.ScrollDirection) -> Self {
-        self.scrollDirection = direction
-        return self
-    }
-    @discardableResult
-    func qheaderReferenceSize(_ size: CGSize) -> Self {
-        self.headerReferenceSize = size
-        return self
-    }
-    @discardableResult
-    func qfooterReferenceSize(_ size: CGSize) -> Self {
-        self.footerReferenceSize = size
-        return self
-    }
-    @discardableResult
-    func qsectionInset(_ inset: UIEdgeInsets) -> Self {
-        self.sectionInset = inset
-        return self
-    }
-    @available(iOS 11.0, *)
-    @discardableResult
-    func qsectionInsetReference(_ reference: UICollectionViewFlowLayout.SectionInsetReference) -> Self {
-        self.sectionInsetReference = reference
-        return self
-    }
-    @discardableResult
-    @available(iOS 9.0, *)
-    func qsectionHeadersPinToVisibleBounds(_ value: Bool) -> Self {
-        self.sectionHeadersPinToVisibleBounds = value
-        return self
-    }
-    @discardableResult
-    @available(iOS 9.0, *)
-    func qsectionFootersPinToVisibleBounds(_ value: Bool) -> Self {
-        self.sectionFootersPinToVisibleBounds = value
-        return self
-    }
-}
+ 

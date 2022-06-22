@@ -233,9 +233,11 @@ public extension UIView {
         return self
     }
     /// 给UIView添加拖拽手势，可以在父视图内进行自由拖动
+    /// center: 拖动开始后，视图中心点移动到手指处
     @discardableResult
-    func qdrag(_ style: QUIView.QDragPanStyle?) -> Self {
+    func qdrag(_ style: QUIView.QDragPanStyle?, center: Bool = false) -> Self {
         self.qviewhelper.dragPanStyle = style
+        self.qviewhelper.dragStarCenter = center
         return self
     }
 }

@@ -19,7 +19,7 @@ class CollectionViewDemoViewController: UIViewController {
         }
         
         let layout = UICollectionViewFlowLayout.init()
-        layout.qitemSize(.init(width: (CGFloat.qscreenWidth - 30 - 5) / 2, height: .qscreenHeight / 3 - 10))
+        layout.qitemSize(.init(width: (qscreenwidth - 30 - 5) / 2, height: qscreenheight / 3 - 10))
             .qscrollDirection(.vertical)
             .qminimumLineSpacing(5)
             .qminimumInteritemSpacing(5)
@@ -27,6 +27,8 @@ class CollectionViewDemoViewController: UIViewController {
         let collectionView = UICollectionView.init(frame: .qfull, collectionViewLayout: layout)
             .qbackgroundColor(.white)
             .qregistercell(TestCollectionViewCell.self, "cell")
+            .qregisterSupplementaryView(CollectionHeaderFooter.self, UICollectionView.elementKindSectionHeader, "header")
+            .qregisterSupplementaryView(CollectionHeaderFooter.self, UICollectionView.elementKindSectionFooter, "footer")
             .qnumberofSections {
                 return 2
             }.qnumberofRows { [weak self] section in
@@ -49,6 +51,21 @@ class CollectionViewDemoViewController: UIViewController {
                 } cancel: {
                     print("nononono")
                 }
+            }.qreferenceSizeForHeader({ layout, section in
+                return .init(width: qscreenwidth, height: 40)
+            }).qreferenceSizeForFooter({ layout, section in
+                return .init(width: qscreenwidth, height: 40)
+            })
+            .qviewForSupplementary { collectionView, kind, indexPath in
+                if kind == UICollectionView.elementKindSectionHeader {
+                    let v: CollectionHeaderFooter = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "header", for: indexPath) as! CollectionHeaderFooter
+                    return v
+                }
+                return nil
+            }.qindexTitles { collectionView in
+                return ["section1", "section2"]
+            }.qindexPathForIndexTitle { collectionView, title, index in
+                return .init(row: 0, section: index)
             }
         self.view.qbody([
             collectionView.qmakeConstraints({ make in
@@ -98,6 +115,22 @@ class TestCollectionViewCell : UICollectionViewCell {
             })
         ])
         .qcornerRadiusCustom([.topRight, .bottomLeft], radii: 10)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
+
+class CollectionHeaderFooter: UICollectionReusableView {
+    let textLabel = UILabel().qtext("哈哈哈哈哈").qtextAliginment(.center)
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        self.qbody([
+            textLabel.qmakeConstraints({ make in
+                make.edges.equalToSuperview()
+            })
+        ])
     }
     
     required init?(coder: NSCoder) {

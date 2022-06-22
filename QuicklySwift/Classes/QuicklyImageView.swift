@@ -10,7 +10,7 @@ import UIKit
 public extension UIImageView {
     /// 设置图片
     @discardableResult
-    func qimage(_ image: UIImage) -> Self {
+    func qimage(_ image: UIImage?) -> Self {
         self.image = image
         return self
     }

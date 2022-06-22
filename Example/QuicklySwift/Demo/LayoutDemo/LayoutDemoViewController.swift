@@ -52,7 +52,7 @@ class LayoutDemoViewController: UIViewController {
         
         imageViewStackView.qremoveAllSubViews()
         let images = model.images.qgroup(step: 3)
-        let size: CGSize = images.first?.count == 1 ? .init(width: 250, height: 250 * 9 / 16) : .init(width: (CGFloat.qscreenWidth - 30 - 20) / 3, height: (CGFloat.qscreenWidth - 30 - 20) / 3)
+        let size: CGSize = images.first?.count == 1 ? .init(width: 250, height: 250 * 9 / 16) : .init(width: (qscreenwidth - 30 - 20) / 3, height: (qscreenwidth - 30 - 20) / 3)
         
         let imageViews = images.compactMap { urls -> UIStackView? in
             let view = urls.compactMap { url -> UIImageView? in

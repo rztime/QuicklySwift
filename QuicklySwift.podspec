@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'QuicklySwift'
-  s.version          = '0.1.0'
+  s.version          = '0.1.1'
   s.summary          = 'swift 常用方法扩展，便捷使用'
 
 # This description is used to generate tags and improve search results.
@@ -26,7 +26,7 @@ Pod::Spec.new do |s|
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
   s.author           = { 'rztime' => 'rztime@vip.qq.com' }
   s.source           = { :git => 'https://github.com/rztime/QuicklySwift.git', :tag => s.version.to_s }
-  # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
+  s.social_media_url = 'https://github.com/rztime'
 
   s.ios.deployment_target = '9.0'
   s.swift_versions = ['4.2', '5.0']

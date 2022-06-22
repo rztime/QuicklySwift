@@ -46,7 +46,7 @@ class HeaderView: UIView {
     }
 }
 class ImageContainerView: UIView {
-    let collectionView = UICollectionView.init(frame: .init(x: 0, y: 0, width: .qscreenWidth - 30, height: CGFloat.qscreenWidth / 3), collectionViewLayout: .init())
+    let collectionView = UICollectionView.init(frame: .init(x: 0, y: 0, width: qscreenwidth - 30, height: qscreenwidth / 3), collectionViewLayout: .init())
     
     var images:[String]? {
         didSet {
@@ -86,7 +86,7 @@ class ImageContainerView: UIView {
                 if let images = self?.images, images.count <= 1 {
                     return .init(width: 160, height: 90)
                 }
-                let width = (CGFloat.qscreenWidth - 30 - 20) / 3
+                let width = (qscreenwidth - 30 - 20) / 3
                 return .init(width: width, height: width)
             }).qcell { collectionView, indexPath in
                 let cell: ImageCell = (collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! ImageCell)

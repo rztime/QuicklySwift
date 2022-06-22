@@ -245,6 +245,9 @@ public extension UIScrollView {
     }
 }
 
+public let quicklycollectionsectionHeader = "quicklycollectionsectionHeader"
+public let quicklycollectionsectionFooter = "quicklycollectionsectionFooter"
+
 open class QScrollViewHelper: NSObject, UIScrollViewDelegate {
     open var didStopScroll: ((_ scrollView: UIScrollView) -> Void)?
     open var didScroll: ((_ scrollView: UIScrollView) -> Void)?
@@ -274,6 +277,16 @@ open class QScrollViewHelper: NSObject, UIScrollViewDelegate {
         self.target = target
         self.target?.addObserver(self, forKeyPath: "contentSize", options: [.new, .old], context: nil)
         self.target?.addObserver(self, forKeyPath: "contentOffset", options: [.new, .old], context: nil)
+        if let collectionView = target as? UICollectionView {
+            collectionView.qregisterSupplementaryView(UICollectionReusableView.self, UICollectionView.elementKindSectionHeader, quicklycollectionsectionHeader)
+            collectionView.qregisterSupplementaryView(UICollectionReusableView.self, UICollectionView.elementKindSectionFooter, quicklycollectionsectionFooter)
+            if collectionView.backgroundColor == nil {
+                collectionView.qbackgroundColor(.white)
+            } 
+        }
+        if let tableView = target as? UITableView, tableView.tableFooterView == nil {
+            tableView.tableFooterView = .init()
+        }
     }
     
     public func scrollViewDidScroll(_ scrollView: UIScrollView) {
