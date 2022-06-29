@@ -183,11 +183,7 @@ public extension UIView {
     @discardableResult
     func qcornerRadiusCustom(_ corners: UIRectCorner, radii: CGFloat) -> Self {
         self.qsizeChanged { view in
-            let path = UIBezierPath.init(roundedRect: view.bounds, byRoundingCorners: corners, cornerRadii: .init(width: radii, height: radii))
-            let layer = CAShapeLayer.init()
-            layer.frame = view.bounds
-            layer.path = path.cgPath
-            view.layer.mask = layer
+            view.layer.qcornerRadiusCustom(corners, radii: radii, frame: view.bounds)
         }
         return self
     }
@@ -223,21 +219,68 @@ public extension UIView {
         }
         return self
     }
+    /// 添加一个气泡
+    /// - Parameters:
+    ///   - corners: 气泡四角是否需要圆角
+    ///   - radii: 圆角的size
+    ///   - size: 气泡三角形的size
+    ///   - location: 气泡三角形的位置
+    ///   - color: 填充颜色
+    @discardableResult
+    func qairbubble(_ corners: UIRectCorner, radii: CGFloat, air size: CGSize, location: QairbubbleLocation, color: UIColor?) -> Self {
+        self.qsizeChanged { view in
+            view.layer.qairbubble(corners, radii: radii, air: size, location: location, color: color)
+        }
+        return self
+    }
 }
-
+// MARK: - 给view添加手势
 public extension UIView {
     /// UIView的单击事件, 一个view只能设置一次，多次设置将以最新的覆盖之前的
     @discardableResult
     func qtap(_ tap: ((_ view: UIView) -> Void)?) -> Self {
-        self.qviewhelper.tapAction = tap
+        self.qtapNumberof(touches: 1, taps: 1, tap)
+        return self
+    }
+    /// 点击手势
+    @discardableResult
+    func qtapNumberof(touches: Int, taps: Int, _ tapaction: ((_ view: UIView) -> Void)?) -> Self {
+        let _ = QTapGestureRecognizer.init(target: self, numberofTouches: touches, numberofTaps: taps, tapaction)
+        return self
+    }
+    /// 点击手势
+    @discardableResult
+    func qtapNumberof(touches: Int, taps: Int, _ tapactionwithTap: ((_ view: UIView, _ tap: UITapGestureRecognizer) -> Void)?) -> Self {
+        let tap = QTapGestureRecognizer.init(target: self, numberofTouches: touches, numberofTaps: taps, nil)
+        tap.tapActionResultWithTap = tapactionwithTap
+        return self
+    }
+    /// 拖动手势
+    @discardableResult
+    func qpanNumberof(touches min: Int, max: Int, _ panAction: ((_ view: UIView, _ pan: UIPanGestureRecognizer) -> Void)?) -> Self {
+        let _ = QPanGestureRecognizer.init(target: self, minOfTouches: min, maxOfTouches: max, panAction)
         return self
     }
     /// 给UIView添加拖拽手势，可以在父视图内进行自由拖动
     /// center: 拖动开始后，视图中心点移动到手指处
     @discardableResult
-    func qdrag(_ style: QUIView.QDragPanStyle?, center: Bool = false) -> Self {
-        self.qviewhelper.dragPanStyle = style
-        self.qviewhelper.dragStarCenter = center
+    func qdrag(_ style: QPanGestureRecognizer.QDragPanStyle?, center: Bool = false,  _ panAction: ((_ view: UIView, _ pan: UIPanGestureRecognizer) -> Void)? = nil) -> Self {
+        let pan = QPanGestureRecognizer.init(target: self, minOfTouches: 1, maxOfTouches: 1, panAction)
+        pan.setDragInSupver(starCenter: center, dragStyle: style)
+        return self
+    }
+    /// 长按手势
+    /// moveMent: 长按时，允许滑动范围，默认是10
+    /// taps = 0 // 即响应长按手势之前，需要单击几次，默认0
+    @discardableResult
+    func qlongpress(numberof touches: Int, taps: Int = 0, minpress duration: TimeInterval, movement: CGFloat, _ action: ((_ view: UIView, _ longpress: UILongPressGestureRecognizer) -> Void)?) -> Self {
+        let _ = QLongPressGestureRecognizer.init(target: self, numberofTouches: touches, numberofTaps: taps, minPressDuration: duration, movement: movement, action)
+        return self
+    }
+    /// 快速轻扫手势
+    @discardableResult
+    func qswipe(numberof touches: Int, direction: UISwipeGestureRecognizer.Direction, _ swipe: ((_ view: UIView, _ swipe: UISwipeGestureRecognizer) -> Void)?) -> Self {
+        let _ = QSwipeGestureRecognizer.init(target: self, numberofTouches: touches, direction: direction, swipe)
         return self
     }
 }

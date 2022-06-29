@@ -85,6 +85,8 @@ class BaseViewDemoViewController: UIViewController {
         .qcontentMode(.scaleAspectFill)
         .qcornerRadius(3, true)
         .qgaussBlur() // 高斯模糊
+    /// 气泡
+    let airb = UIView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -97,8 +99,8 @@ class BaseViewDemoViewController: UIViewController {
         scrollView.qbody([
             label.qmakeConstraints({ make in
                 make.left.equalToSuperview().inset(15)
-                make.top.equalToSuperview().inset(30)
-                make.width.equalTo(200)
+                make.width.equalTo(qscreenwidth - 30)
+                make.top.equalToSuperview().inset(300)
                 make.height.equalTo(44)
             }),
             
@@ -128,12 +130,30 @@ class BaseViewDemoViewController: UIViewController {
                 make.top.equalTo(self.textView.snp.bottom).offset(15)
                 make.width.equalTo(300)
                 make.height.equalTo(44)
-            })
+            }),
+            
+            airb.qmakeConstraints({ make in
+                make.left.equalToSuperview().inset(15)
+                make.top.equalTo(self.imageView.snp.bottom).offset(15)
+                make.width.equalTo(300)
+                make.height.equalTo(44)
+                make.bottom.equalToSuperview().inset(1000)
+            }),
+            
+//            QuicklyPopmenu.init(titles: ["文字1", "文字2", "文字3", "文字3",], style: .horizontal(count: 3))
+//                .qmakeConstraints({ make in
+//                    make.top.equalTo(self.airb.snp.bottom).offset(30)
+//                    make.left.equalToSuperview().inset(50)
+//                })
         ])
-        
-        label.qtap { [weak self] view in
-            print("点击了label")
-            self?.btn.isEnabled = !(self?.btn.isEnabled ?? false)
+        label.qtapNumberof(touches: 1, taps: 1) { view, tap in
+//            let menu = QuicklyPopmenu.show(titles: ["加油\n加油", "加油加油加油", "加油", "加油", "加油", "加油\n加油", "加油加油加油", "加油", "加油", "加油"], style: .horizontal(count: 4), fingerLocation: tap.location(in: view), target: view)
+//            menu.itemSize = .init(width: 50, height: 40)
+//            menu.reload()
+            /// 弹窗
+            QuicklyPopmenu.show(titles: xxxxxtitles, attributedTitles: [], style: .vertical, fingerLocation: tap.location(in: view), target: view) { index in
+                print("index:\(index)")
+            }
         }
         btn.qactionFor(.touchUpInside) { sender in
             print("点击了按钮 事件响应")
@@ -142,6 +162,11 @@ class BaseViewDemoViewController: UIViewController {
             if let btn = view as? UIButton {
                 btn.isSelected = !btn.isSelected
             }
+            QuicklyPopmenu.show(titles: xxxxxtitles, attributedTitles: [], style: .horizontal(count: 4), fingerLocation: .zero, target: view) { index in
+                print("index:\(index)")
+            }
         }
+        airb.qairbubble([.bottomLeft, .bottomRight], radii: 10, air: .init(width: 10, height: 10), location: .bottom(x: 30), color: .lightGray)
     }
 }
+let xxxxxtitles = ["复制", "粘贴", "扫码", "看看", "开始", "结束", "关注", "点赞", "评论"]

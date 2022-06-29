@@ -32,6 +32,7 @@ public extension UIView {
     ///   - to: 结束角度
     ///   - duration: 一个周期时长
     ///   - repeatcount: 重复次数
+    @discardableResult
     func qrotation(from: CGFloat, to: CGFloat, duration: TimeInterval, repeatcount: Float = Float.greatestFiniteMagnitude) -> Self {
         self.layer.qrotation(from: from, to: to, duration: duration, repeatcount: repeatcount)
         return self

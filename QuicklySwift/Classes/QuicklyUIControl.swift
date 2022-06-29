@@ -24,18 +24,22 @@ public extension UIControl {
         self.isHighlighted = light
         return self
     }
+    @discardableResult
     func qaddTarget(_ target: Any?, action: Selector, for controlEvents: UIControl.Event) -> Self {
         self.addTarget(target, action: action, for: controlEvents)
         return self
     }
+    @discardableResult
     func qremoveTarget(_ target: Any?, action: Selector?, for controlEvents: UIControl.Event) -> Self {
         self.removeTarget(target, action: action, for: controlEvents)
         return self
     }
+    @discardableResult
     func qsendAction(_ action: Selector, to target: Any?, for event: UIEvent?) -> Self {
         self.sendAction(action, to: target, for: event)
         return self
     }
+    @discardableResult
     func qsendActions(for controlEvents: UIControl.Event) -> Self {
         self.sendActions(for: controlEvents)
         return self
@@ -112,7 +116,7 @@ open class QControlHelper: UIView {
         }
     }
     
-    @objc func targetActions(_ sender: UIControl) {
+    @objc open func targetActions(_ sender: UIControl) {
         self.handler?(sender)
     }
     

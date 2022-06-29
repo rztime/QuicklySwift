@@ -40,11 +40,16 @@ class TableViewDemoViewController: UIViewController {
                 make.edges.equalToSuperview()
             })
         ])
+        if #available(iOS 15.0, *) {
+            tableView.sectionHeaderTopPadding = 0
+        } else {
+            // Fallback on earlier versions
+        }
         
         tableView
             .qregister(TestTableViewCell.self, identifier: "cell")
             .qnumberofSections {
-                return 1
+                return 3
             }.qnumberofRows { [weak self] section in
                 return self?.items.count ?? 0
             }.qcell { [weak self] tableView, indexPath in
@@ -58,6 +63,14 @@ class TableViewDemoViewController: UIViewController {
                 tableView.deselectRow(at: indexPath, animated: false)
                 print("---- selected:\(indexPath)")
             }
+//            .qheightForHeader({ section in
+//                return 44
+//            })
+//            .qviewForHeader({ tableView, section in
+//                let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: "header") ?? .init(reuseIdentifier: "header")
+//                header.contentView.backgroundColor = .red
+//                return header
+//            })
             .qcanEdit { indexPath in
                 return true
             }.qcanMove { indexPath in

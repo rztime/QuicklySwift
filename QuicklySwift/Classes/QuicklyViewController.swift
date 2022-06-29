@@ -168,6 +168,7 @@ open class QViewControllerHelper: UIViewController {
     deinit {
         if popTimes == 0 {
             self.didpop?()
+            popTimes += 1
         }
         self.deinitAction?()
     }

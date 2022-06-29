@@ -40,7 +40,7 @@ public extension UIButton {
     }
     /// 设置背景图片
     @discardableResult
-    func qbackgroundImage(_ image: UIImage, _ state: UIControl.State = .normal) -> Self {
+    func qbackgroundImage(_ image: UIImage?, _ state: UIControl.State = .normal) -> Self {
         self.setBackgroundImage(image, for: state)
         return self
     }

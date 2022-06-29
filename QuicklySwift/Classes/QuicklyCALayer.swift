@@ -107,4 +107,101 @@ public extension CALayer {
         self.insertSublayer(layer, at: 0)
         return self
     }
+    /// 设置部分圆角，可选某一个圆角
+    @discardableResult
+    func qcornerRadiusCustom(_ corners: UIRectCorner, radii: CGFloat, frame: CGRect) -> Self {
+        let path = UIBezierPath.init(roundedRect: frame, byRoundingCorners: corners, cornerRadii: .init(width: radii, height: radii))
+        let layer = CAShapeLayer.init()
+        layer.frame = frame
+        layer.path = path.cgPath
+        self.mask = layer
+        return self
+    }
+    /// 添加一个气泡
+    /// - Parameters:
+    ///   - corners: 气泡四角是否需要圆角
+    ///   - radii: 圆角的size
+    ///   - size: 气泡三角形的size
+    ///   - location: 气泡三角形的位置
+    ///   - color: 填充颜色
+    @discardableResult
+    func qairbubble(_ corners: UIRectCorner, radii: CGFloat, air size: CGSize, location: QairbubbleLocation, color: UIColor?) -> Self {
+        self.sublayers?.filter({$0.isKind(of: CAShapeLayer.self)}).forEach({ layer in
+            layer.removeFromSuperlayer()
+        })
+        let ra = CGSize.init(width: radii, height: radii)
+        let path: UIBezierPath
+        let p1: UIBezierPath = .init().qaddDelta(size: size, location: location, rectsize: self.bounds.size)
+        switch location {
+        case .up:
+            path = .init(roundedRect: .init(x: 0, y: size.height, width: bounds.width, height: bounds.height - size.height), byRoundingCorners: corners, cornerRadii: ra)
+        case .left:
+            path = .init(roundedRect: .init(x: size.width, y: 0, width: bounds.width - size.width, height: bounds.height), byRoundingCorners: corners, cornerRadii: ra)
+        case .bottom:
+            path = .init(roundedRect: .init(x: 0, y: 0, width: bounds.width, height: bounds.height - size.height), byRoundingCorners: corners, cornerRadii: ra)
+        case .right:
+            path = .init(roundedRect: .init(x: 0, y: 0, width: bounds.width - size.width, height: bounds.height), byRoundingCorners: corners, cornerRadii: ra)
+        }
+        path.append(p1)
+        
+        let layer = CAShapeLayer.init()
+        layer.frame = self.bounds
+        layer.path = path.cgPath
+        layer.fillColor = color?.cgColor
+        self.insertSublayer(layer, at: 0)
+        return self
+    }
+}
+
+/// 气泡所在位置
+/// x: y : 为0时，在view中间  大于0 时，frame.origin.x = x y = y; 小于0时，frame.origin.x = frame.width + x, y = frame.height + y;
+/// 即 大于0 气泡位置以x、y计算；小于0，以view宽度减去x、y的值计算
+public enum QairbubbleLocation {
+    case up(x: CGFloat)
+    case left(y: CGFloat)
+    case bottom(x: CGFloat)
+    case right(y: CGFloat)
+}
+
+public extension UIBezierPath {
+    @discardableResult
+    func qmove(to: CGPoint) -> Self {
+        self.move(to: to)
+        return self
+    }
+    @discardableResult
+    func qaddLine(to: CGPoint) -> Self {
+        self.addLine(to: to)
+        return self
+    }
+    /// 添加三角形
+    @discardableResult
+    func qaddDelta(size delta: CGSize, location: QairbubbleLocation, rectsize: CGSize) -> Self {
+        let star: CGPoint
+        let next: CGPoint
+        let end: CGPoint
+        switch location {
+        case .up(let x):
+            let tempx = x == 0 ? (rectsize.width / 2) : (x > 0 ? x : rectsize.width + x)
+            star = .init(x: tempx, y: 0)
+            next = .init(x: tempx + delta.width / 2, y: delta.height)
+            end = .init(x: tempx - delta.width / 2, y: delta.height)
+        case .left(let y):
+            let tempy = y == 0 ? (rectsize.height / 2) : (y > 0 ? y : rectsize.height + y)
+            star = .init(x: 0, y: tempy)
+            next = .init(x: delta.width, y: tempy - delta.height / 2)
+            end = .init(x: delta.width, y: tempy + delta.height / 2)
+        case .bottom(let x):
+            let tempx = x == 0 ? (rectsize.width / 2) : (x > 0 ? x : rectsize.width + x)
+            star = .init(x: tempx, y: rectsize.height)
+            next = .init(x: tempx + delta.width / 2, y: rectsize.height - delta.height)
+            end = .init(x: tempx - delta.width / 2, y: rectsize.height - delta.height)
+        case .right(let y):
+            let tempy = y == 0 ? (rectsize.height / 2) : (y > 0 ? y : rectsize.height + y)
+            star = .init(x: rectsize.width, y: tempy)
+            next = .init(x: rectsize.width - delta.width, y: tempy - delta.height / 2)
+            end = .init(x: rectsize.width - delta.width, y: tempy + delta.height / 2)
+        }
+        return self.qmove(to: star).qaddLine(to: next).qaddLine(to: end)
+    }
 }
