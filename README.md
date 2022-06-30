@@ -47,6 +47,18 @@ QuicklySwift is available under the MIT license. See the LICENSE file for more i
 
 ## 汇总
 
+| 相关 | 说明 |
+|:----|:----|
+|UIView| 常用属性的快速设置、扩展设置（高斯模糊、气泡、手势、圆角等等）、size改变之后的回调、deinit之后的回调、常用动画等等 |
+|UIScrollView| contentSize和contentOffset改变回调、delegate的回调等等|
+|UITableView、UICollectionView| dataSource, delegate的回调等等|
+|UITextView、UItextField| 快速使用的方法、长度限制、占位符、delegate回调等等|
+|UILabel、UIButton、UIImage、UIColor| 相关的方法的快速使用|
+|UIViewController| 生命周期的回调|
+|UIAlertController| 快速使用|
+|QuicklyPopmenu| 菜单view|
+等等
+
 - UIView:
 
 除了本身已有的属性，可通过添加q的方式使用，如
@@ -66,12 +78,18 @@ let  view = UIView().qbackgroundColor(.red).qisUserInteractionEnabled(true)
 |qcornerRadiusCustom| 设置四个角部分圆角|
 |qgaussBlur | 设置高斯模糊|
 |qgradientColors| 设置渐变色|
+|qairbubble| 添加气泡背景|
 |qtap| 单击手势回调|
+|qtapNumberof| 单击手势|
+|qpanNumberof| 拖拽手势|
 |qdrag| 使view可以在父视图上随意拖拽，并可自动吸边|
+|qlongpress| 长按手势|
+|qswipe| 轻扫手势|
 |qtoImage| 将view转换为图片|
 |qshake| view抖动|
 |qrotation| 旋转（转圈）|
 |qtransform| 平移、旋转一定角度、缩放|
+|QuikclyPopmenu| 在指定位置弹出菜单view|
 
 
 - UITextField、UITextView:
