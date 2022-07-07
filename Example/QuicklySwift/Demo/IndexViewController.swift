@@ -20,6 +20,7 @@ class IndexViewController: UIViewController {
         ("快速开发", QuicklyDemoViewController.self),
         ("动画测试", AnimateDemoViewController.self),
         ("LED", LedDemoViewController.self),
+        ("push pop 转场", TransitionOneViewController.self)
     ]
     
     override func viewDidLoad() {

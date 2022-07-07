@@ -24,7 +24,7 @@ pod 'QuicklySwift'
 
 ## Author
 
-rztime, rztime@vip.qq.com
+rztime, rztime@vip.qq.com, qq交流群：580839749
 
 ## License
 
@@ -54,7 +54,7 @@ QuicklySwift is available under the MIT license. See the LICENSE file for more i
 |UITableView、UICollectionView| dataSource, delegate的回调等等|
 |UITextView、UItextField| 快速使用的方法、长度限制、占位符、delegate回调等等|
 |UILabel、UIButton、UIImage、UIColor| 相关的方法的快速使用|
-|UIViewController| 生命周期的回调|
+|UIViewController| 生命周期的回调、push、pop的自定义跳转动画，相册预览|
 |UIAlertController| 快速使用|
 |QuicklyPopmenu| 菜单view|
 等等

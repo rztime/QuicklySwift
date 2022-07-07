@@ -16,6 +16,9 @@
 		B0B5C8391276FB9FDCE8C8BF /* Pods_QuicklySwift_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 10C44B640550BD816C60F599 /* Pods_QuicklySwift_Tests.framework */; };
 		B20131BB285818A0004FE458 /* AnimateDemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20131BA285818A0004FE458 /* AnimateDemoViewController.swift */; };
 		B20131BF28585CE3004FE458 /* LedDemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20131BE28585CE3004FE458 /* LedDemoViewController.swift */; };
+		B22C27412872848900B34EEF /* TransitionOneViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B22C27402872848900B34EEF /* TransitionOneViewController.swift */; };
+		B22C27442872849C00B34EEF /* TransitionTwoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B22C27432872849C00B34EEF /* TransitionTwoViewController.swift */; };
+		B22C27472872892400B34EEF /* TransitionThreeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B22C27462872892400B34EEF /* TransitionThreeViewController.swift */; };
 		B26C6A7F2850519E009512EC /* QuicklyDemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B26C6A7E2850519E009512EC /* QuicklyDemoViewController.swift */; };
 		B26C6A81285073CC009512EC /* TableViewDemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B26C6A80285073CC009512EC /* TableViewDemoViewController.swift */; };
 		B27EEAE02857261E00C55EA5 /* BaseViewDemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B27EEADF2857261E00C55EA5 /* BaseViewDemoViewController.swift */; };
@@ -59,6 +62,9 @@
 		A8603293D5F28ABA2AA0917A /* Pods-QuicklySwift_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-QuicklySwift_Tests.debug.xcconfig"; path = "Target Support Files/Pods-QuicklySwift_Tests/Pods-QuicklySwift_Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		B20131BA285818A0004FE458 /* AnimateDemoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimateDemoViewController.swift; sourceTree = "<group>"; };
 		B20131BE28585CE3004FE458 /* LedDemoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LedDemoViewController.swift; sourceTree = "<group>"; };
+		B22C27402872848900B34EEF /* TransitionOneViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransitionOneViewController.swift; sourceTree = "<group>"; };
+		B22C27432872849C00B34EEF /* TransitionTwoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransitionTwoViewController.swift; sourceTree = "<group>"; };
+		B22C27462872892400B34EEF /* TransitionThreeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransitionThreeViewController.swift; sourceTree = "<group>"; };
 		B26C6A7E2850519E009512EC /* QuicklyDemoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuicklyDemoViewController.swift; sourceTree = "<group>"; };
 		B26C6A80285073CC009512EC /* TableViewDemoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewDemoViewController.swift; sourceTree = "<group>"; };
 		B27EEADF2857261E00C55EA5 /* BaseViewDemoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewDemoViewController.swift; sourceTree = "<group>"; };
@@ -175,6 +181,16 @@
 			name = "Podspec Metadata";
 			sourceTree = "<group>";
 		};
+		B22C273F2872846800B34EEF /* Transition */ = {
+			isa = PBXGroup;
+			children = (
+				B22C27402872848900B34EEF /* TransitionOneViewController.swift */,
+				B22C27432872849C00B34EEF /* TransitionTwoViewController.swift */,
+				B22C27462872892400B34EEF /* TransitionThreeViewController.swift */,
+			);
+			path = Transition;
+			sourceTree = "<group>";
+		};
 		B2921D63285C1FDB00CBC001 /* View */ = {
 			isa = PBXGroup;
 			children = (
@@ -202,6 +218,7 @@
 		B2E5853A286002A200921A91 /* LayoutDemo */ = {
 			isa = PBXGroup;
 			children = (
+				B22C273F2872846800B34EEF /* Transition */,
 				B2921D63285C1FDB00CBC001 /* View */,
 				B2921D5F285C070E00CBC001 /* FriendDemoViewController.swift */,
 				B27EEAE12857266B00C55EA5 /* QuickLayoutViewController.swift */,
@@ -423,11 +440,14 @@
 				B20131BF28585CE3004FE458 /* LedDemoViewController.swift in Sources */,
 				607FACD81AFB9204008FA782 /* ViewController.swift in Sources */,
 				B2D5CB3D2852DA5A00C6C6EF /* CollectionViewDemoViewController.swift in Sources */,
+				B22C27472872892400B34EEF /* TransitionThreeViewController.swift in Sources */,
+				B22C27412872848900B34EEF /* TransitionOneViewController.swift in Sources */,
 				B27EEAE22857266B00C55EA5 /* QuickLayoutViewController.swift in Sources */,
 				B2921D60285C070E00CBC001 /* FriendDemoViewController.swift in Sources */,
 				607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */,
 				B2E5853C286002C300921A91 /* LayoutIndexViewController.swift in Sources */,
 				B26C6A81285073CC009512EC /* TableViewDemoViewController.swift in Sources */,
+				B22C27442872849C00B34EEF /* TransitionTwoViewController.swift in Sources */,
 				B2921D65285C1FF700CBC001 /* FriendView.swift in Sources */,
 				B2C4BC05284F3A1C00B7C25B /* IndexViewController.swift in Sources */,
 			);

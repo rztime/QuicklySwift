@@ -6,6 +6,28 @@
 //
 
 import UIKit
+private var qgesturehandle = "qgesturehandle"
+public extension UIGestureRecognizer {
+    @discardableResult
+    func qhandle(_ gesture: ((_ gesture: UIGestureRecognizer) -> Void)?) -> Self {
+        self.removeTarget(self, action: #selector(qgestureaction(_:)))
+        self.addTarget(self, action: #selector(qgestureaction(_:)))
+        self.qgesturehandleblock = gesture
+        return self
+    }
+    private var qgesturehandleblock: ((_ gesture: UIGestureRecognizer) -> Void)? {
+        set {
+            objc_setAssociatedObject(self, &qgesturehandle, newValue, .OBJC_ASSOCIATION_COPY)
+        }
+        get {
+            return objc_getAssociatedObject(self, &qgesturehandle) as? ((UIGestureRecognizer) -> Void)
+        }
+    }
+    @objc private func qgestureaction(_ gesture: UIGestureRecognizer) {
+        self.qgesturehandleblock?(gesture)
+    }
+}
+
 /// 点击手势
 open class QTapGestureRecognizer: UITapGestureRecognizer {
     open var tapActionResult: ((_ view: UIView) -> Void)?

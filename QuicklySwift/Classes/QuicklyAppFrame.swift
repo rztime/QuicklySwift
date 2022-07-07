@@ -19,7 +19,8 @@ public struct qAppFrame {
         return self.navigationController?.viewControllers ?? []
     }
     /// push跳转vc,忽略重复的跳转vc， 在vc未跳转完成之前，如果又push一个vc，且和之前是同一个类，将忽略第二个
-    public static func pushViewController(_ vc: UIViewController, animated: Bool = true) {
+    public static func pushViewController(_ vc: UIViewController?, animated: Bool = true) {
+        guard let vc = vc else { return }
         if ispushinganimate {
             /// 有时候卡顿，或者回调多次，致使一次性跳转多次同一个vc，这里将做处理
             let vcs = self.viewControllers

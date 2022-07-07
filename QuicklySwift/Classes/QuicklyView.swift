@@ -255,6 +255,19 @@ public extension UIView {
         tap.tapActionResultWithTap = tapactionwithTap
         return self
     }
+    /// 移除点击tap手势
+    @discardableResult
+    func qremoveTapGesture(touches: Int, taps: Int) -> Self {
+        /// 将之前的重复的去掉
+        let oldGesture : [UITapGestureRecognizer] = (self.gestureRecognizers?.filter({$0.isKind(of: UITapGestureRecognizer.self)}) as? [UITapGestureRecognizer]) ?? []
+        oldGesture.forEach { old in
+            if old.numberOfTouchesRequired == touches,
+               old.numberOfTapsRequired == taps {
+                self.removeGestureRecognizer(old)
+            }
+        }
+        return self
+    }
     /// 拖动手势
     @discardableResult
     func qpanNumberof(touches min: Int, max: Int, _ panAction: ((_ view: UIView, _ pan: UIPanGestureRecognizer) -> Void)?) -> Self {
@@ -269,6 +282,19 @@ public extension UIView {
         pan.setDragInSupver(starCenter: center, dragStyle: style)
         return self
     }
+    /// 移除拖拽pan手势
+    @discardableResult
+    func qremovePanGesture(touches min: Int, max: Int) -> Self {
+        /// 将之前的重复的去掉
+        let oldGesture :[UIPanGestureRecognizer] = (self.gestureRecognizers?.filter({$0.isKind(of: UIPanGestureRecognizer.self)}) as? [UIPanGestureRecognizer]) ?? []
+        oldGesture.forEach { old in
+            if old.minimumNumberOfTouches == min,
+               old.maximumNumberOfTouches == max {
+                self.removeGestureRecognizer(old)
+            }
+        }
+        return self
+    }
     /// 长按手势
     /// moveMent: 长按时，允许滑动范围，默认是10
     /// taps = 0 // 即响应长按手势之前，需要单击几次，默认0
@@ -277,10 +303,35 @@ public extension UIView {
         let _ = QLongPressGestureRecognizer.init(target: self, numberofTouches: touches, numberofTaps: taps, minPressDuration: duration, movement: movement, action)
         return self
     }
+    /// 移除长按手势
+    @discardableResult
+    func qremoveLongpress(numberof touches: Int, taps: Int = 0) -> Self {
+        /// 将之前的重复的去掉
+        let oldGesture :[UILongPressGestureRecognizer] = (self.gestureRecognizers?.filter({$0.isKind(of: UILongPressGestureRecognizer.self)}) as? [UILongPressGestureRecognizer]) ?? []
+        oldGesture.forEach { old in
+            if old.numberOfTouchesRequired == touches,
+               old.numberOfTapsRequired == taps {
+                self.removeGestureRecognizer(old)
+            }
+        }
+        return self
+    }
     /// 快速轻扫手势
     @discardableResult
     func qswipe(numberof touches: Int, direction: UISwipeGestureRecognizer.Direction, _ swipe: ((_ view: UIView, _ swipe: UISwipeGestureRecognizer) -> Void)?) -> Self {
         let _ = QSwipeGestureRecognizer.init(target: self, numberofTouches: touches, direction: direction, swipe)
+        return self
+    }
+    /// 移除轻扫手势
+    @discardableResult
+    func qremoveSwipe(numberof touches: Int, direction: UISwipeGestureRecognizer.Direction) -> Self {
+        /// 将之前的重复的去掉
+        let oldGesture :[UISwipeGestureRecognizer] = (self.gestureRecognizers?.filter({$0.isKind(of: UISwipeGestureRecognizer.self)}) as? [UISwipeGestureRecognizer]) ?? []
+        oldGesture.forEach { old in
+            if old.numberOfTouchesRequired == touches, old.direction == direction {
+                self.removeGestureRecognizer(old)
+            }
+        }
         return self
     }
 }
