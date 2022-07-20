@@ -22,6 +22,11 @@ it, simply add the following line to your Podfile:
 pod 'QuicklySwift'
 ```
 
+如果无法下载最新版本，可以在podfile中使用
+```ruby
+pod 'QuicklySwift', :git => 'https://github.com/rztime/QuicklySwift.git'
+```
+
 ## Author
 
 rztime, rztime@vip.qq.com, qq交流群：580839749
