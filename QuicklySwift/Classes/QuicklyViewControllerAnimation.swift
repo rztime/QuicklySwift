@@ -221,7 +221,7 @@ public extension UIViewController {
             // 移动并缩放，以及设置手势交互返回的百分比
             let pan = interactiveInfo?.panGesture ?? .init()
             let trans = pan.translation(in: pan.view)
-            var percet = 1 - trans.y / qscreenheight
+            var percet = 1 - abs(trans.y / qscreenheight)
             percet = min(1, max(0, percet))
             interactiveInfo?.update(percet)
             interactiveInfo?.backgoundView.alpha = percet
@@ -232,7 +232,7 @@ public extension UIViewController {
             /// 手势结束的时候，通过百分比来确认是否pop成功，
             let pan = interactiveInfo?.panGesture ?? .init()
             let trans = pan.translation(in: pan.view)
-            var percet = 1 - trans.y / qscreenheight
+            var percet = 1 - abs(trans.y / qscreenheight)
             percet = min(1, max(0, percet))
             if percet > 0.9 { // 移动过小，判定pop取消
                 UIView.animate(withDuration: 0.3, delay: 0, options: .transitionCrossDissolve) {
