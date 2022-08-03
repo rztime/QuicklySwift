@@ -23,11 +23,13 @@ public extension UIScrollView {
         return self
     }
     @available(iOS 11.0, *)
+    @discardableResult
     func qcontentInsetAdjustmentBehavior(_ beavior: UIScrollView.ContentInsetAdjustmentBehavior) -> Self {
         self.contentInsetAdjustmentBehavior = beavior
         return self
     }
     @available(iOS 13.0, *)
+    @discardableResult
     func qautomaticallyAdjustsScrollIndicatorInsets(_ insets: Bool) -> Self {
         self.automaticallyAdjustsScrollIndicatorInsets = insets
         return self

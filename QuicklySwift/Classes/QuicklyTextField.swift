@@ -9,12 +9,12 @@ import UIKit
 
 public extension UITextField {
     @discardableResult
-    func qtext(_ text: String)-> Self {
+    func qtext(_ text: String?)-> Self {
         self.text = text
         return self
     }
     @discardableResult
-    func qattributedText(_ text: NSAttributedString) -> Self {
+    func qattributedText(_ text: NSAttributedString?) -> Self {
         self.attributedText = text
         return self
     }
@@ -24,7 +24,7 @@ public extension UITextField {
         return self
     }
     @discardableResult
-    func qfont(_ font: UIFont) -> Self {
+    func qfont(_ font: UIFont?) -> Self {
         self.font = font
         return self
     }

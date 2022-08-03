@@ -189,19 +189,18 @@ public extension UIView {
     }
     /// 高斯模糊
     @discardableResult
-    func qgaussBlur() -> Self {
+    func qgaussBlur(_ style: UIBlurEffect.Style = .light, _ alpha: CGFloat = 1) -> Self {
         self.qsizeChanged { view in
-            if let v = view.subviews.first(where: {$0.isKind(of: UIVisualEffectView.self)}) {
-                v.frame = view.bounds
+            let blur : UIVisualEffectView
+            if let v = view.subviews.first(where: {$0.isKind(of: UIVisualEffectView.self)}) as? UIVisualEffectView {
+                blur = v
             } else {
-                let blur = UIVisualEffectView.init(frame: view.bounds)
-                if #available(iOS 10.0, *) {
-                    blur.effect = UIBlurEffect.init(style: .regular)
-                } else {
-                    blur.effect = UIBlurEffect.init(style: .light)
-                }
-                view.addSubview(blur)
+                blur = UIVisualEffectView.init(frame: view.bounds)
             }
+            blur.frame = view.bounds
+            blur.alpha = alpha
+            blur.effect = UIBlurEffect.init(style: style)
+            view.insertSubview(blur, at: 0)
         }
         self.setNeedsLayout()
         return self
