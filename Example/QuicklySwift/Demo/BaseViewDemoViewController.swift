@@ -139,7 +139,19 @@ class BaseViewDemoViewController: UIViewController {
                 make.height.equalTo(44)
                 make.bottom.equalToSuperview().inset(1000)
             }),
+            UIView().qmakeConstraints({ make in
+                make.left.equalToSuperview().inset(15)
+                make.width.equalTo(410)
+                make.height.equalTo(10)
+                make.top.equalTo(self.airb.snp.bottom).offset(20)
+            }).qdashLine(color: .blue, lineWidth: 5, height: 1, space: 5, direction: .horizontal),
             
+            UIView().qmakeConstraints({ make in
+                make.left.equalToSuperview().inset(15)
+                make.width.equalTo(10)
+                make.height.equalTo(110)
+                make.top.equalTo(self.airb.snp.bottom).offset(80)
+            }).qdashLine(color: .blue, lineWidth: 5, height: 10, space: 5, direction: .vertical),
 //            QuicklyPopmenu.init(titles: ["文字1", "文字2", "文字3", "文字3",], style: .horizontal(count: 3))
 //                .qmakeConstraints({ make in
 //                    make.top.equalTo(self.airb.snp.bottom).offset(30)

@@ -4,7 +4,6 @@ platform :ios, '10.0'
 
 target 'QuicklySwift_Example' do
   pod 'QuicklySwift', :path => '../'
-
   target 'QuicklySwift_Tests' do
     inherit! :search_paths
 

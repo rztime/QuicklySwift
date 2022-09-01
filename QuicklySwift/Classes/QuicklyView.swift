@@ -232,6 +232,20 @@ public extension UIView {
         }
         return self
     }
+    @discardableResult
+    /// 添加虚线（默认虚线画在view居中）
+    /// - Parameters:
+    ///   - color: 虚线颜色
+    ///   - lineWidth: 虚线宽度
+    ///   - height: 高度
+    ///   - space: 虚线间隔
+    ///   - direction: 划线方向
+    func qdashLine(color: UIColor?, lineWidth: CGFloat, height: CGFloat, space: CGFloat, direction: NSLayoutConstraint.Axis) -> Self {
+        self.qsizeChanged { view in
+            view.layer.qdashLine(color: color, lineWidth: lineWidth, height: height, space: space, direction: direction)
+        }
+        return self
+    }
 }
 // MARK: - 给view添加手势
 public extension UIView {

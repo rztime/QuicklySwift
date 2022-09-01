@@ -151,6 +151,44 @@ public extension CALayer {
         self.insertSublayer(layer, at: 0)
         return self
     }
+    @discardableResult
+    /// 添加虚线
+    /// - Parameters:
+    ///   - color: 虚线颜色
+    ///   - lineWidth: 虚线宽度
+    ///   - height: 高度
+    ///   - space: 虚线间隔
+    ///   - direction: 划线方向
+    func qdashLine(color: UIColor?, lineWidth: CGFloat, height: CGFloat, space: CGFloat, direction: NSLayoutConstraint.Axis) -> Self {
+        self.sublayers?.filter({$0.isKind(of: CAShapeLayer.self)}).forEach({ layer in
+            layer.removeFromSuperlayer()
+        })
+        let layer = CAShapeLayer()
+        layer.bounds = self.bounds
+        layer.position = self.bounds.qcenter
+        layer.fillColor = color?.cgColor
+        layer.strokeColor = color?.cgColor
+        layer.lineJoin = .round
+        layer.lineDashPhase = 0
+        let path = CGMutablePath()
+        switch direction {
+        case .horizontal:
+            layer.lineWidth = height
+            layer.lineDashPattern = [NSNumber.init(value: lineWidth), NSNumber.init(value: space)]
+            path.move(to: .init(x: 0, y: (self.bounds.height - height) / 2))
+            path.addLine(to: .init(x: self.bounds.width, y: (self.bounds.height - height) / 2))
+        case .vertical:
+            layer.lineWidth = lineWidth
+            layer.lineDashPattern = [NSNumber.init(value: height), NSNumber.init(value: space)]
+            path.move(to: .init(x: (self.bounds.size.width - lineWidth) / 2, y: 0))
+            path.addLine(to: .init(x: (self.bounds.size.width - lineWidth) / 2, y: self.bounds.height))
+        @unknown default:
+            break
+        }
+        layer.path = path
+        self.addSublayer(layer)
+        return self
+    }
 }
 
 /// 气泡所在位置
