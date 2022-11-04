@@ -158,25 +158,39 @@ public extension UIView {
 
 // MARK: - 其他方法
 public extension UIView {
+    /// view isHidden 改变的回调
+    @discardableResult
+    func qisHiddenChanged(_ changed: ((_ view: UIView) -> Void)?) -> Self {
+        let _ = QUIView.init(target: self, key: "hidden", changed: changed)
+        changed?(self)
+        return self
+    }
+    /// view isUserInteractionEnabled 改变的回调
+    @discardableResult
+    func qisUserInteractionEnabledChanged(_ changed: ((_ view: UIView) -> Void)?) -> Self {
+        let _ = QUIView.init(target: self, key: "userInteractionEnabled", changed: changed)
+        changed?(self)
+        return self
+    }
+    /// view frame 改变的回调
+    @discardableResult
+    func qframeChanged(_ changed: ((_ view: UIView) -> Void)?) -> Self {
+        let _ = QUIView.init(target: self, key: "frame", changed: changed)
+        changed?(self)
+        return self
+    }
     /// view size 改变的回调
     @discardableResult
-    func qsizeChanged(_ size: ((_ view: UIView) -> Void)?) -> Self {
-        let v = QUIView.init(target: self)
-        v.sizeChanged = size
+    func qsizeChanged(_ changed: ((_ view: UIView) -> Void)?) -> Self {
+        let _ = QUIView.init(target: self, key: "bounds", changed: changed)
+        changed?(self)
         return self
     }
     /// 是否显示在window上（view所在vc在栈顶，如果push到其他页面，则为false）
     @discardableResult
     func qshowToWindow(_ show: ((_ view: UIView, _ showed: Bool) -> Void)?) -> Self {
-        let v = QUIView.init(target: self)
+        let v = QUIView.init(target: self, key: "", changed: nil)
         v.showToWindow = show
-        return self
-    }
-    /// 被释放时的回调
-    @discardableResult
-    func qdeinit(_ de:(()-> Void)?) -> Self {
-        let v = QUIView.init(target: self)
-        v.deinitAction = de
         return self
     }
     /// 设置部分圆角，可选某一个圆角

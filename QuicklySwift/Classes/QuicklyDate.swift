@@ -39,10 +39,11 @@ public extension Date {
 }
 
 public extension Date {
-    /// 转换成字符串
+    /// 转换成字符串，在iOS 15.4之后，如果不设置locale，12小时制时，会有中文
     func qtoString(_ format: String) -> String {
         let formatter = DateFormatter.init()
         formatter.dateFormat = format
+        formatter.locale = .init(identifier: "en_US")
         return formatter.string(from: self)
     }
     /// 常规显示

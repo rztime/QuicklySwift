@@ -33,7 +33,24 @@ class BaseViewDemoViewController: UIViewController {
         .qdeinit {
             print("label 被释放了")
         }
-    
+    let textBtn = UIButton.init(type: .custom)
+        .qbackgroundColor(.red)
+        .qtitle("测试")
+        .qisSelectedChanged { sender in
+            print("---isselected:\(sender.isSelected)")
+        }
+        .qisEnabledChanged { sender in
+            print("---isenable:\(sender.isEnabled)")
+        }
+        .qisHighlightedChanged { sender in
+            print("---isHighlighted:\(sender.isHighlighted)")
+        }
+        .qshowToWindow { view, showed in
+            print("---show To window:\(showed)")
+        }
+        .qisUserInteractionEnabledChanged { view in
+            print("---isUserInteractionEnabled:\(view.isUserInteractionEnabled)")
+        }
     let btn = UIButton.init(type: .custom)
         .qtitle("按钮 居左")
         .qtitleColor(.white)
@@ -103,7 +120,10 @@ class BaseViewDemoViewController: UIViewController {
                 make.top.equalToSuperview().inset(300)
                 make.height.equalTo(44)
             }),
-            
+            textBtn.qmakeConstraints({ make in
+                make.left.right.equalTo(self.label)
+                make.bottom.equalTo(self.label.snp.top).offset(-10)
+            }),
             btn.qmakeConstraints({ make in
                 make.top.equalTo(self.label.snp.bottom).offset(15)
                 make.left.equalToSuperview().inset(15)
@@ -169,14 +189,15 @@ class BaseViewDemoViewController: UIViewController {
         }
         btn.qactionFor(.touchUpInside) { sender in
             print("点击了按钮 事件响应")
-        }.qtap { view in
+        }.qtap { [weak self] view in
             print("点击了按钮 tap响应 如果设置了tap， actionFor touchUpInside 将被覆盖")
             if let btn = view as? UIButton {
                 btn.isSelected = !btn.isSelected
             }
-            QuicklyPopmenu.show(titles: xxxxxtitles, attributedTitles: [], style: .horizontal(count: 4), fingerLocation: .zero, target: view) { index in
-                print("index:\(index)")
-            }
+//            QuicklyPopmenu.show(titles: xxxxxtitles, attributedTitles: [], style: .horizontal(count: 4), fingerLocation: .zero, target: view) { index in
+//                print("index:\(index)")
+//            }
+            self?.textBtn.qisUserInteractionEnabled(!(self?.textBtn.isUserInteractionEnabled ?? false))
         }
         airb.qairbubble([.bottomLeft, .bottomRight], radii: 10, air: .init(width: 10, height: 10), location: .bottom(x: 30), color: .lightGray)
     }

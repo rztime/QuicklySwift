@@ -25,7 +25,12 @@
 		B27EEAE22857266B00C55EA5 /* QuickLayoutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B27EEAE12857266B00C55EA5 /* QuickLayoutViewController.swift */; };
 		B2921D60285C070E00CBC001 /* FriendDemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2921D5F285C070E00CBC001 /* FriendDemoViewController.swift */; };
 		B2921D65285C1FF700CBC001 /* FriendView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2921D64285C1FF700CBC001 /* FriendView.swift */; };
+		B2AE806D2912715D00B2C007 /* QAVPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2AE80692912715D00B2C007 /* QAVPlayer.swift */; };
+		B2AE806E2912715D00B2C007 /* QuicklyAVPlayerOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2AE806A2912715D00B2C007 /* QuicklyAVPlayerOptions.swift */; };
+		B2AE806F2912715D00B2C007 /* QuicklyAVPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2AE806B2912715D00B2C007 /* QuicklyAVPlayer.swift */; };
+		B2AE80702912715D00B2C007 /* QAVPlayerItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2AE806C2912715D00B2C007 /* QAVPlayerItem.swift */; };
 		B2C4BC05284F3A1C00B7C25B /* IndexViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2C4BC04284F3A1C00B7C25B /* IndexViewController.swift */; };
+		B2C6F2D428FFEC2100A04167 /* AVPlayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2C6F2D328FFEC2100A04167 /* AVPlayerViewController.swift */; };
 		B2D5CB3D2852DA5A00C6C6EF /* CollectionViewDemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2D5CB3C2852DA5A00C6C6EF /* CollectionViewDemoViewController.swift */; };
 		B2E5853C286002C300921A91 /* LayoutIndexViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2E5853B286002C300921A91 /* LayoutIndexViewController.swift */; };
 		B2E5853E286011D500921A91 /* LayoutDemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2E5853D286011D500921A91 /* LayoutDemoViewController.swift */; };
@@ -71,8 +76,13 @@
 		B27EEAE12857266B00C55EA5 /* QuickLayoutViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickLayoutViewController.swift; sourceTree = "<group>"; };
 		B2921D5F285C070E00CBC001 /* FriendDemoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendDemoViewController.swift; sourceTree = "<group>"; };
 		B2921D64285C1FF700CBC001 /* FriendView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendView.swift; sourceTree = "<group>"; };
+		B2AE80692912715D00B2C007 /* QAVPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QAVPlayer.swift; sourceTree = "<group>"; };
+		B2AE806A2912715D00B2C007 /* QuicklyAVPlayerOptions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuicklyAVPlayerOptions.swift; sourceTree = "<group>"; };
+		B2AE806B2912715D00B2C007 /* QuicklyAVPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuicklyAVPlayer.swift; sourceTree = "<group>"; };
+		B2AE806C2912715D00B2C007 /* QAVPlayerItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QAVPlayerItem.swift; sourceTree = "<group>"; };
 		B2C21346288AA8BB00B2C00B /* QuicklySwift_Example.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = QuicklySwift_Example.entitlements; sourceTree = "<group>"; };
 		B2C4BC04284F3A1C00B7C25B /* IndexViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IndexViewController.swift; sourceTree = "<group>"; };
+		B2C6F2D328FFEC2100A04167 /* AVPlayerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AVPlayerViewController.swift; sourceTree = "<group>"; };
 		B2D5CB3C2852DA5A00C6C6EF /* CollectionViewDemoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewDemoViewController.swift; sourceTree = "<group>"; };
 		B2E5853B286002C300921A91 /* LayoutIndexViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayoutIndexViewController.swift; sourceTree = "<group>"; };
 		B2E5853D286011D500921A91 /* LayoutDemoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayoutDemoViewController.swift; sourceTree = "<group>"; };
@@ -136,6 +146,7 @@
 		607FACD21AFB9204008FA782 /* Example for QuicklySwift */ = {
 			isa = PBXGroup;
 			children = (
+				B2AE80682912715D00B2C007 /* QuicklyAVPlayer */,
 				607FACD51AFB9204008FA782 /* AppDelegate.swift */,
 				B2C4BC03284F3A0A00B7C25B /* Demo */,
 				607FACD71AFB9204008FA782 /* ViewController.swift */,
@@ -201,6 +212,17 @@
 			path = View;
 			sourceTree = "<group>";
 		};
+		B2AE80682912715D00B2C007 /* QuicklyAVPlayer */ = {
+			isa = PBXGroup;
+			children = (
+				B2AE80692912715D00B2C007 /* QAVPlayer.swift */,
+				B2AE806A2912715D00B2C007 /* QuicklyAVPlayerOptions.swift */,
+				B2AE806B2912715D00B2C007 /* QuicklyAVPlayer.swift */,
+				B2AE806C2912715D00B2C007 /* QAVPlayerItem.swift */,
+			);
+			path = QuicklyAVPlayer;
+			sourceTree = "<group>";
+		};
 		B2C4BC03284F3A0A00B7C25B /* Demo */ = {
 			isa = PBXGroup;
 			children = (
@@ -213,6 +235,7 @@
 				B20131BA285818A0004FE458 /* AnimateDemoViewController.swift */,
 				B20131BE28585CE3004FE458 /* LedDemoViewController.swift */,
 				B2E5853F2860128200921A91 /* Model.swift */,
+				B2C6F2D328FFEC2100A04167 /* AVPlayerViewController.swift */,
 			);
 			path = Demo;
 			sourceTree = "<group>";
@@ -295,6 +318,7 @@
 				TargetAttributes = {
 					607FACCF1AFB9204008FA782 = {
 						CreatedOnToolsVersion = 6.3.1;
+						DevelopmentTeam = 9363D6U2QU;
 						LastSwiftMigration = 0900;
 					};
 					607FACE41AFB9204008FA782 = {
@@ -442,16 +466,21 @@
 				B26C6A7F2850519E009512EC /* QuicklyDemoViewController.swift in Sources */,
 				B20131BF28585CE3004FE458 /* LedDemoViewController.swift in Sources */,
 				607FACD81AFB9204008FA782 /* ViewController.swift in Sources */,
+				B2AE806E2912715D00B2C007 /* QuicklyAVPlayerOptions.swift in Sources */,
 				B2D5CB3D2852DA5A00C6C6EF /* CollectionViewDemoViewController.swift in Sources */,
 				B22C27472872892400B34EEF /* TransitionThreeViewController.swift in Sources */,
 				B22C27412872848900B34EEF /* TransitionOneViewController.swift in Sources */,
 				B27EEAE22857266B00C55EA5 /* QuickLayoutViewController.swift in Sources */,
+				B2AE806D2912715D00B2C007 /* QAVPlayer.swift in Sources */,
 				B2921D60285C070E00CBC001 /* FriendDemoViewController.swift in Sources */,
 				607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */,
 				B2E5853C286002C300921A91 /* LayoutIndexViewController.swift in Sources */,
+				B2AE80702912715D00B2C007 /* QAVPlayerItem.swift in Sources */,
 				B26C6A81285073CC009512EC /* TableViewDemoViewController.swift in Sources */,
 				B22C27442872849C00B34EEF /* TransitionTwoViewController.swift in Sources */,
+				B2AE806F2912715D00B2C007 /* QuicklyAVPlayer.swift in Sources */,
 				B2921D65285C1FF700CBC001 /* FriendView.swift in Sources */,
+				B2C6F2D428FFEC2100A04167 /* AVPlayerViewController.swift in Sources */,
 				B2C4BC05284F3A1C00B7C25B /* IndexViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -544,6 +573,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
@@ -589,6 +619,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_VERSION = 5.0;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
@@ -599,7 +630,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = QuicklySwift_Example.entitlements;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 9363D6U2QU;
 				INFOPLIST_FILE = QuicklySwift/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -607,7 +638,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.demo.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
@@ -618,7 +649,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = QuicklySwift_Example.entitlements;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 9363D6U2QU;
 				INFOPLIST_FILE = QuicklySwift/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -626,7 +657,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.demo.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;

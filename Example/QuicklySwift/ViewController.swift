@@ -20,6 +20,7 @@ class ViewController: UIViewController {
             .qtitleColor(.white)
             .qbackgroundColor(.red)
             .qcornerRadius(5, true)
+            .qisSelected(true)
             .qtap { view in
                 let vc = IndexViewController()
                 qAppFrame.pushViewController(vc, animated: true)

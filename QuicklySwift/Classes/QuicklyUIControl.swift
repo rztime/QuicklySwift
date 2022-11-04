@@ -7,7 +7,6 @@
 
 import UIKit
 
-
 public extension UIControl {
     @discardableResult
     func qisEnabled(_ enable: Bool) -> Self {
@@ -69,19 +68,34 @@ public extension UIControl {
     /// control isSelected 状态发生改变之后的回调
     @discardableResult
     func qisSelectedChanged(_ changed: ((_ sender: UIControl) -> Void)?) -> Self {
-        let _ = QControlHelper.init(target: self, key: "selected", changed: changed)
+        let _ = QUIView.init(target: self, key: "selected") { sender in
+            if let sender = sender as? UIControl {
+                changed?(sender)
+            }
+        }
+        changed?(self)
         return self
     }
     /// control isEnabled 状态发生改变之后的回调
     @discardableResult
     func qisEnabledChanged(_ changed: ((_ sender: UIControl) -> Void)?) -> Self {
-        let _ = QControlHelper.init(target: self, key: "enabled", changed: changed)
+        let _ = QUIView.init(target: self, key: "enabled") { sender in
+            if let sender = sender as? UIControl {
+                changed?(sender)
+            }
+        }
+        changed?(self)
         return self
     }
     /// control isEnabled 状态发生改变之后的回调
     @discardableResult
     func qisHighlightedChanged(_ changed: ((_ sender: UIControl) -> Void)?) -> Self {
-        let _ = QControlHelper.init(target: self, key: "highlighted", changed: changed)
+        let _ = QUIView.init(target: self, key: "highlighted") { sender in
+            if let sender = sender as? UIControl {
+                changed?(sender)
+            }
+        }
+        changed?(self)
         return self
     }
 }
@@ -96,36 +110,11 @@ open class QControlHelper: UIView {
         target.addSubview(self)
         target.addTarget(self, action: #selector(targetActions), for: event)
     }
-    
-    public init(target: UIControl, key: String, changed:((_ changed: UIControl) -> Void)?) {
-        super.init(frame: .zero)
-        self.handler = changed
-        self.isHidden = true
-        target.addSubview(self)
-        self.key = key
-        target.addObserver(self, forKeyPath: key, options: [.new, .old], context: nil)
-        self.target = target
-    }
-
-    open override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
-        guard let object = object as? UIControl, object == self.target else {
-            return
-        }
-        if keyPath == self.key {
-            self.handler?(object)
-        }
-    }
-    
     @objc open func targetActions(_ sender: UIControl) {
         self.handler?(sender)
     }
     
     required public init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-    deinit {
-        if !self.key.isEmpty {
-            self.target?.removeObserver(self, forKeyPath: self.key)
-        } 
     }
 }

@@ -10,56 +10,51 @@ import UIKit
 open class QUIView: UIView {
     open weak var target: UIView?
     /// 初始值size
-    open var originSize = CGSize.init(width: 0, height: 0)
-    /// size改变
-    open var sizeChanged: ((_ view: UIView) -> Void)?
+    open var originSize = CGSize.init(width: -1, height: -1)
     /// view在keywindow上是否显示（当前view所在vc在栈顶）
     open var showToWindow: ((_ view: UIView, _ showed: Bool) -> Void)?
     
-    open var deinitAction: (() -> Void)?
+    open var handler: ((_ view: UIView) -> Void)?
+    open var key: String = ""
     
-    public init(target: UIView) {
-        self.target = target
+    public init(target: UIView, key: String, changed:((_ changed: UIView) -> Void)?) {
         super.init(frame: .zero)
+        self.isHidden = true
         target.addSubview(self)
+        self.target = target
+        self.key = key
+        self.handler = changed
+        if !key.isEmpty {
+            self.target?.addObserver(self, forKeyPath: key, options: [.new, .old], context: nil)
+        }
         self.qcontentMode(.redraw)
         self.snp.remakeConstraints { make in
             make.edges.equalToSuperview().priorityLow()
         }
-        self.isHidden = true
-        if let _ = target as? UIScrollView {
-            self.target?.addObserver(self, forKeyPath: "bounds", options: [.new, .old], context: nil)
-        }
-    }
-    
+    } 
     required public init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-    
-    open override func layoutSubviews() {
-        super.layoutSubviews()
-        changedSizeIfNeed()
     }
     open override func didMoveToWindow() {
         super.didMoveToWindow()
         guard let target = target else { return }
         self.showToWindow?(target, self.window != nil)
     }
-    /// 改变了size之后是否需要回调
-    func changedSizeIfNeed() {
-        guard let superv = self.target else { return }
-        let newSize = superv.frame.size
-        if newSize.equalTo(originSize) { return }
-        originSize = newSize
-        self.sizeChanged?(superv)
-    }
     /// 监听size改变，scrollView需要使用
     open override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         guard let object = object as? UIView, object == self.target else { return }
-        self.changedSizeIfNeed()
+        if keyPath == "bounds" && self.key == "bounds" {
+            if !object.bounds.size.equalTo(originSize) {
+                originSize = object.bounds.size
+                self.handler?(object)
+            }
+        } else if keyPath == self.key {
+            self.handler?(object)
+        }
     }
     deinit {
-        self.target?.removeObserver(self, forKeyPath: "bounds", context: nil)
-        self.deinitAction?()
+        if !self.key.isEmpty {
+            self.target?.removeObserver(self, forKeyPath: self.key, context: nil)
+        }
     }
 }

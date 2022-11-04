@@ -20,18 +20,19 @@ class IndexViewController: UIViewController {
         ("快速开发", QuicklyDemoViewController.self),
         ("动画测试", AnimateDemoViewController.self),
         ("LED", LedDemoViewController.self),
-        ("push pop 转场", TransitionOneViewController.self)
+        ("push pop 转场", TransitionOneViewController.self),
+        ("avplayer", AVPlayerViewController.self),
     ]
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.title = "首页"
         self.view.backgroundColor = .white
- 
+
         self.view.qbody([
             tableView.qmakeConstraints({ make in
                 make.edges.equalToSuperview()
-            })
+            }),
         ])
         tableView.qnumberofRows { [weak self] section in
             return self?.source.count ?? 0

@@ -71,13 +71,6 @@ public extension UIViewController {
         vc.didDisAppear = appear
         return self
     }
-    /// 被释放时的回调
-    @discardableResult
-    func qdeinit(_ de:(()-> Void)?) -> Self {
-        let vc = QViewControllerHelper.init(target: self, times: 0)
-        vc.deinitAction = de
-        return self
-    }
 }
 
 open class QViewControllerHelper: UIViewController {
@@ -86,7 +79,6 @@ open class QViewControllerHelper: UIViewController {
     open var didAppear: (() -> Void)?
     open var willDisAppear: (() -> Void)?
     open var didDisAppear: (() -> Void)?
-    open var deinitAction: (() -> Void)?
     
     open var times: Int = 0
     
@@ -170,6 +162,5 @@ open class QViewControllerHelper: UIViewController {
             self.didpop?()
             popTimes += 1
         }
-        self.deinitAction?()
     }
 }

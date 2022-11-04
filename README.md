@@ -39,7 +39,7 @@ QuicklySwift is available under the MIT license. See the LICENSE file for more i
 
 | 相关 | 说明 |
 |:----|:----|
-|v0.1.7|添加虚线|
+|v0.1.7|添加虚线、一些监听、属性改变回调、定时器的用法等等|
 |v0.1.5|添加权限判断方法<br> QuicklyAuthorization.result(with: QAuthorizationType.photoLibrary) { result in }|
 |v0.1.4|添加push、pop的自定义转场动画方法和demo<br>添加预览相册的push、pop动画|
 |v0.1.3|添加手势、气泡、气泡弹窗等等方法|

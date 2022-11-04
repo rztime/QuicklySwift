@@ -36,7 +36,7 @@ class CollectionViewDemoViewController: UIViewController {
             }.qcell { [weak self] collectionView, indexPath in
                 let cell: TestCollectionViewCell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! TestCollectionViewCell
                 let item = self?.items[qsafe: indexPath.row]
-                cell.contentView.qbackgroundColor(.random)
+                cell.contentView.qbackgroundColor(.qrandom)
                 cell.fromeLable.text = "@来自\(item?.ip ?? "")"
                 cell.fromeLable.isHidden = item?.ip.isEmpty ?? true
                 
@@ -85,7 +85,7 @@ class TestCollectionViewCell : UICollectionViewCell {
     let btn1 = UIButton.init(type: .custom).qcornerRadius(20, true).qbackgroundColor(.red).qtitle("点赞")
     let btn2 = UIButton.init(type: .custom).qcornerRadius(20, true).qbackgroundColor(.blue).qtitle("关注")
     let btn3 = UIButton.init(type: .custom).qcornerRadius(20, true).qbackgroundColor(.yellow).qtitle("评论")
-    let btn4 = UIButton.init(type: .custom).qcornerRadius(20, true).qbackgroundColor(.random).qtitle("分享")
+    let btn4 = UIButton.init(type: .custom).qcornerRadius(20, true).qbackgroundColor(.qrandom).qtitle("分享")
     
     let fromeLable = UILabel().qtextColor(.white).qfont(.systemFont(ofSize: 15)).qnumberOfLines(0)
     let contentLabel = UILabel().qtextColor(.white).qfont(.systemFont(ofSize: 14)).qnumberOfLines(3)

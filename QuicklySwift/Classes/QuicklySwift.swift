@@ -21,20 +21,6 @@ public extension UIView {
             return objc_getAssociatedObject(self, &viewConstraintMake) as? ((_ make: ConstraintMaker) -> Void)
         }
     }
-    /// 用于添加size改变回调，点击响应手势
-    var qviewhelper: QUIView {
-        set {
-            objc_setAssociatedObject(self, &qviewhelperkey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
-        }
-        get {
-            if let v = objc_getAssociatedObject(self, &qviewhelperkey) as? QUIView {
-                return v
-            }
-            let v = QUIView.init(target: self)
-            self.qviewhelper = v
-            return v
-        }
-    }
 }
 private var qtextfieldhelperkey = "qtextfieldhelperkey"
 public extension UITextField {

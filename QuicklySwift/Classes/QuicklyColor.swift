@@ -23,11 +23,15 @@ public extension UIColor {
         return qrgba((hex >> 16) & 0xff, (hex >> 8) & 0xFF, hex & 0xFF, a: a)
     }
     /// 随机颜色
-    class var random: UIColor {
+    class var qrandom: UIColor {
         let r = Int.random(in: 0...255)
         let g = Int.random(in: 0...255)
         let b = Int.random(in: 0...255)
         return qrgb(r, g, b)
+    }
+    /// 颜色转换图片
+    func qtoImage(_ size: CGSize = .init(width: 1, height: 1)) -> UIImage? {
+        return self.cgColor.qtoImage(size)
     }
 }
 public extension CGColor {
@@ -46,10 +50,22 @@ public extension CGColor {
         return qrgba((hex >> 16) & 0xff, (hex >> 8) & 0xFF, hex & 0xFF, a: a)
     }
     /// 随机颜色
-    class var random: CGColor {
+    class var qrandom: CGColor {
         let r = Int.random(in: 0...255)
         let g = Int.random(in: 0...255)
         let b = Int.random(in: 0...255)
         return qrgb(r, g, b)
+    }
+    /// 颜色转换图片
+    func qtoImage(_ size: CGSize = .init(width: 1, height: 1)) -> UIImage? {
+        var res: UIImage? = nil
+        let rect = CGRect(x: 0, y: 0, width: size.width, height: size.height)
+        UIGraphicsBeginImageContextWithOptions(rect.size, false, UIScreen.main.scale)
+        let context = UIGraphicsGetCurrentContext()
+        context?.setFillColor(self)
+        context?.fill(rect)
+        res = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        return res
     }
 }
