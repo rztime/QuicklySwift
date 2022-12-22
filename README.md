@@ -414,10 +414,14 @@ func qactiveConstraints() -> Self {
 
 #### 关于页面飘灰
 
-飘灰一键开关
+飘灰配置
 
 ```
+/// 一键开关
 QGrayFloatManager.shared.isgrayActive = true // or false
+
+/// 飘灰视图层级，默认为1， view.layer.zPosition默认为0，数值越大，图层越处于顶层
+QGrayFloatManager.shared.zposition = 1 
 ```
 
 view的飘灰两种方式，约束和frame
@@ -428,6 +432,10 @@ view.qgrayfloat(edges: .zero)
 /// view 部分区域可以多个飘灰
 view.qgrayfloat(tag: 1, frame: .init(x: 0, y: 0, width: 100, height: 100))
 view.qgrayfloat(tag: 2, frame: .init(x: 0, y: 400, width: 100, height: 100))
+
+/// 如果不想让view里的imageView飘灰
+view.addSubview(imageView)
+imageView.layer.zposition = 2 // 
 ```
 
 关于类似tableView飘灰前10行、scrollView飘灰首屏等等方法类似

@@ -10,6 +10,8 @@ import Foundation
 
 /// 是否飘灰 改变之后的通知
 public let qfloatgrayChangeName = Notification.Name("qfloatgrayChangeName")
+public let qfloatgrayzpositionChangeName = Notification.Name("qfloatgrayzpositionChangeName")
+public let qfloatgrayColorChangeName = Notification.Name("qfloatgrayColorChangeName")
 
 private var quicklyFloatgrayKey = "quicklyFloatgrayKey"
 
@@ -93,10 +95,24 @@ public class QGrayFloatManager {
             NotificationCenter.default.post(name: qfloatgrayChangeName, object: nil)
         }
     }
-    /// 飘灰view的zpositon，zposition越大，不管何时加在父视图上，都将在上层显示
-    public var zposition: CGFloat = 10
+    /// 飘灰view的zpositon，默认为1， view.layer.zPosition默认为0，数值越大，图层越处于顶层
+    public var zposition: CGFloat = 1 {
+        didSet {
+            if oldValue == zposition {
+                return
+            }
+            NotificationCenter.default.post(name: qfloatgrayzpositionChangeName, object: nil)
+        }
+    }
     /// 飘灰的颜色
-    public var grayColor: UIColor = .init(white: 0.99, alpha: 1)
+    public var grayColor: UIColor = .init(white: 0.99, alpha: 1) {
+        didSet {
+            if oldValue.isEqual(grayColor) {
+                return
+            }
+            NotificationCenter.default.post(name: qfloatgrayColorChangeName, object: nil)
+        }
+    }
 }
 /// 飘灰的view
 open class QGrayFloatView: UIView {
@@ -107,14 +123,20 @@ open class QGrayFloatView: UIView {
         if #available(iOS 13.0, *) {
             // 在iOS 12上，有部分生效，部分不生效，不生效时，相当于在view上加了一个灰色的图层遮住导致显示空白
             self.backgroundColor = QGrayFloatManager.shared.grayColor
-            self.layer.compositingFilter = "saturationBlendMode"
             self.layer.zPosition = QGrayFloatManager.shared.zposition
+            self.layer.compositingFilter = "saturationBlendMode"
             
             self.qshowToWindow { view, showed in
                 view.isHidden = !QGrayFloatManager.shared.isgrayActive
             }
             NotificationCenter.qaddObserver(name: qfloatgrayChangeName, object: nil, target: self) { [weak self] notification in
                 self?.isHidden = !QGrayFloatManager.shared.isgrayActive
+            }
+            NotificationCenter.qaddObserver(name: qfloatgrayzpositionChangeName, object: nil, target: self) { [weak self] notification in
+                self?.layer.zPosition = QGrayFloatManager.shared.zposition
+            }
+            NotificationCenter.qaddObserver(name: qfloatgrayColorChangeName, object: nil, target: self) { [weak self] notification in
+                self?.backgroundColor = QGrayFloatManager.shared.grayColor
             }
         } else {
             backgroundColor = .clear

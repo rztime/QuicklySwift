@@ -22,6 +22,7 @@ class GrayfloatVC1: UIViewController {
         /// 整个view飘灰
         self.view.qgrayfloat(edges: .zero)
         self.view.qgrayfloat(tag: 1, frame: .init(x: 0, y: 0, width: 100, height: 100))
+        self.imageViwe.layer.zPosition = 2
         /// 导航栏设置飘灰
         /// 因为不是单独设置的导航栏，所以在没显示当前页面后，移除飘灰
         self.qwillAppear { [weak self] in
@@ -48,6 +49,11 @@ class GrayfloatVC1: UIViewController {
         textLabel.qtap { view in
             let vc = ViewController()
             qAppFrame.pushViewController(vc)
+        }
+        imageViwe.qtap { view in
+            UIAlertController.qwith(title: "hhh", "hahhdfa", actions: ["去人"], complete: { index in
+                
+            })
         }
     }
 }
