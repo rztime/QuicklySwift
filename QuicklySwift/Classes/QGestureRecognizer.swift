@@ -232,7 +232,7 @@ open class QPanGestureRecognizer: UIPanGestureRecognizer {
         }
     }
 }
-/// 点击手势
+/// 长按手势
 open class QLongPressGestureRecognizer: UILongPressGestureRecognizer {
     open var longPressActionResult: ((_ view: UIView, _ longpress: UILongPressGestureRecognizer) -> Void)?
     

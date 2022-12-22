@@ -22,7 +22,6 @@ class LayoutDemoViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = .white
-        
         self.view.qbody([
             VStackView.qbody([
                 textLabel,

@@ -138,111 +138,177 @@ public extension UIScrollView {
     }
 }
 
-public extension UIScrollView {
+public extension QuicklyProtocal where Self: UIScrollView {
     /// contentSize 改变之后的回调
     @discardableResult
-    func qcontentSizeChanged(changed: ((_ scrollView: UIScrollView) -> Void)?) -> Self {
-        self.qhelper.contentSizeChanged = changed
+    func qcontentSizeChanged(changed: ((_ scrollView: Self) -> Void)?) -> Self {
+        self.qhelper.contentSizeChanged = { scrollView in
+            if let scrollView = scrollView as? Self {
+                changed?(scrollView)
+            }
+        }
         return self
     }
     /// contentOffset改变之后的回调
     @discardableResult
-    func qcontentOffsetChanged(changed: ((_ scrollView: UIScrollView) -> Void)?) -> Self {
-        self.qhelper.contentOffsetChanged = changed
+    func qcontentOffsetChanged(changed: ((_ scrollView: Self) -> Void)?) -> Self {
+        self.qhelper.contentOffsetChanged = { scrollView in
+            if let scrollView = scrollView as? Self {
+                changed?(scrollView)
+            }
+        }
         return self
     }
-}
-
-// MARK: - 对UIScrollView的delegate进行quickly设置
-public extension UIScrollView {
     /// scrollView停止滚动
     @discardableResult
-    func qdidEndScroll(_ scroll: ((_ scrollView: UIScrollView) -> Void)?) -> Self {
-        self.qhelper.didStopScroll = scroll
+    func qdidEndScroll(_ scroll: ((_ scrollView: Self) -> Void)?) -> Self {
+        self.qhelper.didStopScroll =  { scrollView in
+            if let scrollView = scrollView as? Self {
+                scroll?(scrollView)
+            }
+        }
         return self
     }
     /// 滚动回调
     @discardableResult
-    func qdidScroll(_ scroll: ((_ scrollView: UIScrollView) -> Void)?) -> Self {
-        self.qhelper.didScroll = scroll
+    func qdidScroll(_ scroll: ((_ scrollView: Self) -> Void)?) -> Self {
+        self.qhelper.didScroll = { scrollView in
+            if let scrollView = scrollView as? Self {
+                scroll?(scrollView)
+            }
+        }
         return self
     }
     /// zoom
     @discardableResult
-    func qdidZoom(_ zoom: ((_ scrollView: UIScrollView) -> Void)?) -> Self {
-        self.qhelper.didZoom = zoom
+    func qdidZoom(_ zoom: ((_ scrollView: Self) -> Void)?) -> Self {
+        self.qhelper.didZoom = { scrollView in
+            if let scrollView = scrollView as? Self {
+                zoom?(scrollView)
+            }
+        }
         return self
     }
     /// willBeginDragging
     @discardableResult
-    func qwillBeginDragging(_ drag: ((_ scrollView: UIScrollView) -> Void)?) -> Self {
-        self.qhelper.willBeginDragging = drag
+    func qwillBeginDragging(_ drag: ((_ scrollView: Self) -> Void)?) -> Self {
+        self.qhelper.willBeginDragging = { scrollView in
+            if let scrollView = scrollView as? Self {
+                drag?(scrollView)
+            }
+        }
         return self
     }
     /// scrollViewWillEndDragging withVelocity targetContentOffset
     @discardableResult
-    func qwillEndDragging(_ end: ((_ scrollView: UIScrollView, _ velocity: CGPoint, _ targetContentOffset: UnsafeMutablePointer<CGPoint>) -> Void)?) -> Self {
-        self.qhelper.willEndDragging = end
+    func qwillEndDragging(_ end: ((_ scrollView: Self, _ velocity: CGPoint, _ targetContentOffset: UnsafeMutablePointer<CGPoint>) -> Void)?) -> Self {
+        self.qhelper.willEndDragging = { scrollView, v, t in
+            if let scrollView = scrollView as? Self {
+                end?(scrollView, v, t)
+            }
+        }
         return self
     }
     /// scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool)
     @discardableResult
-    func qdidEndDragging(_ end: ((_ scrollView: UIScrollView, _ decelerate: Bool) -> Void)?) -> Self {
-        self.qhelper.didEndDragging = end
+    func qdidEndDragging(_ end: ((_ scrollView: Self, _ decelerate: Bool) -> Void)?) -> Self {
+        self.qhelper.didEndDragging = { scrollView, d in
+            if let scrollView = scrollView as? Self {
+                end?(scrollView, d)
+            }
+        }
         return self
     }
     /// scrollViewWillBeginDecelerating(_ scrollView: UIScrollView)
     @discardableResult
-    func qwillBeginDecelerating(_ begin: ((_ scrollView: UIScrollView) -> Void)?) -> Self {
-        self.qhelper.willBeginDecelerating = begin
+    func qwillBeginDecelerating(_ begin: ((_ scrollView: Self) -> Void)?) -> Self {
+        self.qhelper.willBeginDecelerating = { scrollView in
+            if let scrollView = scrollView as? Self {
+                begin?(scrollView)
+            }
+        }
         return self
     }
     /// scrollViewDidEndDecelerating(_ scrollView: UIScrollView)
     @discardableResult
-    func qdidEndDecelerating(_ end: ((_ scrollView: UIScrollView) -> Void)?) -> Self {
-        self.qhelper.didEndDecelerating = end
+    func qdidEndDecelerating(_ end: ((_ scrollView: Self) -> Void)?) -> Self {
+        self.qhelper.didEndDecelerating = { scrollView in
+            if let scrollView = scrollView as? Self {
+                end?(scrollView)
+            }
+        }
         return self
     }
     /// scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView)
     @discardableResult
-    func qdidEndScrollingAnimation(_ end: ((_ scrollView: UIScrollView) -> Void)?) -> Self {
-        self.qhelper.didEndScrollingAnimation = end
+    func qdidEndScrollingAnimation(_ end: ((_ scrollView: Self) -> Void)?) -> Self {
+        self.qhelper.didEndScrollingAnimation = { scrollView in
+            if let scrollView = scrollView as? Self {
+                end?(scrollView)
+            }
+        }
         return self
     }
     /// viewForZooming(in scrollView: UIScrollView) -> UIView?
     @discardableResult
-    func qviewForZooming(_ view: ((_ scrollView: UIScrollView) -> UIView?)?) -> Self {
-        self.qhelper.viewForZooming = view
+    func qviewForZooming(_ view: ((_ scrollView: Self) -> UIView?)?) -> Self {
+        self.qhelper.viewForZooming = { scrollView in
+            if let scrollView = scrollView as? Self {
+                return view?(scrollView)
+            }
+            return nil
+        }
         return self
     }
     /// scrollViewWillBeginZooming(_ scrollView: UIScrollView, with view: UIView?)
     @discardableResult
-    func qwillBeginZooming(_ begin: ((_ scrollView: UIScrollView, _ withView: UIView?) -> Void)?) -> Self {
-        self.qhelper.willBeginZooming = begin
+    func qwillBeginZooming(_ begin: ((_ scrollView: Self, _ withView: UIView?) -> Void)?) -> Self {
+        self.qhelper.willBeginZooming = { scrollView, v in
+            if let scrollView = scrollView as? Self {
+                begin?(scrollView, v)
+            }
+        }
         return self
     }
     /// scrollViewDidEndZooming(_ scrollView: UIScrollView, with view: UIView?, atScale scale: CGFloat)
     @discardableResult
-    func qdidEndZooming(_ end: ((_ scrollView: UIScrollView, _ withView: UIView?, _ atScale: CGFloat) -> Void)?) -> Self {
-        self.qhelper.didEndZooming = end
+    func qdidEndZooming(_ end: ((_ scrollView: Self, _ withView: UIView?, _ atScale: CGFloat) -> Void)?) -> Self {
+        self.qhelper.didEndZooming = { scrollView, v, s in
+            if let scrollView = scrollView as? Self {
+                end?(scrollView, v, s)
+            }
+        }
         return self
     }
     /// scrollViewShouldScrollToTop(_ scrollView: UIScrollView)
     @discardableResult
-    func qshouldScrollToTop(_ should: ((_ scrollView: UIScrollView) -> Bool)?) -> Self {
-        self.qhelper.shouldScrollToTop = should
+    func qshouldScrollToTop(_ should: ((_ scrollView: Self) -> Bool)?) -> Self {
+        self.qhelper.shouldScrollToTop = { scrollView in
+            if let scrollView = scrollView as? Self {
+                return should?(scrollView) ?? true
+            }
+            return true
+        }
         return self
     }
     /// scrollViewDidScrollToTop(_ scrollView: UIScrollView)
     @discardableResult
-    func qdidScrollToTop(_ did: ((_ scrollView: UIScrollView) -> Void)?) -> Self {
-        self.qhelper.didScrollToTop = did
+    func qdidScrollToTop(_ did: ((_ scrollView: Self) -> Void)?) -> Self {
+        self.qhelper.didScrollToTop = { scrollView in
+            if let scrollView = scrollView as? Self {
+                did?(scrollView)
+            }
+        }
         return self
     }
     /// scrollViewDidChangeAdjustedContentInset(_ scrollView: UIScrollView)
     @discardableResult
-    func qdidChangeAdjustedContentInset(_ did: ((_ scrollView: UIScrollView) -> Void)?) -> Self {
-        self.qhelper.didChangeAdjustedContentInset = did
+    func qdidChangeAdjustedContentInset(_ did: ((_ scrollView: Self) -> Void)?) -> Self {
+        self.qhelper.didChangeAdjustedContentInset = { scrollView in
+            if let scrollView = scrollView as? Self {
+                did?(scrollView)
+            }
+        }
         return self
     }
 }

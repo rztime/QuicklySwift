@@ -96,3 +96,6 @@ public extension UITextView {
         return .init(target: self)
     }
 }
+
+public protocol QuicklyProtocal {}
+extension UIView: QuicklyProtocal {}

@@ -118,10 +118,6 @@ class FriendCell: UITableViewCell {
         
         // 已关注 隐藏
         self.bottomView.followBtn.isHidden = model?.isfollow ?? false
-        
-        self.contentView.qtap { view in
-            print("111111111")
-        }
     }
     
     required init?(coder: NSCoder) {

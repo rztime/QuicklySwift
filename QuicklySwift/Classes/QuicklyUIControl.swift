@@ -57,19 +57,23 @@ public extension UIControl {
     }
 }
 
-public extension UIControl {
+public extension QuicklyProtocal where Self: UIControl {
     /// control的事件回调
     @discardableResult
-    func qactionFor(_ event: UIControl.Event, handler:((_ sender: UIControl) -> Void)?) -> Self {
+    func qactionFor(_ event: UIControl.Event, handler:((_ sender: Self) -> Void)?) -> Self {
         let v = QControlHelper.init(target: self, event: event)
-        v.handler = handler
+        v.handler = { sender in
+            if let s = sender as? Self {
+                handler?(s)
+            }
+        }
         return self
     }
     /// control isSelected 状态发生改变之后的回调
     @discardableResult
-    func qisSelectedChanged(_ changed: ((_ sender: UIControl) -> Void)?) -> Self {
+    func qisSelectedChanged(_ changed: ((_ sender: Self) -> Void)?) -> Self {
         let _ = QUIView.init(target: self, key: "selected") { sender in
-            if let sender = sender as? UIControl {
+            if let sender = sender as? Self {
                 changed?(sender)
             }
         }
@@ -78,9 +82,9 @@ public extension UIControl {
     }
     /// control isEnabled 状态发生改变之后的回调
     @discardableResult
-    func qisEnabledChanged(_ changed: ((_ sender: UIControl) -> Void)?) -> Self {
+    func qisEnabledChanged(_ changed: ((_ sender: Self) -> Void)?) -> Self {
         let _ = QUIView.init(target: self, key: "enabled") { sender in
-            if let sender = sender as? UIControl {
+            if let sender = sender as? Self {
                 changed?(sender)
             }
         }
@@ -89,9 +93,9 @@ public extension UIControl {
     }
     /// control isEnabled 状态发生改变之后的回调
     @discardableResult
-    func qisHighlightedChanged(_ changed: ((_ sender: UIControl) -> Void)?) -> Self {
+    func qisHighlightedChanged(_ changed: ((_ sender: Self) -> Void)?) -> Self {
         let _ = QUIView.init(target: self, key: "highlighted") { sender in
-            if let sender = sender as? UIControl {
+            if let sender = sender as? Self {
                 changed?(sender)
             }
         }

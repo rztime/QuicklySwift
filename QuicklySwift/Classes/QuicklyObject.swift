@@ -23,7 +23,7 @@ public extension NSObject {
         return self
     }
 }
-private extension NSObject {
+fileprivate extension NSObject {
     private static var quicklyobjnameaddres = "quicklyobjnameaddres"
     var quicklyObj: QuicklyObjectHelper? {
         set {

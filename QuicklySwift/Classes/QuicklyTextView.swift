@@ -45,7 +45,7 @@ public extension UITextView {
         return self
     }
     @discardableResult
-    func qattributedText(_ text: NSAttributedString) -> Self {
+    func qattributedText(_ text: NSAttributedString?) -> Self {
         self.attributedText = text
         return self
     }

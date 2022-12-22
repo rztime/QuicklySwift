@@ -39,14 +39,14 @@ public extension UIView {
     }
 }
 // MARK: - 位移、旋转、缩放相关的
-public extension UIView {
+public extension QuicklyProtocal where Self: UIView {
     /// 旋转一定角度
     /// - Parameters:
     ///   - value: 旋转角度 0度 360度
     ///   - animation: 是否动画 以及动画时长
     ///   - complete: 完成回调
     @discardableResult
-    func qtransform(rotation: CGFloat, _ animate: QTransformAnimate = .none, complete: ((_ view: UIView) -> Void)? = nil) -> Self {
+    func qtransform(rotation: CGFloat, _ animate: QTransformAnimate = .none, complete: ((_ view: Self) -> Void)? = nil) -> Self {
         switch animate {
         case .none:
             self.transform = CGAffineTransform.init(rotationAngle: rotation * .pi / 180.0)
@@ -67,7 +67,7 @@ public extension UIView {
     ///   - animation: 是否动画 以及动画时长
     ///   - complete: 完成回调
     @discardableResult
-    func qtransform(x: CGFloat, y: CGFloat, _ animate: QTransformAnimate = .none, complete: ((_ view: UIView) -> Void)? = nil) -> Self {
+    func qtransform(x: CGFloat, y: CGFloat, _ animate: QTransformAnimate = .none, complete: ((_ view: Self) -> Void)? = nil) -> Self {
         switch animate {
         case .none:
             self.transform = CGAffineTransform.init(translationX: x, y: y)
@@ -89,7 +89,7 @@ public extension UIView {
     ///   - animate: 是否动画
     ///   - complete: 回调
     @discardableResult
-    func qtransform(scale x: CGFloat, _ y: CGFloat, _ animate: QTransformAnimate = .none, complete: ((_ view: UIView) -> Void)? = nil) -> Self {
+    func qtransform(scale x: CGFloat, _ y: CGFloat, _ animate: QTransformAnimate = .none, complete: ((_ view: Self) -> Void)? = nil) -> Self {
         switch animate {
         case .none:
             self.transform = CGAffineTransform.init(scaleX: x, y: y)
@@ -106,7 +106,7 @@ public extension UIView {
     }
     /// 自定义transform
     @discardableResult
-    func qtransform(animate: QTransformAnimate = .none, transform: (() -> CGAffineTransform), complete: ((_ view: UIView) -> Void)? = nil) -> Self {
+    func qtransform(animate: QTransformAnimate = .none, transform: (() -> CGAffineTransform), complete: ((_ view: Self) -> Void)? = nil) -> Self {
         let trans = transform()
         switch animate {
         case .none:

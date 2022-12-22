@@ -29,6 +29,9 @@
 		B2AE806E2912715D00B2C007 /* QuicklyAVPlayerOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2AE806A2912715D00B2C007 /* QuicklyAVPlayerOptions.swift */; };
 		B2AE806F2912715D00B2C007 /* QuicklyAVPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2AE806B2912715D00B2C007 /* QuicklyAVPlayer.swift */; };
 		B2AE80702912715D00B2C007 /* QAVPlayerItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2AE806C2912715D00B2C007 /* QAVPlayerItem.swift */; };
+		B2C0B1792951A3C900918951 /* GrayfloatIndexViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2C0B1782951A3C900918951 /* GrayfloatIndexViewController.swift */; };
+		B2C0B17B2951A4A300918951 /* GrayfloatVC1.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2C0B17A2951A4A300918951 /* GrayfloatVC1.swift */; };
+		B2C0B17D2951ACAB00918951 /* GrayfloatVC2.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2C0B17C2951ACAB00918951 /* GrayfloatVC2.swift */; };
 		B2C4BC05284F3A1C00B7C25B /* IndexViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2C4BC04284F3A1C00B7C25B /* IndexViewController.swift */; };
 		B2C6F2D428FFEC2100A04167 /* AVPlayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2C6F2D328FFEC2100A04167 /* AVPlayerViewController.swift */; };
 		B2D5CB3D2852DA5A00C6C6EF /* CollectionViewDemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2D5CB3C2852DA5A00C6C6EF /* CollectionViewDemoViewController.swift */; };
@@ -80,6 +83,9 @@
 		B2AE806A2912715D00B2C007 /* QuicklyAVPlayerOptions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuicklyAVPlayerOptions.swift; sourceTree = "<group>"; };
 		B2AE806B2912715D00B2C007 /* QuicklyAVPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuicklyAVPlayer.swift; sourceTree = "<group>"; };
 		B2AE806C2912715D00B2C007 /* QAVPlayerItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QAVPlayerItem.swift; sourceTree = "<group>"; };
+		B2C0B1782951A3C900918951 /* GrayfloatIndexViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GrayfloatIndexViewController.swift; sourceTree = "<group>"; };
+		B2C0B17A2951A4A300918951 /* GrayfloatVC1.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GrayfloatVC1.swift; sourceTree = "<group>"; };
+		B2C0B17C2951ACAB00918951 /* GrayfloatVC2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GrayfloatVC2.swift; sourceTree = "<group>"; };
 		B2C21346288AA8BB00B2C00B /* QuicklySwift_Example.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = QuicklySwift_Example.entitlements; sourceTree = "<group>"; };
 		B2C4BC04284F3A1C00B7C25B /* IndexViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IndexViewController.swift; sourceTree = "<group>"; };
 		B2C6F2D328FFEC2100A04167 /* AVPlayerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AVPlayerViewController.swift; sourceTree = "<group>"; };
@@ -223,9 +229,20 @@
 			path = QuicklyAVPlayer;
 			sourceTree = "<group>";
 		};
+		B2C0B1772951A3AA00918951 /* GrayDemo */ = {
+			isa = PBXGroup;
+			children = (
+				B2C0B1782951A3C900918951 /* GrayfloatIndexViewController.swift */,
+				B2C0B17C2951ACAB00918951 /* GrayfloatVC2.swift */,
+				B2C0B17A2951A4A300918951 /* GrayfloatVC1.swift */,
+			);
+			path = GrayDemo;
+			sourceTree = "<group>";
+		};
 		B2C4BC03284F3A0A00B7C25B /* Demo */ = {
 			isa = PBXGroup;
 			children = (
+				B2C0B1772951A3AA00918951 /* GrayDemo */,
 				B2E5853A286002A200921A91 /* LayoutDemo */,
 				B2C4BC04284F3A1C00B7C25B /* IndexViewController.swift */,
 				B27EEADF2857261E00C55EA5 /* BaseViewDemoViewController.swift */,
@@ -324,7 +341,7 @@
 					607FACE41AFB9204008FA782 = {
 						CreatedOnToolsVersion = 6.3.1;
 						DevelopmentTeam = 9363D6U2QU;
-						LastSwiftMigration = 0900;
+						LastSwiftMigration = "";
 						TestTargetID = 607FACCF1AFB9204008FA782;
 					};
 				};
@@ -460,6 +477,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B2E585402860128200921A91 /* Model.swift in Sources */,
+				B2C0B1792951A3C900918951 /* GrayfloatIndexViewController.swift in Sources */,
 				B27EEAE02857261E00C55EA5 /* BaseViewDemoViewController.swift in Sources */,
 				B2E5853E286011D500921A91 /* LayoutDemoViewController.swift in Sources */,
 				B20131BB285818A0004FE458 /* AnimateDemoViewController.swift in Sources */,
@@ -467,6 +485,7 @@
 				B20131BF28585CE3004FE458 /* LedDemoViewController.swift in Sources */,
 				607FACD81AFB9204008FA782 /* ViewController.swift in Sources */,
 				B2AE806E2912715D00B2C007 /* QuicklyAVPlayerOptions.swift in Sources */,
+				B2C0B17D2951ACAB00918951 /* GrayfloatVC2.swift in Sources */,
 				B2D5CB3D2852DA5A00C6C6EF /* CollectionViewDemoViewController.swift in Sources */,
 				B22C27472872892400B34EEF /* TransitionThreeViewController.swift in Sources */,
 				B22C27412872848900B34EEF /* TransitionOneViewController.swift in Sources */,
@@ -477,6 +496,7 @@
 				B2E5853C286002C300921A91 /* LayoutIndexViewController.swift in Sources */,
 				B2AE80702912715D00B2C007 /* QAVPlayerItem.swift in Sources */,
 				B26C6A81285073CC009512EC /* TableViewDemoViewController.swift in Sources */,
+				B2C0B17B2951A4A300918951 /* GrayfloatVC1.swift in Sources */,
 				B22C27442872849C00B34EEF /* TransitionTwoViewController.swift in Sources */,
 				B2AE806F2912715D00B2C007 /* QuicklyAVPlayer.swift in Sources */,
 				B2921D65285C1FF700CBC001 /* FriendView.swift in Sources */,
@@ -680,7 +700,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/QuicklySwift_Example.app/QuicklySwift_Example";
 			};
 			name = Debug;
@@ -699,7 +719,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/QuicklySwift_Example.app/QuicklySwift_Example";
 			};
 			name = Release;

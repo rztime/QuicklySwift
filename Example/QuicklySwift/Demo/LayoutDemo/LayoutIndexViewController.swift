@@ -17,7 +17,7 @@ class LayoutIndexViewController: UIViewController {
         ("布局 demo 1", LayoutDemoViewController.self),
         ("朋友圈 demo 2", FriendDemoViewController.self),
     ]
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = .white
@@ -37,7 +37,7 @@ class LayoutIndexViewController: UIViewController {
             let item = self?.source[indexPath.row]
             cell.textLabel?.text = item?.0
             cell.detailTextLabel?.text = "\(String(describing: item?.1.self)))"
-            print("-------- cell\(cell.frame)")
+            cell.textLabel?.textColor = .red
             return cell
         }.qdidSelectRow { [weak self] tableView, indexPath in
             tableView.deselectRow(at: indexPath, animated: false)

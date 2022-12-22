@@ -39,6 +39,7 @@ QuicklySwift is available under the MIT license. See the LICENSE file for more i
 
 | 相关 | 说明 |
 |:----|:----|
+|v0.1.8|添加view飘灰配置功能、对数字进行小数位转换等等|
 |v0.1.7|添加虚线、一些监听、属性改变回调、定时器的用法等等|
 |v0.1.5|添加权限判断方法<br> QuicklyAuthorization.result(with: QAuthorizationType.photoLibrary) { result in }|
 |v0.1.4|添加push、pop的自定义转场动画方法和demo<br>添加预览相册的push、pop动画|
@@ -63,6 +64,7 @@ QuicklySwift is available under the MIT license. See the LICENSE file for more i
 
 | 相关 | 说明 |
 |:----|:----|
+|QGrayFloatManager|飘灰管理：给view在指定区域内添加一个黑白滤镜，并可一键控制滤镜开关|
 |UIView| 常用属性的快速设置、扩展设置（高斯模糊、气泡、手势、圆角等等）、size改变之后的回调、deinit之后的回调、常用动画等等 |
 |UIScrollView| contentSize和contentOffset改变回调、delegate的回调等等|
 |UITableView、UICollectionView| dataSource, delegate的回调等等|
@@ -71,6 +73,7 @@ QuicklySwift is available under the MIT license. See the LICENSE file for more i
 |UIViewController| 生命周期的回调、push、pop的自定义跳转动画，相册预览|
 |UIAlertController| 快速使用|
 |QuicklyPopmenu| 菜单view|
+|Number, Int等等|根据配置转换成字符串，取整，保留几位小数，不足位补0等等|
 等等
 
 - UIView:
@@ -104,7 +107,7 @@ let  view = UIView().qbackgroundColor(.red).qisUserInteractionEnabled(true)
 |qrotation| 旋转（转圈）|
 |qtransform| 平移、旋转一定角度、缩放|
 |QuikclyPopmenu| 在指定位置弹出菜单view|
-
+|qgrayfloat| 页面添加飘灰区域 |
 
 - UITextField、UITextView:
 
@@ -408,7 +411,45 @@ func qactiveConstraints() -> Self {
     return self
 }
 ```
- 
+
+#### 关于页面飘灰
+
+飘灰一键开关
+
+```
+QGrayFloatManager.shared.isgrayActive = true // or false
+```
+
+view的飘灰两种方式，约束和frame
+
+```swift
+/// view 整个飘灰
+view.qgrayfloat(edges: .zero)
+/// view 部分区域可以多个飘灰
+view.qgrayfloat(tag: 1, frame: .init(x: 0, y: 0, width: 100, height: 100))
+view.qgrayfloat(tag: 2, frame: .init(x: 0, y: 400, width: 100, height: 100))
+```
+
+关于类似tableView飘灰前10行、scrollView飘灰首屏等等方法类似
+
+```swift
+/// tableView 只飘灰前10行
+tableView.qcontentSizeChanged { [weak self] tb in
+    guard let tableView = self?.tableView, let self = self else { return }
+    /// 只飘灰前10列，后边的正常显示
+    var maxRow = min(10, self.rowCount - 1)
+    maxRow = max(0, maxRow)
+    let y = tableView.rectForRow(at: IndexPath.init(row: maxRow, section: 0)).maxY
+    tableView.qgrayfloat(frame: .init(x: 0, y: 0, width: qscreenwidth, height: y))
+} 
+
+/// scrollView 首屏飘灰，之后正常显示
+scrollView.qframeChanged { view in
+    view.qgrayfloat(frame: .init(x: 0, y: 0, width: view.frame.size.width, height: view.frame.size.height))
+}
+```
+
+
 ## 二: UITableView、UICollectionView 的快速使用
 
 不需要使用delegate、dataSource 全部使用q方法来使用，更简单

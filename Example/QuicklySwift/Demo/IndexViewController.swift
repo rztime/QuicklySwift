@@ -13,6 +13,7 @@ class IndexViewController: UIViewController {
     let tableView = UITableView.init(frame: .zero, style: .plain)
     
     let source:[(String, AnyClass)] = [
+        ("飘灰demo", GrayfloatIndexViewController.self),
         ("布局", LayoutIndexViewController.self),
         ("基础控件的方法", BaseViewDemoViewController.self),
         ("列表", TableViewDemoViewController.self),
@@ -43,6 +44,7 @@ class IndexViewController: UIViewController {
             cell.accessoryType = .disclosureIndicator
             let item = self?.source[indexPath.row]
             cell.textLabel?.text = item?.0
+            cell.textLabel?.textColor = .blue
             cell.detailTextLabel?.text = "\(String(describing: item?.1.self)))"
             return cell
         }.qdidSelectRow { [weak self] tableView, indexPath in
