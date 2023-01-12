@@ -417,7 +417,17 @@ public extension UIView {
 public extension UIView {
     /// 将view 转换成图片
     func qtoImage() -> UIImage? {
-        return self.layer.qtoImage()
+        var flag = false
+        if self.superview == nil && self.frame.isEmpty {
+            qappKeyWindow.addSubview(self)
+            flag = true
+        }
+        self.layoutIfNeeded()
+        let image = self.layer.qtoImage()
+        if flag {
+            self.removeFromSuperview()
+        }
+        return image
     }
 }
 
