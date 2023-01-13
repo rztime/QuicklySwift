@@ -38,7 +38,7 @@ class ViewController: UIViewController {
      
             UIView().qbackgroundColor(.green).qframe(.init(x: 100, y: 600, width: 100, height: 100))
             .qtap({ [weak self] _ in
-                QActionSheetController.show(options: .init(options: [.title("xxxx"), .description("我是一个小小"), .action("选择1"), .action("2"), .action("3"), .subDescription("小心眼"), .cancel("取消")])) { index in
+                QActionSheetController.show(options: .init(options: [.title("xxxx"), .description("我是一个小小"), .action("选择1"), .action("2"), .action("3"), .action("4"), .action("5"), .subDescription("小心眼"), .cancel("取消")])) { index in
                     print("index:\(index)")
                 }
             })

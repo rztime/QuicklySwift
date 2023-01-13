@@ -229,8 +229,9 @@ class QAlertControllerAcitonItem: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         self.contentView.qbody([
             titleLabel.qmakeConstraints({ make in
-                make.edges.equalToSuperview().inset(15)
-                make.height.greaterThanOrEqualTo(20)
+                make.left.right.equalToSuperview().inset(15)
+                make.top.bottom.equalToSuperview().inset(10)
+                make.height.greaterThanOrEqualTo(30)
             }),
             line.qmakeConstraints({ make in
                 make.left.bottom.right.equalToSuperview()
