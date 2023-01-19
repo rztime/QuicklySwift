@@ -98,4 +98,4 @@ public extension UITextView {
 }
 
 public protocol QuicklyProtocal {}
-extension UIView: QuicklyProtocal {}
+extension NSObject: QuicklyProtocal {}

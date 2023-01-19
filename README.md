@@ -39,6 +39,7 @@ QuicklySwift is available under the MIT license. See the LICENSE file for more i
 
 | 相关 | 说明 |
 |:----|:----|
+|v0.2.0|优化部分KVO监听的事件，添加弹窗支持图文混排，添加字符串的安全(表情)截取方法，对一些方法进行优化，添加动态规划方法|
 |v0.1.8|添加view飘灰配置功能、对数字进行小数位转换等等|
 |v0.1.7|添加虚线、一些监听、属性改变回调、定时器的用法等等|
 |v0.1.5|添加权限判断方法<br> QuicklyAuthorization.result(with: QAuthorizationType.photoLibrary) { result in }|

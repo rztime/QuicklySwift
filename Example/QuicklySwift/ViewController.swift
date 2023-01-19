@@ -8,6 +8,23 @@
 
 import UIKit
 import QuicklySwift
+import RZColorfulSwift
+
+class QTestModel: NSObject, QGroupEqualPartitionProtocol {
+    var index: Int = 0
+    
+    var text: String = ""
+    init(text: String) {
+        self.text = text
+    }
+    
+    func compareValue() -> Int {
+        return text.count
+    }
+    override var description: String {
+        return "index: \(index) \(text)"
+    }
+}
 
 class ViewController: UIViewController {
     
@@ -15,6 +32,20 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         self.view.backgroundColor = .white
         self.title = "加油"
+        
+        let array = [
+            QTestModel(text: "一"),
+            QTestModel(text: "二个"),
+            QTestModel(text: "三个字"),
+            QTestModel(text: "四个字数"),
+            QTestModel(text: "五个字来着"),
+            QTestModel(text: "六个字六个字"),
+            QTestModel(text: "七个字七个字七"),
+            QTestModel(text: "八个字八个字八个"),
+            QTestModel(text: "九个字九个字九个字")
+        ].qgroupEqualPartition(row: 3)
+        print("动态规划-----\(array)")
+        
         let btn = UIButton.init(type: .custom)
             .qtitle("去首页")
             .qtitle("去首页 +", .selected)
@@ -35,10 +66,35 @@ class ViewController: UIViewController {
 
         self.view.qbody([
             btn.qframe(.init(x: 100, y: 400, width: 100, height: 60)),
-     
-            UIView().qbackgroundColor(.green).qframe(.init(x: 100, y: 600, width: 100, height: 100))
-            .qtap({ [weak self] _ in
-                QActionSheetController.show(options: .init(options: [.title("xxxx"), .description("我是一个小小"), .action("选择1"), .action("2"), .action("3"), .action("4"), .action("5"), .subDescription("小心眼"), .cancel("取消")])) { index in
+            UIView().qbackgroundColor(.green).qframe(.init(x: 100, y: 100, width: 100, height: 100))
+            .qtap({ _ in
+                /// 自定义AtionSheet 支持图文混排
+                let t = NSAttributedString.rz.colorfulConfer { confer in
+                    confer.image(UIImage.init(named: "1111"))?.size(.init(width: 0, height: 17), align: .center, font: .systemFont(ofSize: 17)).paragraphStyle?.alignment(.center)
+                    confer.text(" 我是一个标题")?.font(.systemFont(ofSize: 17)).textColor(.red).paragraphStyle?.alignment(.center)
+                }
+                let r = NSAttributedString.rz.colorfulConfer { confer in
+                    confer.text("我是一个选项")?.font(.systemFont(ofSize: 16)).textColor(.blue).paragraphStyle?.alignment(.center)
+                }
+                let c = NSAttributedString.rz.colorfulConfer { confer in
+                    confer.text("取消")?.font(.systemFont(ofSize: 17)).textColor(.yellow).paragraphStyle?.alignment(.center)
+                }
+                QActionSheetController.show(options: .init(options: [
+                    .titleAttributeText(t),
+                    .description("我是一个小描述"),
+                    .actionAttributeText(r),
+                    .action("2"),
+                    .action("3"),
+//                    .action("4"),
+//                    .action("5"),
+//                    .action("6"),
+                    .subDescription("我是第二个小提示"),
+                    .cancel("取消"),
+                    .cancelAttributeText(c),
+//                    .dismissWhenTouchOut(false), // 点空白区域不消失
+                    .backgroundColor(.lightGray), // 背景
+                    .separatorColor(.white), // 分割线背景色
+                    ])) { index in
                     print("index:\(index)")
                 }
             })
@@ -70,7 +126,6 @@ class ViewController: UIViewController {
         .qswipe(numberof: 1, direction: .down) { view, swipe in
             print("swipe:\(swipe.direction.rawValue)")
         }
-        
         /// 导航栏设置飘灰
         self.qwillAppear { [weak self] in
             self?.navigationController?.navigationBar

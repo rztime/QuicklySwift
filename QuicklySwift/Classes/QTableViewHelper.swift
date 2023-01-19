@@ -82,10 +82,10 @@ extension QTableViewHelper: UITableViewDataSource {
 }
 extension QTableViewHelper: UITableViewDelegate {
     public func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return heightForHeader?(section) ?? 0
+        return heightForHeader?(section) ?? 0.0001
     }
     public func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        return heightForFooter?(section) ?? 0
+        return heightForFooter?(section) ?? 0.0001
     }
     public func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return heightForRow?(indexPath) ?? UITableView.automaticDimension

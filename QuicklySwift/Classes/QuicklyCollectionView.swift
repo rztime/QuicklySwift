@@ -23,10 +23,11 @@ public extension UICollectionViewFlowLayout {
        self.itemSize = size
        return self
    }
-   @available(iOS 8.0, *)
    @discardableResult
    func qestimatedItemSize(_ size: CGSize) -> Self {
-       self.estimatedItemSize = size
+       if #available(iOS 8.0, *) {
+           self.estimatedItemSize = size
+       }
        return self
    }
    @discardableResult
@@ -49,22 +50,26 @@ public extension UICollectionViewFlowLayout {
        self.sectionInset = inset
        return self
    }
-   @available(iOS 11.0, *)
+ 
    @discardableResult
-   func qsectionInsetReference(_ reference: UICollectionViewFlowLayout.SectionInsetReference) -> Self {
-       self.sectionInsetReference = reference
+   func qsectionInsetReference(_ reference: QCollectionViewSectionInsetReference) -> Self {
+       if #available(iOS 11.0, *) {
+           self.sectionInsetReference = reference.toValue
+       }
        return self
    }
    @discardableResult
-   @available(iOS 9.0, *)
    func qsectionHeadersPinToVisibleBounds(_ value: Bool) -> Self {
-       self.sectionHeadersPinToVisibleBounds = value
+       if #available(iOS 9.0, *) {
+           self.sectionHeadersPinToVisibleBounds = value
+       }
        return self
    }
-   @discardableResult
-   @available(iOS 9.0, *)
+   @discardableResult 
    func qsectionFootersPinToVisibleBounds(_ value: Bool) -> Self {
-       self.sectionFootersPinToVisibleBounds = value
+       if #available(iOS 9.0, *) {
+           self.sectionFootersPinToVisibleBounds = value
+       }
        return self
    }
 }

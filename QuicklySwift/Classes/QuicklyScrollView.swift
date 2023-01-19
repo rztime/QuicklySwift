@@ -22,16 +22,18 @@ public extension UIScrollView {
         self.contentInset = inset
         return self
     }
-    @available(iOS 11.0, *)
     @discardableResult
-    func qcontentInsetAdjustmentBehavior(_ beavior: UIScrollView.ContentInsetAdjustmentBehavior) -> Self {
-        self.contentInsetAdjustmentBehavior = beavior
+    func qcontentInsetAdjustmentBehavior(_ beavior: QContentInsetADjustmentBehavior) -> Self {
+        if #available(iOS 11.0, *) {
+            self.contentInsetAdjustmentBehavior = beavior.toValue
+        }
         return self
     }
-    @available(iOS 13.0, *)
     @discardableResult
     func qautomaticallyAdjustsScrollIndicatorInsets(_ insets: Bool) -> Self {
-        self.automaticallyAdjustsScrollIndicatorInsets = insets
+        if #available(iOS 13.0, *) {
+            self.automaticallyAdjustsScrollIndicatorInsets = insets
+        }
         return self
     }
     @discardableResult
@@ -79,16 +81,18 @@ public extension UIScrollView {
         self.indicatorStyle = style
         return self
     }
-    @available(iOS 11.1, *)
     @discardableResult
     func qverticalScrollIndicatorInsets(_ insets: UIEdgeInsets) -> Self {
-        self.verticalScrollIndicatorInsets = insets
+        if #available(iOS 11.1, *) {
+            self.verticalScrollIndicatorInsets = insets
+        }
         return self
     }
-    @available(iOS 11.1, *)
     @discardableResult
     func qhorizontalScrollIndicatorInsets(_ insets: UIEdgeInsets) -> Self {
-        self.horizontalScrollIndicatorInsets = insets
+        if #available(iOS 11.1, *) {
+            self.horizontalScrollIndicatorInsets = insets
+        }
         return self
     }
     @discardableResult
@@ -142,21 +146,25 @@ public extension QuicklyProtocal where Self: UIScrollView {
     /// contentSize 改变之后的回调
     @discardableResult
     func qcontentSizeChanged(changed: ((_ scrollView: Self) -> Void)?) -> Self {
-        self.qhelper.contentSizeChanged = { scrollView in
-            if let scrollView = scrollView as? Self {
-                changed?(scrollView)
-            }
+        var contentsize = CGSize.init(width: -1, height: -1)
+        self.qaddObserver(key: "contentSize", options: [.new, .old], context: nil) { sender, key, value in
+            if sender.contentSize.equalTo(contentsize) { return }
+            contentsize = sender.contentSize
+            changed?(sender)
         }
+        changed?(self)
         return self
     }
     /// contentOffset改变之后的回调
     @discardableResult
     func qcontentOffsetChanged(changed: ((_ scrollView: Self) -> Void)?) -> Self {
-        self.qhelper.contentOffsetChanged = { scrollView in
-            if let scrollView = scrollView as? Self {
-                changed?(scrollView)
-            }
+        var contentoffset = CGPoint.init(x: -1, y: -1)
+        self.qaddObserver(key: "contentOffset", options: [], context: nil) { sender, key, value in
+            if sender.contentOffset.equalTo(contentoffset) { return }
+            contentoffset = sender.contentOffset
+            changed?(sender)
         }
+        changed?(self)
         return self
     }
     /// scrollView停止滚动
@@ -333,18 +341,10 @@ open class QScrollViewHelper: NSObject, UIScrollViewDelegate {
     open var didScrollToTop: ((_ scrollView: UIScrollView) -> Void)?
     open var didChangeAdjustedContentInset: ((_ scrollView: UIScrollView) -> Void)?
     
-    open var _contentSize = CGSize.init(width: -1, height: -1)
-    open var contentSizeChanged: ((_ scrollView: UIScrollView) -> Void)?
-    
-    open var _contentOffset = CGPoint.init(x: -1, y: -1) 
-    open var contentOffsetChanged: ((_ scrollView: UIScrollView) -> Void)?
-    
     open weak var target: UIScrollView?
     public init(target: UIScrollView) {
         super.init()
         self.target = target
-        self.target?.addObserver(self, forKeyPath: "contentSize", options: [.new, .old], context: nil)
-        self.target?.addObserver(self, forKeyPath: "contentOffset", options: [.new, .old], context: nil)
         if let collectionView = target as? UICollectionView {
             collectionView.qregisterSupplementaryView(UICollectionReusableView.self, UICollectionView.elementKindSectionHeader, quicklycollectionsectionHeader)
             collectionView.qregisterSupplementaryView(UICollectionReusableView.self, UICollectionView.elementKindSectionFooter, quicklycollectionsectionFooter)
@@ -354,6 +354,7 @@ open class QScrollViewHelper: NSObject, UIScrollViewDelegate {
         }
         if let tableView = target as? UITableView, tableView.tableFooterView == nil {
             tableView.tableFooterView = .init()
+            tableView.qsectionHeaderTopPadding(0)
         }
     }
     
@@ -408,25 +409,5 @@ open class QScrollViewHelper: NSObject, UIScrollViewDelegate {
     }
     public func scrollViewDidChangeAdjustedContentInset(_ scrollView: UIScrollView) {
         didChangeAdjustedContentInset?(scrollView)
-    }
-    open override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
-        guard let object = object as? UIScrollView, object == self.target else {
-            return
-        }
-        if keyPath == "contentSize" {
-            if !object.contentSize.equalTo(self._contentSize) {
-                self.contentSizeChanged?(object)
-            }
-            self._contentSize = object.contentSize
-        } else if keyPath == "contentOffset" {
-            if !object.contentOffset.equalTo(self._contentOffset) {
-                self.contentOffsetChanged?(object)
-            }
-            self._contentOffset = object.contentOffset
-        }
-    }
-    deinit {
-        self.target?.removeObserver(self, forKeyPath: "contentSize")
-        self.target?.removeObserver(self, forKeyPath: "contentOffset")
     }
 }

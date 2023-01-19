@@ -89,6 +89,13 @@ public extension UITableView {
         self.register(view, forHeaderFooterViewReuseIdentifier: identifier)
         return self
     }
+    @discardableResult
+    func qsectionHeaderTopPadding(_ padding: CGFloat) -> Self {
+        if #available(iOS 15.0, *) {
+            self.sectionHeaderTopPadding = padding
+        }
+        return self
+    }
 }
 // MARK: - DataSource
 public extension UITableView {

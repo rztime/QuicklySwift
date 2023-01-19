@@ -72,10 +72,8 @@ public extension QuicklyProtocal where Self: UIControl {
     /// control isSelected 状态发生改变之后的回调
     @discardableResult
     func qisSelectedChanged(_ changed: ((_ sender: Self) -> Void)?) -> Self {
-        let _ = QUIView.init(target: self, key: "selected") { sender in
-            if let sender = sender as? Self {
-                changed?(sender)
-            }
+        self.qaddObserver(key: "selected", options: [.new, .old], context: nil) { sender, key, value in
+            changed?(sender)
         }
         changed?(self)
         return self
@@ -83,10 +81,8 @@ public extension QuicklyProtocal where Self: UIControl {
     /// control isEnabled 状态发生改变之后的回调
     @discardableResult
     func qisEnabledChanged(_ changed: ((_ sender: Self) -> Void)?) -> Self {
-        let _ = QUIView.init(target: self, key: "enabled") { sender in
-            if let sender = sender as? Self {
-                changed?(sender)
-            }
+        self.qaddObserver(key: "enabled", options: [.new, .old], context: nil) { sender, key, value in
+            changed?(sender)
         }
         changed?(self)
         return self
@@ -94,10 +90,8 @@ public extension QuicklyProtocal where Self: UIControl {
     /// control isEnabled 状态发生改变之后的回调
     @discardableResult
     func qisHighlightedChanged(_ changed: ((_ sender: Self) -> Void)?) -> Self {
-        let _ = QUIView.init(target: self, key: "highlighted") { sender in
-            if let sender = sender as? Self {
-                changed?(sender)
-            }
+        self.qaddObserver(key: "highlighted", options: [.new, .old], context: nil) { sender, key, value in
+            changed?(sender)
         }
         changed?(self)
         return self

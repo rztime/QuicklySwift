@@ -159,10 +159,8 @@ public extension QuicklyProtocal where Self: UIView {
     /// view isHidden 改变的回调
     @discardableResult
     func qisHiddenChanged(_ changed: ((_ view: Self) -> Void)?) -> Self {
-        let _ = QUIView.init(target: self, key: "hidden") { view in
-            if let view = view as? Self {
-                changed?(view)
-            }
+        self.qaddObserver(key: "hidden", options: [.new, .old], context: nil) { sender, key, value in
+            changed?(sender)
         }
         changed?(self)
         return self
@@ -170,45 +168,56 @@ public extension QuicklyProtocal where Self: UIView {
     /// view isUserInteractionEnabled 改变的回调
     @discardableResult
     func qisUserInteractionEnabledChanged(_ changed: ((_ view: Self) -> Void)?) -> Self {
-        let _ = QUIView.init(target: self, key: "userInteractionEnabled", changed: { view in
-            if let view = view as? Self {
-                changed?(view)
-            }
-        })
+        self.qaddObserver(key: "userInteractionEnabled", options: [.new, .old], context: nil) { sender, key, value in
+            changed?(sender)
+        }
         changed?(self)
         return self
     }
     /// view frame 改变的回调
     @discardableResult
     func qframeChanged(_ changed: ((_ view: Self) -> Void)?) -> Self {
-        let _ = QUIView.init(target: self, key: "frame", changed: { view in
-            if let view = view as? Self {
-                changed?(view)
-            }
-        })
+        var lastFrame = CGRect.init(x: -1, y: -1, width: -1, height: -1)
+        self.qaddObserver(key: "bounds", options: [.new, .old], context: nil) { sender, key, value in
+            if sender.frame.equalTo(lastFrame) { return }
+            lastFrame = sender.frame
+            changed?(sender)
+        }
+        self.qaddObserver(key: "frame", options: [.new, .old], context: nil) { sender, key, value in
+            if sender.frame.equalTo(lastFrame) { return }
+            lastFrame = sender.frame
+            changed?(sender)
+        }
         changed?(self)
         return self
     }
     /// view size 改变的回调
     @discardableResult
     func qsizeChanged(_ changed: ((_ view: Self) -> Void)?) -> Self {
-        let _ = QUIView.init(target: self, key: "bounds", changed: { view in
-            if let view = view as? Self {
-                changed?(view)
-            }
-        })
+        var boundsSize = CGSize.init(width: -1, height: -1)
+        self.qaddObserver(key: "bounds", options: [.new, .old], context: nil) { sender, key, value in
+            if sender.frame.size.equalTo(boundsSize) { return }
+            boundsSize = sender.bounds.size
+            changed?(sender)
+        }
+        self.qaddObserver(key: "frame", options: [.new, .old], context: nil) { sender, key, value in
+            if sender.frame.size.equalTo(boundsSize) { return }
+            boundsSize = sender.bounds.size
+            changed?(sender)
+        }
         changed?(self)
         return self
     }
     /// 是否显示在window上（view所在vc在栈顶，如果push到其他页面，则为false）
     @discardableResult
     func qshowToWindow(_ show: ((_ view: Self, _ showed: Bool) -> Void)?) -> Self {
-        let v = QUIView.init(target: self, key: "", changed: nil)
+        let v = QuicklyObjectHelper.init(targetView: self)
         v.showToWindow = { view, s in
             if let view = view as? Self {
                 show?(view, s)
             }
         }
+        show?(self, self.window != nil)
         return self
     }
 }

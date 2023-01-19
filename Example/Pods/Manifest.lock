@@ -4,17 +4,20 @@ PODS:
   - FBSnapshotTestCase/Core (2.1.4)
   - FBSnapshotTestCase/SwiftSupport (2.1.4):
     - FBSnapshotTestCase/Core
-  - QuicklySwift (0.1.7):
+  - QuicklySwift (0.2.0):
     - SnapKit
+  - RZColorfulSwift (0.4.0)
   - SnapKit (4.2.0)
 
 DEPENDENCIES:
   - FBSnapshotTestCase (~> 2.1.4)
   - QuicklySwift (from `../`)
+  - RZColorfulSwift
 
 SPEC REPOS:
   trunk:
     - FBSnapshotTestCase
+    - RZColorfulSwift
     - SnapKit
 
 EXTERNAL SOURCES:
@@ -23,9 +26,10 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   FBSnapshotTestCase: 094f9f314decbabe373b87cc339bea235a63e07a
-  QuicklySwift: df25159cb9f401acedeaf22256c1e874f5ec829b
+  QuicklySwift: 15f1a523e1625ae46193cee65f726fb993fe0003
+  RZColorfulSwift: be0a34377c4855336445c2f034117fb19019feac
   SnapKit: fe8a619752f3f27075cc9a90244d75c6c3f27e2a
 
-PODFILE CHECKSUM: 77990937a52ad4d28971fefac1ccd76a5212425c
+PODFILE CHECKSUM: 14af211b0a4e4fd615d9c2c75950d046f4d7bd97
 
 COCOAPODS: 1.11.3

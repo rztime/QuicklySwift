@@ -6,8 +6,9 @@
 //
 
 import UIKit
+import Foundation
 
-public extension NSObject {
+public extension QuicklyProtocal where Self: NSObject {
     /// 被释放时的回调
     @discardableResult
     func qdeinit(_ de: (()-> Void)?) -> Self {
@@ -18,11 +19,27 @@ public extension NSObject {
             self.quicklyObj = helper
         }
         let v = QuicklyObjectHelper.init(frame: .zero)
-        v.deinitAction = de
         helper?.addSubview(v)
+        v.deinitAction = de
         return self
     }
+    func qaddObserver(key: String, options: NSKeyValueObservingOptions, context: UnsafeMutableRawPointer?, handle: ((_ sender: Self, _ key: String, _ value: [NSKeyValueChangeKey : Any]?) -> Void)?) {
+        /// 通过给NSobject，添加一个obj，然后再obj里添加view的方式持有，当NSObject要被释放时，
+        var helper = self.quicklyObj
+        if helper == nil {
+            helper = QuicklyObjectHelper.init(frame: .zero)
+            self.quicklyObj = helper
+        }
+        let v = QuicklyObjectHelper.init(frame: .zero)
+        helper?.addSubview(v)
+        v.addObs(target: self, key: key, options: options, context: context) { [weak self] sender, key, value in
+            if let sender = sender as? Self, sender == self {
+                handle?(sender, key, value)
+            }
+        }
+    }
 }
+
 fileprivate extension NSObject {
     private static var quicklyobjnameaddres = "quicklyobjnameaddres"
     var quicklyObj: QuicklyObjectHelper? {
@@ -32,18 +49,5 @@ fileprivate extension NSObject {
         get {
             return objc_getAssociatedObject(self, &NSObject.quicklyobjnameaddres) as? QuicklyObjectHelper
         }
-    }
-}
-private class QuicklyObjectHelper: UIView {
-    open var deinitAction: (() -> Void)?
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        self.isHidden = true
-    }
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    deinit {
-        self.deinitAction?()
     }
 }
