@@ -10,6 +10,12 @@ import UIKit
 import QuicklySwift
 import RZColorfulSwift
 
+/// 未提交，备注：
+/// 新增PHAsset相关方法
+/// 新增视频url获取首帧图
+/// 新增文件浏览器
+
+
 class QTestModel: NSObject, QGroupEqualPartitionProtocol {
     var index: Int = 0
     
@@ -63,11 +69,14 @@ class ViewController: UIViewController {
             })
             // 设置拖拽，则不能使用约束，否则改变状态之后，会还原
             .qdrag(.nearBorder(edge: .init(top: qnavigationbarHeight, left: 10, bottom: qbottomSafeHeight, right: 10)))
-
+        
         self.view.qbody([
             btn.qframe(.init(x: 100, y: 400, width: 100, height: 60)),
+
             UIView().qbackgroundColor(.green).qframe(.init(x: 100, y: 100, width: 100, height: 100))
             .qtap({ _ in
+                QuicklyFileBrowser.show()
+                return ;
                 /// 自定义AtionSheet 支持图文混排
                 let t = NSAttributedString.rz.colorfulConfer { confer in
                     confer.image(UIImage.init(named: "1111"))?.size(.init(width: 0, height: 17), align: .center, font: .systemFont(ofSize: 17)).paragraphStyle?.alignment(.center)
@@ -92,10 +101,13 @@ class ViewController: UIViewController {
                     .cancel("取消"),
                     .cancelAttributeText(c),
 //                    .dismissWhenTouchOut(false), // 点空白区域不消失
-                    .backgroundColor(.lightGray), // 背景
-                    .separatorColor(.white), // 分割线背景色
+//                    .backgroundColor(.white), // 背景
+//                    .separatorColor(.white), // 分割线背景色
                     ])) { index in
                     print("index:\(index)")
+//                    let vc = QuicklyFileBrowser()
+//                    qAppFrame.pushViewController(vc, animated: true)
+                        
                 }
             })
             .qtapNumberof(touches: 1, taps: 2, { view in

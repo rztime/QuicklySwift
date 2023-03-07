@@ -51,3 +51,55 @@ fileprivate extension NSObject {
         }
     }
 }
+
+// MARK: - 相关辅助
+public extension Optional {
+    /// 是否是空，数字 = 0 也是 空
+    var qisEmpty: Bool {
+        if case .none = self {
+            return true
+        }
+        if let t = self as? String {
+            return t.isEmpty
+        }
+        if let t = self as? Array<Any> {
+            return t.isEmpty
+        }
+        if let t = self as? NSNumber {
+            return t == 0
+        }
+        if let t = self as? NSAttributedString {
+            return t.string.isEmpty
+        }
+        if let t = self as? NSDictionary {
+            return t.allKeys.count == 0
+        }
+        return false
+    }
+}
+public protocol QuicklyIsEmptyProtoal {}
+public extension QuicklyIsEmptyProtoal {
+    var qisEmpty: Bool {
+        if let t = self as? String {
+            return t.isEmpty
+        }
+        if let t = self as? Array<Any> {
+            return t.isEmpty
+        }
+        if let t = self as? NSNumber {
+            return t == 0
+        }
+        if let t = self as? NSAttributedString {
+            return t.string.isEmpty
+        }
+        if let t = self as? NSDictionary {
+            return t.allKeys.count == 0
+        }
+        return false
+    }
+}
+extension String: QuicklyIsEmptyProtoal {}
+extension NSAttributedString: QuicklyIsEmptyProtoal {}
+extension Array: QuicklyIsEmptyProtoal {}
+extension NSDictionary: QuicklyIsEmptyProtoal {}
+extension NSNumber: QuicklyIsEmptyProtoal {}

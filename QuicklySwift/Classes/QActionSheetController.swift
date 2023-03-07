@@ -170,11 +170,9 @@ public class QActionSheetController: UIViewController {
             self.view.layoutIfNeeded()
         } completion: { _ in
             if !show {
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.38, execute: {
-                    self.dismiss(animated: false) {
-                        self.finishHandle?(self.selectedIndex ?? -1)
-                    }
-                })
+                self.dismiss(animated: false) {
+                    self.finishHandle?(self.selectedIndex ?? -1)
+                }
             }
         }
     }

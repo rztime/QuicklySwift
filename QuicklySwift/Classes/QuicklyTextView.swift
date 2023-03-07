@@ -210,15 +210,9 @@ extension QTextViewHelper: UITextViewDelegate {
         var newText = text
         var selectedRange = textView.selectedRange
         if self.maxCount > 0, text.count > self.maxCount {
-            newText = "\(text.prefix(self.maxCount))"
+            newText = text.qsubstring(emoji: .count, to: self.maxCount)
         } else if self.maxLength > 0, (text as NSString).length > self.maxLength {
-            newText = (text as NSString).substring(to: self.maxLength)
-            /// 有可能会截取到半个表情，所以这里剔除掉半个表情的情况
-            if let data = newText.data(using: .utf8),
-                let temp = NSString.init(data: data, encoding: String.Encoding.utf8.rawValue),
-                temp.contains("\u{0000fffd}") {
-                newText = temp.replacingOccurrences(of: "\u{0000fffd}", with: "") as String
-            }
+            newText = text.qsubstring(emoji: .length, to: self.maxLength)
         }
         textView.text = newText
         if selectedRange.location > ("\(newText)" as NSString).length {

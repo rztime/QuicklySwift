@@ -29,6 +29,7 @@
 		B2AE806E2912715D00B2C007 /* QuicklyAVPlayerOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2AE806A2912715D00B2C007 /* QuicklyAVPlayerOptions.swift */; };
 		B2AE806F2912715D00B2C007 /* QuicklyAVPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2AE806B2912715D00B2C007 /* QuicklyAVPlayer.swift */; };
 		B2AE80702912715D00B2C007 /* QAVPlayerItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2AE806C2912715D00B2C007 /* QAVPlayerItem.swift */; };
+		B2B761BB29B5856C00A96748 /* QPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2B761BA29B5856C00A96748 /* QPlayer.swift */; };
 		B2C0B1792951A3C900918951 /* GrayfloatIndexViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2C0B1782951A3C900918951 /* GrayfloatIndexViewController.swift */; };
 		B2C0B17B2951A4A300918951 /* GrayfloatVC1.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2C0B17A2951A4A300918951 /* GrayfloatVC1.swift */; };
 		B2C0B17D2951ACAB00918951 /* GrayfloatVC2.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2C0B17C2951ACAB00918951 /* GrayfloatVC2.swift */; };
@@ -83,6 +84,7 @@
 		B2AE806A2912715D00B2C007 /* QuicklyAVPlayerOptions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuicklyAVPlayerOptions.swift; sourceTree = "<group>"; };
 		B2AE806B2912715D00B2C007 /* QuicklyAVPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuicklyAVPlayer.swift; sourceTree = "<group>"; };
 		B2AE806C2912715D00B2C007 /* QAVPlayerItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QAVPlayerItem.swift; sourceTree = "<group>"; };
+		B2B761BA29B5856C00A96748 /* QPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QPlayer.swift; sourceTree = "<group>"; };
 		B2C0B1782951A3C900918951 /* GrayfloatIndexViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GrayfloatIndexViewController.swift; sourceTree = "<group>"; };
 		B2C0B17A2951A4A300918951 /* GrayfloatVC1.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GrayfloatVC1.swift; sourceTree = "<group>"; };
 		B2C0B17C2951ACAB00918951 /* GrayfloatVC2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GrayfloatVC2.swift; sourceTree = "<group>"; };
@@ -152,6 +154,7 @@
 		607FACD21AFB9204008FA782 /* Example for QuicklySwift */ = {
 			isa = PBXGroup;
 			children = (
+				B2B761B929B5855500A96748 /* Player */,
 				B2AE80682912715D00B2C007 /* QuicklyAVPlayer */,
 				607FACD51AFB9204008FA782 /* AppDelegate.swift */,
 				B2C4BC03284F3A0A00B7C25B /* Demo */,
@@ -227,6 +230,14 @@
 				B2AE806C2912715D00B2C007 /* QAVPlayerItem.swift */,
 			);
 			path = QuicklyAVPlayer;
+			sourceTree = "<group>";
+		};
+		B2B761B929B5855500A96748 /* Player */ = {
+			isa = PBXGroup;
+			children = (
+				B2B761BA29B5856C00A96748 /* QPlayer.swift */,
+			);
+			path = Player;
 			sourceTree = "<group>";
 		};
 		B2C0B1772951A3AA00918951 /* GrayDemo */ = {
@@ -498,6 +509,7 @@
 				B2E5853C286002C300921A91 /* LayoutIndexViewController.swift in Sources */,
 				B2AE80702912715D00B2C007 /* QAVPlayerItem.swift in Sources */,
 				B26C6A81285073CC009512EC /* TableViewDemoViewController.swift in Sources */,
+				B2B761BB29B5856C00A96748 /* QPlayer.swift in Sources */,
 				B2C0B17B2951A4A300918951 /* GrayfloatVC1.swift in Sources */,
 				B22C27442872849C00B34EEF /* TransitionTwoViewController.swift in Sources */,
 				B2AE806F2912715D00B2C007 /* QuicklyAVPlayer.swift in Sources */,

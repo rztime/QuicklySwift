@@ -142,7 +142,7 @@ open class QPanGestureRecognizer: UIPanGestureRecognizer {
         case .changed:
             let point = pan.translation(in: view)
             view.center = .init(x: view.center.x + point.x, y: view.center.y + point.y)
-        case .ended:
+        case .ended, .failed, .cancelled:
             self.near()
         default: break
         }

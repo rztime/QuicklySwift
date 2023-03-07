@@ -15,7 +15,8 @@ import MediaPlayer
 import Speech
 import Intents
 import CoreMotion
-
+import AdSupport
+import AppTrackingTransparency
 /// 权限类型
 public enum QAuthorizationType: String {
     /// 相机
@@ -44,6 +45,8 @@ public enum QAuthorizationType: String {
     case siri = "notconfig_siri"
     /// 活动与体能训练记录
     case motion = "NSMotionUsageDescription"
+    /// 广告追踪权限
+    case idfa = "notconfig_idfa"
 }
 // MARK: - 权限获取结果
 public struct QAuthorizationResult {
@@ -113,6 +116,8 @@ public struct QuicklyAuthorization {
             self.shared.requestSiri(result: res)
         case .motion:
             self.shared.requestMotion(result: res)
+        case .idfa:
+            self.shared.requestIdfa(result: res)
         }
     }
 }
@@ -404,14 +409,40 @@ class QuicklyAuthorizationHelper {
             result?(res)
         }
     }
-}
-// MARK: - 相关辅助
-public extension Optional {
-    var qisEmpty: Bool {
-        if case .none = self {
-            return true
+    /// IDFA广告权限
+    func requestIdfa(result: ((_ result: QAuthorizationResult) -> Void)?) {
+        var uuid = "00000000-0000-0000-0000-000000000000"
+        if #available(iOS 14, *) {
+            let status = ATTrackingManager.trackingAuthorizationStatus
+            switch status {
+            case .notDetermined:
+                ATTrackingManager.requestTrackingAuthorization { [weak self] status in
+                    if status == .notDetermined {
+                        let res = QAuthorizationResult.init(granted: false, limit: false, status: status, message: uuid)
+                        result?(res)
+                        return
+                    }
+                    self?.requestIdfa(result: result)
+                }
+            case .restricted, .denied:
+                let res = QAuthorizationResult.init(granted: false, limit: false, status: status, message: uuid)
+                result?(res)
+            case .authorized:
+                uuid = ASIdentifierManager.shared().advertisingIdentifier.uuidString
+                let res = QAuthorizationResult.init(granted: true, limit: false, status: status, message: uuid)
+                result?(res)
+            @unknown default:
+                let res = QAuthorizationResult.init(granted: false, limit: false, status: status, message: uuid)
+                result?(res)
+            }
+        } else {
+            let enable = ASIdentifierManager.shared().isAdvertisingTrackingEnabled
+            if enable {
+                uuid = ASIdentifierManager.shared().advertisingIdentifier.uuidString
+            }
+            let res = QAuthorizationResult.init(granted: enable, limit: false, status: "", message: uuid)
+            result?(res)
         }
-        return false
     }
 }
 

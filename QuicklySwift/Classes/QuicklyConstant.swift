@@ -30,6 +30,33 @@ public extension CGSize {
     static var qfull: CGSize {
         return UIScreen.main.bounds.size
     }
+    
+    /// 如果宽度大于width，则按比例缩小宽高
+    func qscaleto(maxWidth: CGFloat) -> Self {
+        if self.width > maxWidth {
+            let height = self.height * maxWidth / self.width
+            return .init(width: maxWidth, height: height)
+        }
+        return self
+    }
+    /// 按宽等比例缩放
+    func qscaleto(width: CGFloat) -> Self {
+        let height = self.height * width / self.width
+        return .init(width: width, height: height)
+    }
+    /// 如果高度大于maxHeight，则按比例缩小宽高
+    func qscaleto(maxHeight: CGFloat) -> Self {
+        if self.height > maxHeight {
+            let width = self.width * maxHeight / self.height
+            return .init(width: width, height: maxHeight)
+        }
+        return self
+    }
+    /// 按高等比例缩放
+    func qscaleto(height: CGFloat) -> Self {
+        let width = self.width * height / self.height
+        return .init(width: width, height: height)
+    }
 }
 
 /// app 的 keywindow
@@ -102,4 +129,26 @@ public var qisdeviceLandscape: Bool {
     @unknown default:
         return false
     }
+}
+/// 用于记录开了几次回调监听，=0时，关闭监听
+private var deviceActionTimes = 0
+/// 设备方向改变时，回调，初次调用时，会有回调
+/// - Parameters:
+///   - target: 持有此block的类，释放时，将自动取消监听
+///   - changed: 改变的回调
+public func qDeviceOrientationChanged(target: NSObject, changed: ((_ orientation: UIDeviceOrientation) -> Void)?) {
+    if deviceActionTimes <= 0 {
+        UIDevice.current.beginGeneratingDeviceOrientationNotifications()
+    }
+    deviceActionTimes += 1
+    NotificationCenter.qaddObserver(name: UIDevice.orientationDidChangeNotification, object: nil, target: target) { notification in
+        changed?(UIDevice.current.orientation)
+    }
+    target.qdeinit {
+        deviceActionTimes -= 1
+        if deviceActionTimes <= 0 {
+            UIDevice.current.endGeneratingDeviceOrientationNotifications()
+        }
+    }
+    changed?(UIDevice.current.orientation)
 }
