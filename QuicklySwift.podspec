@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'QuicklySwift'
-  s.version          = '0.2.0'
+  s.version          = '0.3.0'
   s.summary          = 'swift 常用方法扩展，便捷使用'
 
 # This description is used to generate tags and improve search results.

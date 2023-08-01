@@ -70,4 +70,14 @@ public extension String {
         }
         return self
     }
+    /// 将字符串转换为URL
+    var qtoURL: URL? {
+        if self.isEmpty {
+            return nil
+        }
+        if self.hasPrefix("http") || self.hasPrefix("file://") {
+            return URL.init(string: self)
+        }
+        return URL.init(fileURLWithPath: self)
+    }
 }

@@ -33,7 +33,7 @@ class QTestModel: NSObject, QGroupEqualPartitionProtocol {
 }
 
 class ViewController: UIViewController {
-    
+        
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = .white
@@ -51,10 +51,10 @@ class ViewController: UIViewController {
             QTestModel(text: "九个字九个字九个字")
         ].qgroupEqualPartition(row: 3)
         print("动态规划-----\(array)")
-        
+                
         let btn = UIButton.init(type: .custom)
             .qtitle("去首页")
-            .qtitle("去首页 +", .selected)
+            .qtitle("去首页 +  ⇋澳门", .selected)
             .qtitleColor(.white)
             .qbackgroundColor(.red)
             .qcornerRadius(5, true)
@@ -69,9 +69,8 @@ class ViewController: UIViewController {
             })
             // 设置拖拽，则不能使用约束，否则改变状态之后，会还原
             .qdrag(.nearBorder(edge: .init(top: qnavigationbarHeight, left: 10, bottom: qbottomSafeHeight, right: 10)))
-        
         self.view.qbody([
-            btn.qframe(.init(x: 100, y: 400, width: 100, height: 60)),
+            btn.qframe(.init(x: 100, y: 400, width: 300, height: 60)),
 
             UIView().qbackgroundColor(.green).qframe(.init(x: 100, y: 100, width: 100, height: 100))
             .qtap({ _ in

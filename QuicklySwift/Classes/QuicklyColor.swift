@@ -33,6 +33,11 @@ public extension UIColor {
     func qtoImage(_ size: CGSize = .init(width: 1, height: 1)) -> UIImage? {
         return self.cgColor.qtoImage(size)
     }
+    /// 颜色对应的16进制  ff9900
+    /// 如果有透明值，则有八位，最后两位是透明值
+    var qhexString: String {
+        return self.cgColor.qhexString;
+    }
 }
 public extension CGColor {
     class func qrgb(_ r: Int, _ g: Int, _ b: Int) -> CGColor {
@@ -67,5 +72,23 @@ public extension CGColor {
         res = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
         return res
+    }
+    /// 颜色对应的16进制  ff9900
+    /// 如果有透明值，则有八位，最后两位是透明值
+    var qhexString: String {
+        guard let components = self.components else { return "000000" }
+        if self.numberOfComponents == 4 {
+            let r: Int = Int(components[0] * 255)
+            let g: Int = Int(components[1] * 255)
+            let b: Int = Int(components[2] * 255)
+            let a: Int = Int(components[3] * 255)
+            if a == 255 {
+                return String(format: "%02X%02X%02X", r, g, b)
+            }
+            return String(format: "%02X%02X%02X%02X", r, g, b, a)
+        } else {
+            let r: Int = Int(components[0] * 255)
+            return String(format: "%02X%02X%02X", r, r, r)
+        } 
     }
 }

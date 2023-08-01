@@ -86,7 +86,20 @@ public extension QuicklyNumberProtoal where Self: Any {
         }
         return "\(self)"
     }
+    /// 如果是时间，将其转换为时分秒, number单位为秒，输出01:44:11
+    var qtohms: String {
+        let number = NSDecimalNumber.init(string: "\(self)")
+        let value = number.intValue
+        let hours = value / 3600
+        let min = (value % 3600) / 60
+        let s = value % 60
+        if hours > 0 {
+            return String(format: "%02d:%02d:%02d", hours, min, s)
+        }
+        return String(format: "%02d:%02d", min, s)
+    }
 }
+
 extension NSNumber: QuicklyNumberProtoal {}
 extension CChar: QuicklyNumberProtoal {}
 extension UInt8: QuicklyNumberProtoal {}
