@@ -76,7 +76,13 @@ public extension String {
             return nil
         }
         if self.hasPrefix("http") || self.hasPrefix("file://") {
-            return URL.init(string: self)
+            if let url = URL.init(string: self) {
+                return url
+            }
+            if let u = self.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed), let url = URL.init(string: u) {
+                return url
+            }
+            return nil
         }
         return URL.init(fileURLWithPath: self)
     }

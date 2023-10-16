@@ -9,14 +9,13 @@ import UIKit
 
 /// 自定义ActionSheetController，支持图文混排
 public class QActionSheetController: UIViewController {
-    let contentView = UIView.init(frame: .init(x: 0, y: qscreenheight, width: qscreenwidth, height: 300))
+    public lazy var contentView = UIView.init(frame: .init(x: 0, y: qscreenheight, width: qscreenwidth, height: 0))
+        .qcornerRadiusCustom([.topLeft, .topRight], radii: 15)
+        .qbackgroundColor(self.options.backgroundColor)
+
+    public let options: QAlertControllerOptions
     
-    let stackView = QStackView.qbody(.vertical, 0, .fill, .equalSpacing, []).qframe(.init(x: 0, y: 0, width: qscreenwidth, height: 100))
-    
-    let tableView = UITableView.init(frame: .init(x: 0, y: 0, width: qscreenwidth, height: 300), style: .plain)
-    let options: QAlertControllerOptions
-    
-    var selectedIndex: Int?
+    public var selectedIndex: Int?
     
     /// 小于0时，为取消
     public var finishHandle: ((Int) -> Void)?
@@ -50,113 +49,126 @@ public class QActionSheetController: UIViewController {
                 }
             }),
             contentView
-                .qcornerRadiusCustom([.topLeft, .topRight], radii: 15)
-                .qbackgroundColor(self.options.backgroundColor)
-                .qbody([
-                    stackView.qmakeConstraints({ make in
-                        make.edges.equalToSuperview()
-                    }).qalignment(self.options.aligment)
-                ])
                 .qmakeConstraints({ make in
                     make.top.equalTo(self.view.snp.bottom)
                     make.centerX.equalToSuperview()
                     make.width.equalToSuperview()
                 })
         ])
-        /// 标题
+        let contentMaxHeight = (qscreenheight - 200 - qbottomSafeHeight - 54) / 2.0
+        /// 标题 描述
+        let textVs = VStackView.qbody([])
         if let t = self.options.title, t.length > 0 {
-            addLabel(title: t)
+            textVs.qbody([addLabel(title: t)])
         }
-        /// 描述
         if let t = self.options.desc, t.length > 0 {
-            addLabel(title: t).qbody([
-                /// 加一个底部线
-                UIView().qbackgroundColor(self.options.separatorColor)
-                    .qmakeConstraints({ make in
-                        make.left.bottom.right.equalToSuperview()
-                        make.height.equalTo(1)
-                    })
-            ])
+            textVs.qbody([addLabel(title: t)])
         }
-        /// 选项
-        let actions = self.options.actions
-        if !actions.isEmpty {
-            stackView.qbody([
-                tableView.qmakeConstraints({ make in
-                    make.left.right.equalToSuperview()
-                    make.height.equalTo(50)
-                })
-            ])
-            tableView.qcontentSizeChanged { scrollView in
-                var height: CGFloat
-                if qisdeviceLandscape {
-                    height = min(scrollView.contentSize.height, 175)
-                } else {
-                    height = min(scrollView.contentSize.height, 275)
+        
+        let color = self.options.gradientColor
+        let spev1 = UIView().qgradientColors([color.withAlphaComponent(0), color], locations: [0, 1], start: .init(x: 0.5, y: 0), end: .init(x: 0.5, y: 1))
+        let scrollView1 = UIScrollView()
+        let v1 = UIView().qbody([
+            scrollView1.qmakeConstraints({ make in
+                make.edges.equalToSuperview()
+            }).qbody([
+                textVs.qmakeConstraints({ make in
+                    make.edges.equalToSuperview()
+                    make.width.equalTo(qscreenwidth)
+                }),
+            ]).qcontentSizeChanged(changed: { scrollView in
+                scrollView.superview?.snp.makeConstraints { make in
+                    let h = min(scrollView.contentSize.height, contentMaxHeight)
+                    make.height.equalTo(h)
                 }
-                scrollView.snp.updateConstraints { make in
-                    make.height.equalTo(height)
-                }
-                scrollView.isScrollEnabled = Int(scrollView.contentSize.height) > Int(height)
-            }
-            tableView
-                .qbackgroundColor(.clear)
-                .qsectionHeaderTopPadding(0)
-                .qcontentInsetAdjustmentBehavior(.never)
-                .qseparatorStyle(.none)
-                .qnumberofRows({ section in
-                    return actions.count
-                })
-                .qcell { [weak self] tableView, indexPath in
-                    let cell: QAlertControllerAcitonItem = (tableView.dequeueReusableCell(withIdentifier: "cell") as? QAlertControllerAcitonItem) ?? QAlertControllerAcitonItem.init(style: .default, reuseIdentifier: "cell")
-                    cell.titleLabel.attributedText = actions[qsafe: indexPath.row]
-                    cell.line.isHidden = (indexPath.row == actions.count - 1)
-                    cell.line.backgroundColor = self?.options.separatorColor
-                    return cell
-                }
-                .qdidSelectRow { [weak self] tableView, indexPath in
-                    tableView.deselectRow(at: indexPath, animated: false)
-                    self?.selectedIndex = indexPath.row
+            }),
+            spev1.qmakeConstraints({ make in
+                make.left.right.bottom.equalToSuperview()
+                make.height.equalTo(15)
+            })
+        ])
+        /// actions
+        let actionVs = VStackView.qbody([])
+        if self.options.actions.count > 0 {
+            let vs: [UIView] = self.options.actions.enumerated().compactMap { [weak self] action -> UIView? in
+                let v = self?.addLabel(title: action.element).qtag(action.offset).qtap({ [weak self] view in
+                    self?.selectedIndex = view.tag
                     self?.contentShow(false)
+                })
+                if action.offset > 0 {
+                    v?.qbody([
+                        UIView().qmakeConstraints({ make in
+                            make.left.right.top.equalToSuperview()
+                            make.height.equalTo(1)
+                        }).qbackgroundColor(self?.options.separatorColor)
+                    ])
                 }
+                return v
+            }
+            actionVs.qbody(vs)
         }
         /// 底部描述
         if let t = self.options.subDesc, t.length > 0 {
-            addLabel(title: t).qbody([
-                /// 加一个顶部线
-                UIView().qbackgroundColor(self.options.separatorColor)
-                    .qmakeConstraints({ make in
-                        make.left.top.right.equalToSuperview()
-                        make.height.equalTo(1)
-                    })
-            ])
+            actionVs.qbody([addLabel(title: t)])
         }
-        /// 取消
+        let spev2 = UIView().qgradientColors([color.withAlphaComponent(0), color], locations: [0, 1], start: .init(x: 0.5, y: 0), end: .init(x: 0.5, y: 1))
+        let scrollView2 = UIScrollView()
+        let v2 = UIView().qbody([
+            scrollView2.qmakeConstraints({ make in
+                make.edges.equalToSuperview()
+            }).qbody([
+                actionVs.qmakeConstraints({ make in
+                    make.edges.equalToSuperview()
+                    make.width.equalTo(qscreenwidth)
+                })
+            ]).qcontentSizeChanged(changed: { scrollView in
+                scrollView.superview?.snp.makeConstraints { make in
+                    let h = min(scrollView.contentSize.height, contentMaxHeight)
+                    make.height.equalTo(h)
+                }
+            }),
+            spev2.qmakeConstraints({ make in
+                make.left.right.bottom.equalToSuperview()
+                make.height.equalTo(15)
+            })
+        ])
+        // 取消
+        let cancelVs = VStackView.qbody([])
         if let t = self.options.cancel, t.length > 0 {
-            stackView.qbody([
-                UIView().qbackgroundColor(self.options.separatorColor)
-                    .qmakeConstraints({ make in
-                        make.height.equalTo(10)
-                        make.width.equalToSuperview()
-                    })
+            cancelVs.qbody([
+                UIView().qmakeConstraints({ make in
+                    make.height.equalTo(10)
+                }).qbackgroundColor(self.options.separatorColor),
+                addLabel(title: t).qtap({ [weak self] view in
+                    self?.contentShow(false)
+                }),
             ])
-            addLabel(title: t).qtap { [weak self] view in
-                self?.contentShow(false)
-            }
         }
-        /// 底部安全区域
-        stackView.qbody([
+        cancelVs.qbody([
             UIView().qmakeConstraints({ make in
                 make.height.equalTo(qbottomSafeHeight)
             })
         ])
+        let stack = [v1, v2, cancelVs].qjoined(aixs: .vertical, spacing: 0, align: .fill, distribution: .equalSpacing)
+        contentView.qbody([
+            stack.qmakeConstraints({ make in
+                make.edges.equalToSuperview()
+            })
+        ])
+        self.view.layoutIfNeeded()
+        scrollView1.qcontentOffsetChanged(changed: { [weak spev1] scrollView in
+            spev1?.isHidden = Int(scrollView.contentOffset.y + scrollView.frame.size.height) >= Int(scrollView.contentSize.height - 5)
+        })
+        scrollView2.qcontentOffsetChanged(changed: { [weak spev2] scrollView in
+            spev2?.isHidden = Int(scrollView.contentOffset.y + scrollView.frame.size.height) >= Int(scrollView.contentSize.height - 5)
+        })
     }
     public override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         contentShow(true)
     }
     public func contentShow(_ show: Bool) {
-        self.contentView.layoutIfNeeded()
+        self.view.alpha = show ? 0 : 1
         self.contentView.snp.remakeConstraints { make in
             if show {
                 make.bottom.equalToSuperview()
@@ -167,6 +179,7 @@ public class QActionSheetController: UIViewController {
             make.width.equalToSuperview()
         }
         UIView.animate(withDuration: 0.38, delay: 0) {
+            self.view.alpha = show ? 1 : 0
             self.view.layoutIfNeeded()
         } completion: { _ in
             if !show {
@@ -179,17 +192,15 @@ public class QActionSheetController: UIViewController {
     @discardableResult
     func addLabel(title: NSAttributedString) -> UIView {
         let v = UIView()
-        stackView.qbody([
-            v.qbody([
-                UILabel()
-                    .qnumberOfLines(0)
-                    .qattributedText(title)
-                    .qmakeConstraints({ make in
-                        make.left.right.equalToSuperview().inset(15)
-                        make.top.bottom.equalToSuperview().inset(10)
-                        make.height.greaterThanOrEqualTo(30)
-                    })
-            ])
+        v.qbody([
+            UILabel()
+                .qnumberOfLines(0)
+                .qattributedText(title)
+                .qmakeConstraints({ make in
+                    make.left.right.equalToSuperview().inset(15)
+                    make.top.bottom.equalToSuperview().inset(10)
+                    make.height.greaterThanOrEqualTo(30)
+                })
         ])
         return v
     }
@@ -240,10 +251,14 @@ public class QAlertControllerOptions {
         case alignment(UIStackView.Alignment)
         /// 背景色
         case backgroundColor(UIColor)
-        /// 点击界面外，关闭 // 默认true
+        /// 点击界面外，关闭 // 默认true   仅对ActionSheet有效
         case dismissWhenTouchOut(Bool)
+        /// 点击界面外，关闭 // 默认false，仅对Alert有效
+        case dismissWhenTouchOutByAlert(Bool)
         /// 分割线颜色
         case separatorColor(UIColor)
+        /// 渐变色
+        case gradientColor(UIColor)
     }
     
     var title: NSAttributedString?
@@ -254,19 +269,21 @@ public class QAlertControllerOptions {
     var aligment: UIStackView.Alignment = .fill
     var backgroundColor: UIColor = .white
     var dismissWhenTouchOut: Bool = true
+    var dismissWhenTouchOutByAlert: Bool = false
     var separatorColor: UIColor = .init(white: 0.8, alpha: 0.3)
+    var gradientColor: UIColor = .black.withAlphaComponent(0.7)
     public init(options: [QAlertControllerOptions.Options]) {
         let p = NSMutableParagraphStyle.init()
         p.alignment = .center
         p.lineSpacing = 5
         let descDict: [NSAttributedString.Key: Any] = [.paragraphStyle: p,
-                                                   .foregroundColor: UIColor.init(white: 0.5, alpha: 1),
-                                                   .font: UIFont.systemFont(ofSize: 11)
-                                                ]
+                                                       .foregroundColor: UIColor.init(white: 0.5, alpha: 1),
+                                                       .font: UIFont.systemFont(ofSize: 11)
+        ]
         let dict: [NSAttributedString.Key: Any] = [.paragraphStyle: p,
                                                    .foregroundColor: UIColor.init(white: 0.3, alpha: 1),
                                                    .font: UIFont.systemFont(ofSize: 16)
-                                                ]
+        ]
         options.forEach { opt in
             switch opt {
             case .title(let text):
@@ -315,8 +332,12 @@ public class QAlertControllerOptions {
                 self.backgroundColor = color
             case .dismissWhenTouchOut(let diss):
                 self.dismissWhenTouchOut = diss
+            case .dismissWhenTouchOutByAlert(let diss):
+                self.dismissWhenTouchOutByAlert = diss
             case .separatorColor(let color):
                 self.separatorColor = color
+            case .gradientColor(let color):
+                self.gradientColor = color
             }
         }
     }

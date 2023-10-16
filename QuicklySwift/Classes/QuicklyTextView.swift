@@ -54,6 +54,19 @@ public extension UITextView {
         self.linkTextAttributes = attr
         return self
     }
+    /// 给文字设置渐变色
+    /// - Parameters:
+    ///   - gradinent: 渐变色
+    ///   - locations: 位置
+    ///   - start: 起点
+    ///   - end: 终点
+    ///   - size: 渐变区域
+    @discardableResult
+    func qtextColor(gradinent: [UIColor], locations: [NSNumber], start: CGPoint, end: CGPoint, size: CGSize) -> Self {
+        let image = UIImage.qimageBy(gradinentColors: gradinent, locations: locations, start: start, end: end, size: size)
+        self.textColor = UIColor.init(patternImage: image)
+        return self
+    }
 }
 // MARK: - maxCount  maxLength 的区别，
 // maxCount：表情长度 = 1     如“中文你好👰” count = 5
@@ -132,6 +145,29 @@ public extension UITextView {
     func qshouldInteractWithAttachment(_ should: ((_ textView: UITextView, _ textAttachment: NSTextAttachment, _ range: NSRange, _ interaction: Int) -> Bool)?) -> Self {
         self.qtextViewHelper.shouldInteractWithAttachment = should
         return self
+    }
+    /// 获取range所在区域第一排的位置
+    func qfistRect(for range: NSRange) -> CGRect {
+        let beginning = self.beginningOfDocument
+        guard let star = self.position(from: beginning, offset: range.location),
+              let end = self.position(from: star, offset: range.length),
+              let textRange = self.textRange(from: star, to: end) else { return .zero }
+        return self.firstRect(for: textRange)
+    }
+    /// 获取index所在区域的位置,
+    func qcaretRect(for index: Int) -> CGRect {
+        let beginning = self.beginningOfDocument
+        guard let star = self.position(from: beginning, offset: index) else { return .zero }
+        return self.caretRect(for: star)
+    }
+    /// 获取range所在区域所有排的位置
+    func qsectionRects(for range: NSRange) -> [CGRect] {
+        let beginning = self.beginningOfDocument
+        guard let star = self.position(from: beginning, offset: range.location),
+              let end = self.position(from: star, offset: range.length),
+              let textRange = self.textRange(from: star, to: end) else { return [] }
+        let res = self.selectionRects(for: textRange)
+        return res.map { $0.rect }
     }
 }
  
@@ -260,9 +296,12 @@ public extension QTextViewHelper {
                     self?.placeHolderLabel?.font = textView.font ?? .systemFont(ofSize: 11)
                     self?.placeHolderLabel?.textColor = UIColor.lightGray
                 }
+                let rect = textView.qcaretRect(for: 0)
                 self?.placeHolderLabel?.snp.remakeConstraints({ make in
-                    make.right.top.bottom.equalToSuperview().inset(textView.textContainerInset)
-                    make.left.equalToSuperview().inset(textView.textContainer.lineFragmentPadding + textView.textContainerInset.left)
+                    make.left.equalToSuperview().inset(textView.contentInset.left)
+                    make.top.equalToSuperview().inset(rect.origin.y)
+                    let w = textView.frame.size.width - textView.contentInset.left - textView.contentInset.right
+                    make.width.equalTo(w)
                 })
             }
         })

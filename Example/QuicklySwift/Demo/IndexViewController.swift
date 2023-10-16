@@ -23,6 +23,7 @@ class IndexViewController: UIViewController {
         ("LED", LedDemoViewController.self),
         ("push pop 转场", TransitionOneViewController.self),
         ("avplayer", AVPlayerViewController.self),
+        ("渐变", GradientLayerViewController.self),
     ]
     
     override func viewDidLoad() {
@@ -34,13 +35,21 @@ class IndexViewController: UIViewController {
             tableView.qmakeConstraints({ make in
                 make.edges.equalToSuperview()
             }),
+            UIButton.init().qbackgroundColor(.red)
+                .qmakeConstraints({ make in
+                    make.bottom.right.equalToSuperview()
+                    make.size.equalTo(100)
+                })
+                .qtap({ [weak self] view in
+                    self?.tableView.reloadRows(at: [.init(row: 1, section: 0)], with: .automatic)
+                })
         ])
         tableView.qnumberofRows { [weak self] section in
             return self?.source.count ?? 0
         }.qheightForRow { indexPath in
             return 80
         }.qcell { [weak self] (tableView, indexPath) in
-            let cell = tableView.dequeueReusableCell(withIdentifier: "cell") ?? .init(style: .subtitle, reuseIdentifier: "cell")
+            let cell = tableView.dequeueReusableCell(withIdentifier: "cell") ?? TestCell.init(style: .subtitle, reuseIdentifier: "cell")
             cell.accessoryType = .disclosureIndicator
             let item = self?.source[indexPath.row]
             cell.textLabel?.text = item?.0
@@ -65,5 +74,14 @@ class IndexViewController: UIViewController {
                 }
             }
         }
+    }
+}
+class TestCell: UITableViewCell {
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 }

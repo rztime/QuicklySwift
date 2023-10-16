@@ -47,7 +47,8 @@ public extension PHAsset {
         return false
     }
     /// 获取缩略图
-    func qfastImage(maxWidth: CGFloat = 480, progress: ((_ progress: Double) -> Void)?, complete: ((_ image: UIImage?) -> Void)?) {
+    @discardableResult
+    func qfastImage(maxWidth: CGFloat = 480, progress: ((_ progress: Double) -> Void)?, complete: ((_ image: UIImage?) -> Void)?) -> PHImageRequestID {
         let option = PHImageRequestOptions.init()
         option.isNetworkAccessAllowed = true
         option.resizeMode = .fast
@@ -56,12 +57,13 @@ public extension PHAsset {
             progress?(p)
         }
         let size = CGSize.init(width: self.pixelWidth, height: self.pixelHeight).qscaleto(maxWidth: maxWidth)
-        PHImageManager.default().requestImage(for: self, targetSize: size, contentMode: .default, options: option) { image, _ in
+        return PHImageManager.default().requestImage(for: self, targetSize: size, contentMode: .default, options: option) { image, _ in
             complete?(image?.qfixOrientation)
         }
     }
     /// 获取原图（如果是iCloud会下载）
-    func qoriginImage(progress: ((_ progress: Double) -> Void)?, complete: ((_ image: UIImage?) -> Void)?) {
+    @discardableResult
+    func qoriginImage(progress: ((_ progress: Double) -> Void)?, complete: ((_ image: UIImage?) -> Void)?) -> PHImageRequestID {
         let option = PHImageRequestOptions.init()
         option.isNetworkAccessAllowed = true
         option.resizeMode = .fast
@@ -70,16 +72,37 @@ public extension PHAsset {
             progress?(p)
         }
         let size = CGSize.init(width: self.pixelWidth, height: self.pixelHeight)
-        PHImageManager.default().requestImage(for: self, targetSize: size, contentMode: .default, options: option) { image, _ in
+        return PHImageManager.default().requestImage(for: self, targetSize: size, contentMode: .default, options: option) { image, _ in
             complete?(image?.qfixOrientation)
         }
     }
+    /// 获取原图（如果是iCloud会下载）
+    @discardableResult
+    func qoriginImageData(progress: ((_ progress: Double) -> Void)?, complete: ((_ data: Data?) -> Void)?) -> PHImageRequestID {
+        let option = PHImageRequestOptions.init()
+        option.isNetworkAccessAllowed = true
+        option.resizeMode = .fast
+        option.deliveryMode = .highQualityFormat
+        option.progressHandler = { p, error, _, _ in
+            progress?(p)
+        }
+        if #available(iOS 13, *) {
+            return PHImageManager.default().requestImageDataAndOrientation(for: self, options: option) { data, _, _, _ in
+                complete?(data)
+            }
+        } else {
+            return PHImageManager.default().requestImageData(for: self, options: option) { data, _, _, _ in
+                complete?(data)
+            }
+        }
+    }
     /// 获取原视频（如果是iCloud会下载）
-    func qoriginVideo(progress: ((_ progress: Double) -> Void)?, complete: ((_ video: AVURLAsset?) -> Void)?) {
+    @discardableResult
+    func qoriginVideo(progress: ((_ progress: Double) -> Void)?, complete: ((_ video: AVURLAsset?) -> Void)?) -> PHImageRequestID {
         guard self.mediaType == .video else {
             progress?(1)
             complete?(nil)
-            return
+            return PHInvalidImageRequestID
         }
         let option = PHVideoRequestOptions.init()
         option.isNetworkAccessAllowed = true
@@ -87,7 +110,7 @@ public extension PHAsset {
         option.progressHandler = { p, error, _, _ in
             progress?(p)
         }
-        PHImageManager.default().requestAVAsset(forVideo: self, options: option) { av, _, _ in
+        return PHImageManager.default().requestAVAsset(forVideo: self, options: option) { av, _, _ in
             DispatchQueue.main.async {
                 complete?(av as? AVURLAsset)
             }

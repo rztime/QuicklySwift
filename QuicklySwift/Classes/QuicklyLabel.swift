@@ -59,4 +59,17 @@ public extension UILabel {
         self.preferredMaxLayoutWidth = width
         return self
     }
+    /// 给文字设置渐变色
+    /// - Parameters:
+    ///   - gradinent: 渐变色
+    ///   - locations: 位置
+    ///   - start: 起点
+    ///   - end: 终点
+    ///   - size: 渐变区域
+    @discardableResult
+    func qtextColor(gradinent: [UIColor], locations: [NSNumber], start: CGPoint, end: CGPoint, size: CGSize) -> Self {
+        let image = UIImage.qimageBy(gradinentColors: gradinent, locations: locations, start: start, end: end, size: size)
+        self.textColor = UIColor.init(patternImage: image)
+        return self
+    }
 }

@@ -9,6 +9,27 @@ import UIKit
 import AVKit
 
 public extension UIImage {
+    /// 将颜色转化为图片
+    class func qimageBy(color: UIColor, size: CGSize) -> UIImage {
+        return color.qtoImage(size) ?? .init()
+    }
+    
+    /// 将渐变色转换为图片
+    /// - Parameters:
+    ///   - gradinentColors: 渐变色
+    ///   - locations: 渐变色开始位置，数量和颜色保持一致
+    ///   - start: 七点
+    ///   - end: 终点
+    ///   - size: 图片大小
+    class func qimageBy(gradinentColors: [UIColor], locations: [NSNumber], start: CGPoint, end: CGPoint, size: CGSize) -> UIImage {
+        let view = UIView.init(frame: .init(origin: .zero, size: size))
+        view.qgradientColors(gradinentColors, locations: locations, start: start, end: end)
+        let image = view.qtoImage()
+        return image ?? .init()
+    }
+}
+
+public extension UIImage {
     /// 修正图片方向
     var qfixOrientation: UIImage {
         if self.imageOrientation == .up {

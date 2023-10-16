@@ -20,6 +20,12 @@ public extension UIButton {
         self.titleLabel?.font = font
         return self
     }
+    /// 行数
+    @discardableResult
+    func qnumberOfLines(_ line: Int) -> Self {
+        self.titleLabel?.numberOfLines = line
+        return self
+    }
     /// 设置标题颜色
     @discardableResult
     func qtitleColor(_ color: UIColor?, _ state: UIControl.State = .normal) -> Self {
@@ -67,6 +73,48 @@ public extension UIButton {
     @discardableResult
     func qimageEdge(_ edges: UIEdgeInsets) -> Self {
         self.imageEdgeInsets = edges
+        return self
+    }
+    /// 给文字设置渐变色
+    /// - Parameters:
+    ///   - gradinent: 渐变色
+    ///   - locations: 位置
+    ///   - start: 起点
+    ///   - end: 终点
+    ///   - size: 渐变区域
+    @discardableResult
+    func qtitleColor(gradinent: [UIColor], locations: [NSNumber], start: CGPoint, end: CGPoint, size: CGSize, state: UIControl.State = .normal) -> Self {
+        let image = UIImage.qimageBy(gradinentColors: gradinent, locations: locations, start: start, end: end, size: size)
+        return self.qtitleColor(UIColor.init(patternImage: image), state)
+    }
+    /// 重绘图片的颜色，png适用
+    /// - Parameter color:
+    @discardableResult
+    func qimageRedrawColor(_ color: UIColor?, for state: UIControl.State) -> Self {
+        if color == nil {
+            self.tintColor = nil
+            let image = self.image(for: state)?.withRenderingMode(.alwaysOriginal)
+            self.setImage(image, for: state)
+        } else {
+            let image = self.image(for: state)?.withRenderingMode(.alwaysTemplate)
+            self.setImage(image, for: state)
+            self.tintColor = color
+        }
+        return self
+    }
+    /// 重绘背景图片的颜色，png适用
+    /// - Parameter color:
+    @discardableResult
+    func qbackgroundImageRedrawColor(_ color: UIColor?, for state: UIControl.State) -> Self {
+        if color == nil {
+            self.tintColor = nil
+            let image = self.backgroundImage(for: state)?.withRenderingMode(.alwaysOriginal)
+            self.setBackgroundImage(image, for: state)
+        } else {
+            let image = self.backgroundImage(for: state)?.withRenderingMode(.alwaysTemplate)
+            self.setBackgroundImage(image, for: state)
+            self.tintColor = color
+        }
         return self
     }
 }
