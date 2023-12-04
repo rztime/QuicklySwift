@@ -315,6 +315,12 @@ class QuicklyAuthorizationHelper {
         case .authorized:
             let res = QAuthorizationResult.init(granted: true, limit: false, status: status)
             result?(res)
+        case .fullAccess:
+            let res = QAuthorizationResult.init(granted: true, limit: false, status: status)
+            result?(res)
+        case .writeOnly:
+            let res = QAuthorizationResult.init(granted: true, limit: false, status: status)
+            result?(res)
         @unknown default:
             let res = QAuthorizationResult.init(granted: false, limit: false, status: status)
             result?(res)

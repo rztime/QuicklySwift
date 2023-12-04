@@ -39,6 +39,7 @@ QuicklySwift is available under the MIT license. See the LICENSE file for more i
 
 | 相关 | 说明 |
 |:----|:----|
+|v0.5.0|优化警告，新增QDispatch等|
 |v0.4.0|优化新增一些功能，新增alertvc,新增文字渐变色|
 |v0.3.0|新增通过url或者path获取文件属性，新增部分功能|
 |v0.2.0|优化部分KVO监听的事件，添加弹窗支持图文混排，添加字符串的安全(表情)截取方法，对一些方法进行优化，添加动态规划方法|

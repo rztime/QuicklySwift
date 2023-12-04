@@ -191,9 +191,7 @@ class BaseViewDemoViewController: UIViewController {
             print("点击了按钮 事件响应")
         }.qtap { [weak self] view in
             print("点击了按钮 tap响应 如果设置了tap， actionFor touchUpInside 将被覆盖")
-            if let btn = view as? UIButton {
-                btn.isSelected = !btn.isSelected
-            }
+            view.isSelected = !view.isSelected
 //            QuicklyPopmenu.show(titles: xxxxxtitles, attributedTitles: [], style: .horizontal(count: 4), fingerLocation: .zero, target: view) { index in
 //                print("index:\(index)")
 //            }

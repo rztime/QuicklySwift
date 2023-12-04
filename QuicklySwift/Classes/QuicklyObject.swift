@@ -40,14 +40,14 @@ public extension QuicklyProtocal where Self: NSObject {
     }
 }
 
+private var quicklyobjnameaddres: UInt8 = 1
 fileprivate extension NSObject {
-    private static var quicklyobjnameaddres = "quicklyobjnameaddres"
     var quicklyObj: QuicklyObjectHelper? {
         set {
-            objc_setAssociatedObject(self, &NSObject.quicklyobjnameaddres, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+            objc_setAssociatedObject(self, &quicklyobjnameaddres, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         }
         get {
-            return objc_getAssociatedObject(self, &NSObject.quicklyobjnameaddres) as? QuicklyObjectHelper
+            return objc_getAssociatedObject(self, &quicklyobjnameaddres) as? QuicklyObjectHelper
         }
     }
 }

@@ -55,9 +55,7 @@ class QuicklyDemoViewController: UIViewController {
             
         
         let imageView = UIImageView.init(image: UIImage.init(named: "zan_h")).qgaussBlur().qtap { view in
-            if let v = view as? UIImageView {
-                v.image = UIImage.init(named: "1111")
-            }
+            view.image = UIImage.init(named: "1111")
         }
         
         let vstack = VStackView.qbody([

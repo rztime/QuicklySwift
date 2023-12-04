@@ -54,6 +54,18 @@ public extension Array {
         }
         return result
     }
+    /// 当数组数量不足count时，可以配置填充至足够数量
+    func qmapTo(count: Int, elementCreat: ((_ index: Int) -> Element)) -> Array<Element> {
+        if self.count >= count {
+            return self
+        }
+        var temp = self
+        for i in self.count ... (count - 1) {
+            let e = elementCreat(i)
+            temp.append(e)
+        }
+        return temp
+    }
 }
 
 /// 【动态规划】 如[1,2,3,4,5,6,7,8,9] 分成3份，每份总数尽量接近 ，最后为[[6,9] [7, 8],[1,2,3,4, 5] ]

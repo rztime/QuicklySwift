@@ -29,6 +29,7 @@
 		B2AE806E2912715D00B2C007 /* QuicklyAVPlayerOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2AE806A2912715D00B2C007 /* QuicklyAVPlayerOptions.swift */; };
 		B2AE806F2912715D00B2C007 /* QuicklyAVPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2AE806B2912715D00B2C007 /* QuicklyAVPlayer.swift */; };
 		B2AE80702912715D00B2C007 /* QAVPlayerItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2AE806C2912715D00B2C007 /* QAVPlayerItem.swift */; };
+		B2B47DD32AF0ED2F0057FCFB /* DispatchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2B47DD22AF0ED2F0057FCFB /* DispatchViewController.swift */; };
 		B2B4D12A2AB3F6B700270C44 /* GradientLayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2B4D1292AB3F6B700270C44 /* GradientLayerViewController.swift */; };
 		B2B761BB29B5856C00A96748 /* QPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2B761BA29B5856C00A96748 /* QPlayer.swift */; };
 		B2C0B1792951A3C900918951 /* GrayfloatIndexViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2C0B1782951A3C900918951 /* GrayfloatIndexViewController.swift */; };
@@ -85,6 +86,7 @@
 		B2AE806A2912715D00B2C007 /* QuicklyAVPlayerOptions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuicklyAVPlayerOptions.swift; sourceTree = "<group>"; };
 		B2AE806B2912715D00B2C007 /* QuicklyAVPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuicklyAVPlayer.swift; sourceTree = "<group>"; };
 		B2AE806C2912715D00B2C007 /* QAVPlayerItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QAVPlayerItem.swift; sourceTree = "<group>"; };
+		B2B47DD22AF0ED2F0057FCFB /* DispatchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DispatchViewController.swift; sourceTree = "<group>"; };
 		B2B4D1292AB3F6B700270C44 /* GradientLayerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientLayerViewController.swift; sourceTree = "<group>"; };
 		B2B761BA29B5856C00A96748 /* QPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QPlayer.swift; sourceTree = "<group>"; };
 		B2C0B1782951A3C900918951 /* GrayfloatIndexViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GrayfloatIndexViewController.swift; sourceTree = "<group>"; };
@@ -267,6 +269,7 @@
 				B2E5853F2860128200921A91 /* Model.swift */,
 				B2B4D1292AB3F6B700270C44 /* GradientLayerViewController.swift */,
 				B2C6F2D328FFEC2100A04167 /* AVPlayerViewController.swift */,
+				B2B47DD22AF0ED2F0057FCFB /* DispatchViewController.swift */,
 			);
 			path = Demo;
 			sourceTree = "<group>";
@@ -503,6 +506,7 @@
 				607FACD81AFB9204008FA782 /* ViewController.swift in Sources */,
 				B2AE806E2912715D00B2C007 /* QuicklyAVPlayerOptions.swift in Sources */,
 				B2C0B17D2951ACAB00918951 /* GrayfloatVC2.swift in Sources */,
+				B2B47DD32AF0ED2F0057FCFB /* DispatchViewController.swift in Sources */,
 				B2D5CB3D2852DA5A00C6C6EF /* CollectionViewDemoViewController.swift in Sources */,
 				B22C27472872892400B34EEF /* TransitionThreeViewController.swift in Sources */,
 				B22C27412872848900B34EEF /* TransitionOneViewController.swift in Sources */,
@@ -670,7 +674,7 @@
 				CODE_SIGN_ENTITLEMENTS = QuicklySwift_Example.entitlements;
 				DEVELOPMENT_TEAM = 9363D6U2QU;
 				INFOPLIST_FILE = QuicklySwift/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MODULE_NAME = ExampleApp;
 				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.demo.$(PRODUCT_NAME:rfc1034identifier)";
@@ -689,7 +693,7 @@
 				CODE_SIGN_ENTITLEMENTS = QuicklySwift_Example.entitlements;
 				DEVELOPMENT_TEAM = 9363D6U2QU;
 				INFOPLIST_FILE = QuicklySwift/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MODULE_NAME = ExampleApp;
 				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.demo.$(PRODUCT_NAME:rfc1034identifier)";
@@ -714,6 +718,7 @@
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = Tests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -733,6 +738,7 @@
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = Tests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";

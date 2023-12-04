@@ -13,7 +13,7 @@ public let qfloatgrayChangeName = Notification.Name("qfloatgrayChangeName")
 public let qfloatgrayzpositionChangeName = Notification.Name("qfloatgrayzpositionChangeName")
 public let qfloatgrayColorChangeName = Notification.Name("qfloatgrayColorChangeName")
 
-private var quicklyFloatgrayKey = "quicklyFloatgrayKey"
+private var quicklyFloatgrayKey: UInt8 = 2
 
 /// 给UIView添加一个滤镜，用于飘灰
 /// 在tableView等设置frame区域，可以飘灰比如首屏，之后的正常显示

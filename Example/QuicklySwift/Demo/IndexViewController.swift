@@ -24,6 +24,7 @@ class IndexViewController: UIViewController {
         ("push pop 转场", TransitionOneViewController.self),
         ("avplayer", AVPlayerViewController.self),
         ("渐变", GradientLayerViewController.self),
+        ("dispath", DispatchViewController.self),
     ]
     
     override func viewDidLoad() {
