@@ -2,6 +2,12 @@
 
 本代码只为提高 Swift UI 层的开发效率，使写代码更简洁、更易读、易维护
 
+# 注意
+
+QuicklyAuthorization 里将所有的权限相关代码写上了，
+如果项目本身没有相关权限需求，请将此文件不需要的权限的代码注释掉，否则可能会导致审核被拒
+下个版本将尝试解决
+
 [![CI Status](https://img.shields.io/travis/rztime/QuicklySwift.svg?style=flat)](https://travis-ci.org/rztime/QuicklySwift)
 [![Version](https://img.shields.io/cocoapods/v/QuicklySwift.svg?style=flat)](https://cocoapods.org/pods/QuicklySwift)
 [![License](https://img.shields.io/cocoapods/l/QuicklySwift.svg?style=flat)](https://cocoapods.org/pods/QuicklySwift)
