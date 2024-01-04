@@ -42,11 +42,11 @@ public enum QAuthorizationType: String {
     /// 语言识别
     case speech = "NSSpeechRecognitionUsageDescription"
     /// siri权限
-    case siri = "notconfig_siri"
+    case siri = "NSSiriUsageDescription"
     /// 活动与体能训练记录
     case motion = "NSMotionUsageDescription"
     /// 广告追踪权限
-    case idfa = "notconfig_idfa"
+    case idfa = "NSUserTrackingUsageDescription"
 }
 // MARK: - 权限获取结果
 public struct QAuthorizationResult {
@@ -70,16 +70,16 @@ public struct QAuthorizationResult {
 public struct QuicklyAuthorization {
     ///内部使用单例，用于单独获取某一个权限时的方法
     static var shared = QuicklyAuthorizationHelper.init()
-
+    
     /// 判断是否拥有权限
     public static func result(with authorizationType: QAuthorizationType, handle: ((_ result: QAuthorizationResult) -> Void)?) {
-        #if DEBUG
+#if DEBUG
         let key = authorizationType.rawValue
         if !key.hasPrefix("notconfig") {
             let hasKey: Bool = !Bundle.main.object(forInfoDictionaryKey: authorizationType.rawValue).qisEmpty
             assert(hasKey, "\n\n\n需要在 info.plist 里添加:\(authorizationType.rawValue)")
         }
-        #endif
+#endif
         let res: ((_ result: QAuthorizationResult) -> Void)? = { res in
             if Thread.isMainThread {
                 handle?(res)
@@ -123,11 +123,15 @@ public struct QuicklyAuthorization {
 }
 /// 权限获取
 class QuicklyAuthorizationHelper {
+#if Q_NSLocationWhenInUseUsageDescription || Q_NSLocationAlwaysUsageDescription
     /// 定位
     var locationWhenInUse: QLocationAuthorization?
     /// 长定位
     var locationAlways: QLocationAuthorization?
+#endif
+    
     private var _montion: Any? = nil
+#if Q_NSMotionUsageDescription
     /// 活动与体能训练记录
     @available(iOS 11.0, *)
     var motion: QMotionAuthorization? {
@@ -138,8 +142,10 @@ class QuicklyAuthorizationHelper {
             _montion = newValue
         }
     }
+#endif
     /// 相机
     func requestCamera(result: ((_ result: QAuthorizationResult) -> Void)?) {
+#if Q_NSCameraUsageDescription
         let status = AVCaptureDevice.authorizationStatus(for: .video)
         switch status {
         case .notDetermined:
@@ -162,9 +168,11 @@ class QuicklyAuthorizationHelper {
             let res = QAuthorizationResult.init(granted: false, limit: false, status: status)
             result?(res)
         }
+#endif
     }
     /// 相册
     func requestPhotoLibrary(result: ((_ result: QAuthorizationResult) -> Void)?) {
+#if Q_NSPhotoLibraryUsageDescription
         let status: PHAuthorizationStatus
         if #available(iOS 14, *) {
             status = PHPhotoLibrary.authorizationStatus(for: .readWrite)
@@ -195,9 +203,11 @@ class QuicklyAuthorizationHelper {
             let res = QAuthorizationResult.init(granted: false, limit: false, status: status)
             result?(res)
         }
+#endif
     }
     /// 麦克风
     func requestMicrophone(result: ((_ result: QAuthorizationResult) -> Void)?) {
+#if Q_NSMicrophoneUsageDescription
         let status = AVCaptureDevice.authorizationStatus(for: .audio)
         switch status {
         case .notDetermined:
@@ -214,6 +224,7 @@ class QuicklyAuthorizationHelper {
             let res = QAuthorizationResult.init(granted: false, limit: false, status: status)
             result?(res)
         }
+#endif
     }
     /// 通知权限
     func requestNotification(result: ((_ result: QAuthorizationResult) -> Void)?) {
@@ -244,6 +255,7 @@ class QuicklyAuthorizationHelper {
     }
     /// 通讯录
     func requestContact(result: ((_ result: QAuthorizationResult) -> Void)?) {
+#if Q_NSContactsUsageDescription
         let status = CNContactStore.authorizationStatus(for: .contacts)
         switch status {
         case .notDetermined:
@@ -260,9 +272,11 @@ class QuicklyAuthorizationHelper {
             let res = QAuthorizationResult.init(granted: false, limit: false, status: status)
             result?(res)
         }
+#endif
     }
     /// app使用中的 定位权限
     func requestLocation(type: CLAuthorizationStatus, result: ((_ result: QAuthorizationResult) -> Void)?) {
+#if Q_NSLocationWhenInUseUsageDescription || Q_NSLocationAlwaysUsageDescription
         guard CLLocationManager.locationServicesEnabled() else {
             let res = QAuthorizationResult.init(granted: false, limit: false, status: 0, message: "未开启GPS服务")
             result?(res)
@@ -300,9 +314,11 @@ class QuicklyAuthorizationHelper {
             let res = QAuthorizationResult.init(granted: false, limit: false, status: status)
             result?(res)
         }
+#endif
     }
     /// 日历
     func requestEvents(type: EKEntityType, result: ((_ result: QAuthorizationResult) -> Void)?) {
+#if Q_NSCalendarsUsageDescription
         let status = EKEventStore.authorizationStatus(for: type)
         switch status {
         case .notDetermined:
@@ -325,9 +341,11 @@ class QuicklyAuthorizationHelper {
             let res = QAuthorizationResult.init(granted: false, limit: false, status: status)
             result?(res)
         }
+#endif
     }
     /// apple music
     func requestAppleMusic(result: ((_ result: QAuthorizationResult) -> Void)?) {
+#if Q_NSAppleMusicUsageDescription
         let status = MPMediaLibrary.authorizationStatus()
         switch status {
         case .notDetermined:
@@ -346,9 +364,11 @@ class QuicklyAuthorizationHelper {
             let res = QAuthorizationResult.init(granted: false, limit: false, status: status)
             result?(res)
         }
+#endif
     }
     /// 语言识别权限
     func requestSpeech(result: ((_ result: QAuthorizationResult) -> Void)?) {
+#if Q_NSSpeechRecognitionUsageDescription
         let status = SFSpeechRecognizer.authorizationStatus()
         switch status {
         case .notDetermined:
@@ -367,9 +387,11 @@ class QuicklyAuthorizationHelper {
             let res = QAuthorizationResult.init(granted: false, limit: false, status: status)
             result?(res)
         }
+#endif
     }
     /// siri权限
     func requestSiri(result: ((_ result: QAuthorizationResult) -> Void)?) {
+#if Q_NSSiriUsageDescription
         let status = INPreferences.siriAuthorizationStatus()
         switch status {
         case .notDetermined:
@@ -388,9 +410,11 @@ class QuicklyAuthorizationHelper {
             let res = QAuthorizationResult.init(granted: false, limit: false, status: status)
             result?(res)
         }
+#endif
     }
     /// 活动与体能训练记录
     func requestMotion(result: ((_ result: QAuthorizationResult) -> Void)?) {
+#if Q_NSMotionUsageDescription
         guard CMMotionActivityManager.isActivityAvailable(), #available(iOS 11.0, *) else {
             let res = QAuthorizationResult.init(granted: false, limit: false, status: 0, message: "活动与体能训练记录不支持")
             result?(res)
@@ -414,9 +438,11 @@ class QuicklyAuthorizationHelper {
             let res = QAuthorizationResult.init(granted: false, limit: false, status: status)
             result?(res)
         }
+#endif
     }
     /// IDFA广告权限
     func requestIdfa(result: ((_ result: QAuthorizationResult) -> Void)?) {
+#if Q_NSUserTrackingUsageDescription
         var uuid = "00000000-0000-0000-0000-000000000000"
         if #available(iOS 14, *) {
             let status = ATTrackingManager.trackingAuthorizationStatus
@@ -449,9 +475,11 @@ class QuicklyAuthorizationHelper {
             let res = QAuthorizationResult.init(granted: enable, limit: false, status: "", message: uuid)
             result?(res)
         }
+#endif
     }
 }
 
+#if Q_NSLocationWhenInUseUsageDescription || Q_NSLocationAlwaysUsageDescription
 // MARK: - 定位权限辅助
 class QLocationAuthorization: NSObject, CLLocationManagerDelegate {
     var complete: ((_ status: CLAuthorizationStatus) -> Void)?
@@ -477,7 +505,7 @@ class QLocationAuthorization: NSObject, CLLocationManagerDelegate {
         self.complete = status
         switch type {
         case .notDetermined, .restricted, .denied:
-           break
+            break
         case .authorizedAlways:
             self.location.requestAlwaysAuthorization()
         case .authorizedWhenInUse:
@@ -487,7 +515,9 @@ class QLocationAuthorization: NSObject, CLLocationManagerDelegate {
         }
     }
 }
+#endif
 
+#if Q_NSMotionUsageDescription
 // MARK: - 活动与体能训练记录
 /// 活动与体能训练记录
 @available(iOS 11.0, *)
@@ -512,3 +542,4 @@ class QMotionAuthorization {
         }
     }
 }
+#endif
