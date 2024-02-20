@@ -9,14 +9,34 @@ import UIKit
 import AVFoundation
 import Photos
 import CoreTelephony
+#if Q_NSContactsUsageDescription
 import Contacts
+#endif
+
+#if Q_NSCalendarsUsageDescription
 import EventKit
+#endif
+
+#if Q_NSAppleMusicUsageDescription
 import MediaPlayer
+#endif
+
+#if Q_NSSpeechRecognitionUsageDescription
 import Speech
+#endif
+
+#if Q_NSSiriUsageDescription
 import Intents
+#endif
+
+#if Q_NSMotionUsageDescription
 import CoreMotion
+#endif
+
+#if Q_NSUserTrackingUsageDescription
 import AdSupport
 import AppTrackingTransparency
+#endif
 /// 权限类型
 public enum QAuthorizationType: String {
     /// 相机
@@ -105,7 +125,7 @@ public struct QuicklyAuthorization {
         case .locationAlways:
             self.shared.requestLocation(type: .authorizedAlways, result: res)
         case .events:
-            self.shared.requestEvents(type: .event, result: res)
+            self.shared.requestEvents(type: .events, result: res)
         case .reminder:
             self.shared.requestEvents(type: .reminder, result: res)
         case .appleMusic:
@@ -317,12 +337,21 @@ class QuicklyAuthorizationHelper {
 #endif
     }
     /// 日历
-    func requestEvents(type: EKEntityType, result: ((_ result: QAuthorizationResult) -> Void)?) {
+    func requestEvents(type: QAuthorizationType, result: ((_ result: QAuthorizationResult) -> Void)?) {
 #if Q_NSCalendarsUsageDescription
-        let status = EKEventStore.authorizationStatus(for: type)
+        let t : EKEntityType
+        switch type {
+        case .events:
+            t = .event
+        case .reminder:
+            t = .reminder
+        default:
+            t = .event
+        }
+        let status = EKEventStore.authorizationStatus(for: t)
         switch status {
         case .notDetermined:
-            EKEventStore().requestAccess(to: type) { [weak self] _, _ in
+            EKEventStore().requestAccess(to: t) { [weak self] _, _ in
                 self?.requestEvents(type: type, result: result)
             }
         case .restricted, .denied:
