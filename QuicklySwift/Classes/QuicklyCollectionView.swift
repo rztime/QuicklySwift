@@ -97,6 +97,17 @@ public extension UICollectionView {
         self.register(viewClass, forSupplementaryViewOfKind: elementKind, withReuseIdentifier: identifier)
         return self
     }
+    /// 获取item的数量
+    func qitemsCount() -> Int {
+        var count = 0
+        let sections = self.numberOfSections
+        var i = 1
+        while i <= sections {
+            count += self.numberOfItems(inSection: i - 1)
+            i += 1
+        }
+        return count
+    }
 }
 // MARK: - dataSource
 public extension UICollectionView {

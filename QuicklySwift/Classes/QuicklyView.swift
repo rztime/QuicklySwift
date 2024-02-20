@@ -292,6 +292,27 @@ public extension UIView {
     }
 }
 public extension QuicklyProtocal where Self: UIView {
+    /// UIView将要被点击的时候触发(点击子视图时，也会触发), 一个view只能设置一次，多次设置将以最新的覆盖之前的
+    @discardableResult
+    func qwillTouchIn(_ touchIn: ((_ view: Self) -> Void)?) -> Self {
+        var temp: QTouchView
+        if let v = self.subviews.filter({$0.isKind(of: QTouchView.self)}).first as? QTouchView {
+            temp = v
+        } else {
+            temp = QTouchView.init()
+            self.qbody([
+                temp.qmakeConstraints({ make in
+                    make.edges.equalToSuperview().priority(.low)
+                })
+            ])
+        }
+        temp.willTouchIn = { [weak self] in
+            if let self = self {
+                touchIn?(self)
+            }
+        }
+        return self
+    }
     /// UIView的单击事件, 一个view只能设置一次，多次设置将以最新的覆盖之前的
     @discardableResult
     func qtap(_ tap: ((_ view: Self) -> Void)?) -> Self {
@@ -461,5 +482,20 @@ public extension UIView {
             self.setContentCompressionResistancePriority(.required, for: axis)
         }
         return self
+    }
+}
+
+class QTouchView: UIView {
+    var willTouchIn: (() -> Void)?
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        self.isHidden = true
+    }
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+        self.willTouchIn?()
+        return super.hitTest(point, with: event)
     }
 }

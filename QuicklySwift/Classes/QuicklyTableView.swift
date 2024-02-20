@@ -96,6 +96,17 @@ public extension UITableView {
         }
         return self
     }
+    /// 获取item的数量
+    func qitemsCount() -> Int {
+        var count = 0
+        let sections = self.numberOfSections
+        var i = 1
+        while i <= sections {
+            count += self.numberOfRows(inSection: i - 1)
+            i += 1
+        }
+        return count
+    }
 }
 // MARK: - DataSource
 public extension UITableView {
