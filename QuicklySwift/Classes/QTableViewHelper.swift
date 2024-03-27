@@ -91,13 +91,13 @@ extension QTableViewHelper: UITableViewDelegate {
         return heightForRow?(indexPath) ?? UITableView.automaticDimension
     }
     public func tableView(_ tableView: UITableView, estimatedHeightForHeaderInSection section: Int) -> CGFloat {
-        return estimatedheightForHeader?(section) ?? UITableView.automaticDimension
+        return estimatedheightForHeader?(section) ?? tableView.estimatedSectionHeaderHeight
     }
     public func tableView(_ tableView: UITableView, estimatedHeightForFooterInSection section: Int) -> CGFloat {
-        return estimatedheightForFooter?(section) ?? UITableView.automaticDimension
+        return estimatedheightForFooter?(section) ?? tableView.estimatedSectionFooterHeight
     }
     public func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
-        return estimatedheightForRow?(indexPath) ?? 44
+        return estimatedheightForRow?(indexPath) ?? tableView.estimatedRowHeight
     }
     public func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         return viewForHeader?(tableView, section)

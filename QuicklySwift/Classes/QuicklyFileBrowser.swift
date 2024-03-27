@@ -136,11 +136,21 @@ public class QuicklyFileBrowser: UIViewController {
                 return folder.childPaths.count
             }
             .qheightForRow { indexPath in
-                return 50
+                return 60
             }
             .qcell { tableView, indexPath in
                 let cell = (tableView.dequeueReusableCell(withIdentifier: "cell") as? QuicklyFileCell) ?? QuicklyFileCell.init(style: .default, reuseIdentifier: "cell")
                 cell.folder = folder.childPaths[qsafe: indexPath.row]
+                let idx = indexPath.row
+                cell.contentView.qlongpress(numberof: 1, minpress: 1, movement: 10) { [weak tableView] view, longpress in
+                    if longpress.state == .began {
+                        UIAlertController.qwith(title: "注意！！！", "文件可能是APP必要文件，请谨慎删除！！！", actions: ["删除"], cancelTitle: "取消") { index in
+                            let folder = folder.childPaths.remove(at: idx)
+                            FileManager.default.qdeleteFile(url: folder.path.qtoURL)
+                            tableView?.reloadData()
+                        }
+                    }
+                }
                 return cell
             }
             .qdidSelectRow { [weak self] tableView, indexPath in
@@ -277,12 +287,11 @@ class QuicklyFileBrowserViewModel {
     
     init(path: String? = nil) {
         var p: URL
-        if !path.qisEmpty, let path = path {
-            p = NSURL.fileURL(withPath: path)
+        if let url = path?.qtoURL {
+            p = url
         } else {
             p = NSURL.fileURL(withPath: NSHomeDirectory())
         }
-        
         folder.name = p.lastPathComponent
         folder.path = p.path
         var isDir: ObjCBool = false

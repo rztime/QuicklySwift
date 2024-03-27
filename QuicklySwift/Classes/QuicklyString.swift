@@ -86,4 +86,7 @@ public extension String {
         }
         return URL.init(fileURLWithPath: self)
     }
+    var qasNSString: NSString {
+        return NSString(string: self)
+    }
 }

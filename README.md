@@ -39,6 +39,7 @@ QuicklySwift is available under the MIT license. See the LICENSE file for more i
 
 | 相关 | 说明 |
 |:----|:----|
+|v0.7.0|优化新增功能，文件管理，pcm音频转wav|
 |v0.6.0|添加脚本以解决：库里包含的相关的权限申请的代码，在info.plist里没有配置相关使用说明时，编译时隐藏代码，避免提审时被拒|
 |v0.5.0|优化警告，新增QDispatch等|
 |v0.4.0|优化新增一些功能，新增alertvc,新增文字渐变色|

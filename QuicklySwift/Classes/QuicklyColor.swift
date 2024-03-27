@@ -38,6 +38,22 @@ public extension UIColor {
     var qhexString: String {
         return self.cgColor.qhexString;
     }
+    /// R  0-255
+    var qR: Int {
+        return self.cgColor.qR
+    }
+    /// G  0-255
+    var qG: Int {
+        return self.cgColor.qG
+    }
+    /// B  0-255
+    var qB: Int {
+        return self.cgColor.qB
+    }
+    /// A  0.0-1.0
+    var qA: CGFloat {
+        return self.cgColor.qA
+    }
 }
 public extension CGColor {
     class func qrgb(_ r: Int, _ g: Int, _ b: Int) -> CGColor {
@@ -76,19 +92,33 @@ public extension CGColor {
     /// 颜色对应的16进制  ff9900
     /// 如果有透明值，则有八位，最后两位是透明值
     var qhexString: String {
-        guard let components = self.components else { return "000000" }
-        if self.numberOfComponents == 4 {
-            let r: Int = Int(components[0] * 255)
-            let g: Int = Int(components[1] * 255)
-            let b: Int = Int(components[2] * 255)
-            let a: Int = Int(components[3] * 255)
-            if a == 255 {
-                return String(format: "%02X%02X%02X", r, g, b)
-            }
-            return String(format: "%02X%02X%02X%02X", r, g, b, a)
-        } else {
-            let r: Int = Int(components[0] * 255)
-            return String(format: "%02X%02X%02X", r, r, r)
-        } 
+        let r = self.qR
+        let g = self.qG
+        let b = self.qB
+        let a = Int(self.qA * 255)
+        if a == 255 {
+            return String(format: "%02X%02X%02X", r, g, b)
+        }
+        return String(format: "%02X%02X%02X%02X", r, g, b, a)
+    }
+    /// R  0-255
+    var qR: Int {
+        if let r = self.components?[qsafe: 0] { return Int(r * 255) }
+        return 0
+    }
+    /// G  0-255
+    var qG: Int {
+        if let g = self.components?[qsafe: 1] { return Int(g * 255) }
+        return self.qR
+    }
+    /// B  0-255
+    var qB: Int {
+        if let b = self.components?[qsafe: 2] { return Int(b * 255) }
+        return self.qR
+    }
+    /// A  0.0-1.0
+    var qA: CGFloat {
+        if let a = self.components?[qsafe: 3] { return a }
+        return 1
     }
 }

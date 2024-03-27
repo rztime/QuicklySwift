@@ -86,21 +86,6 @@ public extension UIView {
 // MARK: - 属性设置方法
 public extension UIView {
     @discardableResult
-    func qframe(_ frame: CGRect) -> Self {
-        self.frame = frame
-        return self
-    }
-    @discardableResult
-    func qbounds(_ bounds: CGRect) -> Self {
-        self.bounds = bounds
-        return self
-    }
-    @discardableResult
-    func qcenter(_ center: CGPoint) -> Self {
-        self.center = center
-        return self
-    }
-    @discardableResult
     func qalpha(_ alpha: CGFloat) -> Self {
         self.alpha = alpha
         return self
@@ -152,6 +137,53 @@ public extension UIView {
     @discardableResult
     func qshadow(_ color: UIColor?, _ offset: CGSize, radius: CGFloat, _ opacity: Float = 1) -> Self {
         self.layer.qshadow(color, offset, radius: radius, opacity)
+        return self
+    }
+}
+public extension UIView {
+    @discardableResult
+    func qframe(_ frame: CGRect) -> Self {
+        self.frame = frame
+        return self
+    }
+    @discardableResult
+    func qbounds(_ bounds: CGRect) -> Self {
+        self.bounds = bounds
+        return self
+    }
+    @discardableResult
+    func qcenter(_ center: CGPoint) -> Self {
+        self.center = center
+        return self
+    }
+    @discardableResult
+    func qorigin(_ origin: CGPoint) -> Self {
+        self.frame.origin = origin
+        return self
+    }
+    @discardableResult
+    func qsize(_ size: CGSize) -> Self {
+        self.frame.size = size
+        return self
+    }
+    @discardableResult
+    func qx(_ x: CGFloat) -> Self {
+        self.frame.origin.x = x
+        return self
+    }
+    @discardableResult
+    func qy(_ y: CGFloat) -> Self {
+        self.frame.origin.y = y
+        return self
+    }
+    @discardableResult
+    func qwidth(_ width: CGFloat) -> Self {
+        self.frame.size.width = width
+        return self
+    }
+    @discardableResult
+    func qheight(_ height: CGFloat) -> Self {
+        self.frame.size.height = height
         return self
     }
 }

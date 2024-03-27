@@ -352,9 +352,14 @@ open class QScrollViewHelper: NSObject, UIScrollViewDelegate {
                 collectionView.qbackgroundColor(.white)
             } 
         }
-        if let tableView = target as? UITableView, tableView.tableFooterView == nil {
-            tableView.tableFooterView = .init()
+        if let tableView = target as? UITableView {
             tableView.qsectionHeaderTopPadding(0)
+                .qestimatedRowHeight(44)
+                .qestimatedSectionFooterHeight(0.0001)
+                .qestimatedSectionHeaderHeight(0.0001)
+            if tableView.tableFooterView == nil {
+                tableView.tableFooterView = .init()
+            }
         }
     }
     

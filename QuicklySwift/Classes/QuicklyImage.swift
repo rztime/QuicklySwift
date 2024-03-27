@@ -143,7 +143,7 @@ struct QImageHelper {
     var complete: ((_ url: String?, _ image: UIImage?) -> Void)?
     
     func download(complete: ((_ helper: QImageHelper, _ image: UIImage?) -> Void)?) {
-        guard let url = self.url, let U = URL.init(string: url) else {
+        guard let url = self.url, let U = url.qtoURL else {
             complete?(self, nil)
             return
         }
