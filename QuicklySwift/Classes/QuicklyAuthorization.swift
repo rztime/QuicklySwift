@@ -9,6 +9,9 @@ import UIKit
 import AVFoundation
 import Photos
 import CoreTelephony
+#if Q_NSLocationWhenInUseUsageDescription || Q_NSLocationAlwaysUsageDescription || Q_NSLocationAlwaysAndWhenInUseUsageDescription
+import CoreLocation
+#endif
 #if Q_NSContactsUsageDescription
 import Contacts
 #endif
@@ -121,9 +124,15 @@ public struct QuicklyAuthorization {
         case .contact:
             self.shared.requestContact(result: res)
         case .locationWhenInUse:
+#if Q_NSLocationWhenInUseUsageDescription || Q_NSLocationAlwaysUsageDescription || Q_NSLocationAlwaysAndWhenInUseUsageDescription
             self.shared.requestLocation(type: .authorizedWhenInUse, result: res)
+#endif
+            break
         case .locationAlways:
+#if Q_NSLocationWhenInUseUsageDescription || Q_NSLocationAlwaysUsageDescription || Q_NSLocationAlwaysAndWhenInUseUsageDescription
             self.shared.requestLocation(type: .authorizedAlways, result: res)
+#endif
+            break
         case .events:
             self.shared.requestEvents(type: .events, result: res)
         case .reminder:
@@ -143,7 +152,7 @@ public struct QuicklyAuthorization {
 }
 /// 权限获取
 class QuicklyAuthorizationHelper {
-#if Q_NSLocationWhenInUseUsageDescription || Q_NSLocationAlwaysUsageDescription
+#if Q_NSLocationWhenInUseUsageDescription || Q_NSLocationAlwaysUsageDescription || Q_NSLocationAlwaysAndWhenInUseUsageDescription
     /// 定位
     var locationWhenInUse: QLocationAuthorization?
     /// 长定位
@@ -294,9 +303,9 @@ class QuicklyAuthorizationHelper {
         }
 #endif
     }
+#if Q_NSLocationWhenInUseUsageDescription || Q_NSLocationAlwaysUsageDescription || Q_NSLocationAlwaysAndWhenInUseUsageDescription
     /// app使用中的 定位权限
     func requestLocation(type: CLAuthorizationStatus, result: ((_ result: QAuthorizationResult) -> Void)?) {
-#if Q_NSLocationWhenInUseUsageDescription || Q_NSLocationAlwaysUsageDescription
         guard CLLocationManager.locationServicesEnabled() else {
             let res = QAuthorizationResult.init(granted: false, limit: false, status: 0, message: "未开启GPS服务")
             result?(res)
@@ -334,8 +343,8 @@ class QuicklyAuthorizationHelper {
             let res = QAuthorizationResult.init(granted: false, limit: false, status: status)
             result?(res)
         }
-#endif
     }
+#endif
     /// 日历
     func requestEvents(type: QAuthorizationType, result: ((_ result: QAuthorizationResult) -> Void)?) {
 #if Q_NSCalendarsUsageDescription
@@ -508,7 +517,7 @@ class QuicklyAuthorizationHelper {
     }
 }
 
-#if Q_NSLocationWhenInUseUsageDescription || Q_NSLocationAlwaysUsageDescription
+#if Q_NSLocationWhenInUseUsageDescription || Q_NSLocationAlwaysUsageDescription || Q_NSLocationAlwaysAndWhenInUseUsageDescription
 // MARK: - 定位权限辅助
 class QLocationAuthorization: NSObject, CLLocationManagerDelegate {
     var complete: ((_ status: CLAuthorizationStatus) -> Void)?

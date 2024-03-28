@@ -36,6 +36,14 @@ class IndexViewController: UIViewController {
             tableView.qmakeConstraints({ make in
                 make.edges.equalToSuperview()
             }),
+            UIImageView.init(image: .init(named: "1111"))
+                .qmakeConstraints({ make in
+                    make.top.left.equalToSuperview().inset(100)
+                    make.size.equalTo(200)
+                })
+                .qalpha(0.7)
+                .qgaussBlur(.light, 1),
+            
             UIButton.init().qbackgroundColor(.red)
                 .qmakeConstraints({ make in
                     make.bottom.right.equalToSuperview()
@@ -51,6 +59,7 @@ class IndexViewController: UIViewController {
             return 80
         }.qcell { [weak self] (tableView, indexPath) in
             let cell = tableView.dequeueReusableCell(withIdentifier: "cell") ?? TestCell.init(style: .subtitle, reuseIdentifier: "cell")
+            cell.backgroundColor = .black
             cell.accessoryType = .disclosureIndicator
             let item = self?.source[indexPath.row]
             cell.textLabel?.text = item?.0

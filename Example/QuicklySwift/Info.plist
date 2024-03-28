@@ -27,12 +27,14 @@
 		<key>NSAllowsArbitraryLoads</key>
 		<true/>
 	</dict>
-	<key>NSLocationAlwaysUsageDescription</key>
-	<string>定位11111</string>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>相册</string>
-	<key>NSSpeechRecognitionUsageDescription</key>
-	<string>语音识别库</string>
+	<key>NSAppleMusicUsageDescription</key>
+	<string>music 音乐</string>
+	<key>NSCalendarsUsageDescription</key>
+	<string>日历</string>
+	<key>NSContactsUsageDescription</key>
+	<string>通讯录</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>使用位置</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>

@@ -15,7 +15,6 @@ import RZColorfulSwift
 /// 新增视频url获取首帧图
 /// 新增文件浏览器
 
-
 class QTestModel: NSObject, QGroupEqualPartitionProtocol {
     var index: Int = 0
     
@@ -32,8 +31,7 @@ class QTestModel: NSObject, QGroupEqualPartitionProtocol {
     }
 }
 
-class ViewController: UIViewController {
-        
+class ViewController: UIViewController {    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = .white
@@ -74,8 +72,8 @@ class ViewController: UIViewController {
 
             UIView().qbackgroundColor(.green).qframe(.init(x: 100, y: 100, width: 100, height: 100))
             .qtap({ _ in
-//                QuicklyFileBrowser.show()
-//                return ;
+                QuicklyFileBrowser.show()
+                return ;
                 
                 /// 自定义AtionSheet 支持图文混排
                 let t = NSAttributedString.rz.colorfulConfer { confer in
