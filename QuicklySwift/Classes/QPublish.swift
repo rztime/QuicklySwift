@@ -42,4 +42,12 @@ public class QPublish<T> {
             item.subscribe?(value)
         }
     }
+    /// 移除监听，nil时：移除所有
+    public func removeSubscribe(_ disposebag: NSObject?) {
+        if let disposebag = disposebag {
+            self.subscribeItems.removeAll(where: {$0.disposebag == disposebag })
+        } else {
+            self.subscribeItems.removeAll()
+        }
+    }
 }

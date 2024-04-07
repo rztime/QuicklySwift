@@ -26,7 +26,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   FBSnapshotTestCase: 094f9f314decbabe373b87cc339bea235a63e07a
-  QuicklySwift: 1d759ce775545baa2569bd899e24748406ee47b6
+  QuicklySwift: 3f64cd7cbfbfbccad42ecd442439e3b99269a320
   RZColorfulSwift: be0a34377c4855336445c2f034117fb19019feac
   SnapKit: fe8a619752f3f27075cc9a90244d75c6c3f27e2a
 

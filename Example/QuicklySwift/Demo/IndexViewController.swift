@@ -8,6 +8,7 @@
 
 import UIKit
 import QuicklySwift
+import AVFoundation
 
 class IndexViewController: UIViewController {
     let tableView = UITableView.init(frame: .zero, style: .plain)
@@ -25,6 +26,7 @@ class IndexViewController: UIViewController {
         ("avplayer", AVPlayerViewController.self),
         ("渐变", GradientLayerViewController.self),
         ("dispath", DispatchViewController.self),
+        ("Qplayer", QPlayerTestViewController.self)
     ]
     
     override func viewDidLoad() {
@@ -59,7 +61,6 @@ class IndexViewController: UIViewController {
             return 80
         }.qcell { [weak self] (tableView, indexPath) in
             let cell = tableView.dequeueReusableCell(withIdentifier: "cell") ?? TestCell.init(style: .subtitle, reuseIdentifier: "cell")
-            cell.backgroundColor = .black
             cell.accessoryType = .disclosureIndicator
             let item = self?.source[indexPath.row]
             cell.textLabel?.text = item?.0

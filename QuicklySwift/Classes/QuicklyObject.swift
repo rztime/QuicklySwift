@@ -38,6 +38,11 @@ public extension QuicklyProtocal where Self: NSObject {
             }
         }
     }
+    @discardableResult
+    func qthen(_ then: ((_ : Self) -> Void)?) -> Self {
+        then?(self)
+        return self
+    }
 }
 
 private var quicklyobjnameaddres: UInt8 = 1

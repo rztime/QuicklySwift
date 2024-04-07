@@ -21,7 +21,7 @@ Pod::Spec.new do |s|
   s.source           = { :git => 'https://github.com/rztime/QuicklySwift.git', :tag => s.version.to_s }
   s.social_media_url = 'https://github.com/rztime'
   
-  s.ios.deployment_target = '11.0'
+  s.ios.deployment_target = '10.0'
   s.swift_versions = ['4.2', '5.0']
   s.source_files = 'QuicklySwift/Classes/**/*'
   s.dependency 'SnapKit'

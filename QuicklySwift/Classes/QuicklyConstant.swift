@@ -6,6 +6,8 @@
 //
 
 import UIKit
+import AVFAudio
+import MediaPlayer
 // MARK: - 一些常量
 
 public var qscreenwidth: CGFloat {
@@ -151,4 +153,18 @@ public func qDeviceOrientationChanged(target: NSObject, changed: ((_ orientation
         }
     }
     changed?(UIDevice.current.orientation)
+}
+/// 手机媒体输出音量
+public var qaudioOutputVolume: Float {
+    return AVAudioSession.sharedInstance().outputVolume
+}
+/// 设置音量
+public func qaudioOutputVolumeSet(_ value: Float) {
+    let view = MPVolumeView()
+    if let slider = view.subviews.first(where: {$0 is UISlider}) as? UISlider {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.01, execute: {
+            slider.value = value
+            slider.sendActions(for: .valueChanged)
+        })
+    }
 }
