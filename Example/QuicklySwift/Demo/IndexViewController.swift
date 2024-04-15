@@ -26,7 +26,8 @@ class IndexViewController: UIViewController {
         ("avplayer", AVPlayerViewController.self),
         ("渐变", GradientLayerViewController.self),
         ("dispath", DispatchViewController.self),
-        ("Qplayer", QPlayerTestViewController.self)
+        ("Qplayer", QPlayerTestViewController.self),
+        ("Test", TestViewController.self)
     ]
     
     override func viewDidLoad() {

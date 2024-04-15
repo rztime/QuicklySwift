@@ -499,8 +499,9 @@ public extension UIView {
         case low
         /// 优先级高，将不能被压缩或者拉伸
         case height
+        /// 默认(将设置还原)
+        case defaultType
     }
-    
     /// 显示优先级（完全显示，或者易被拉伸）
     /// - Parameters:
     ///   - axis: 水平或者垂直方向
@@ -509,9 +510,14 @@ public extension UIView {
     func qshowType(_ axis: NSLayoutConstraint.Axis, type: QViewShowType) -> Self {
         switch type {
         case .low:
-            self.setContentHuggingPriority(.defaultLow, for: axis)
+            self.setContentHuggingPriority(.fittingSizeLevel, for: axis)
+            self.setContentCompressionResistancePriority(.fittingSizeLevel, for: axis)
         case .height:
+            self.setContentHuggingPriority(.required, for: axis)
             self.setContentCompressionResistancePriority(.required, for: axis)
+        case .defaultType:
+            self.setContentHuggingPriority(.defaultLow, for: axis)
+            self.setContentCompressionResistancePriority(.defaultHigh, for: axis)
         }
         return self
     }

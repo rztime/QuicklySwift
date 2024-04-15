@@ -1,15 +1,16 @@
 //
-//  QPlayer.swift
-//  QuicklySwift_Example
+//  QuicklyAVPlayer.swift
+//  QuicklySwift
 //
-//  Created by rztime on 2023/3/6.
-//  Copyright © 2023 CocoaPods. All rights reserved.
+//  Created by rztime on 2024/4/15.
 //
 
 import UIKit
 import AVFoundation
-import QuicklySwift
-
+/******
+ AVPlayer的封装
+ 可以播放视频、音频，需要显示视频内容时，将playerView加在view上即可
+ **/
 open class QPlayer {
     private var player: AVPlayer?
     private var playerLayer: AVPlayerLayer?
@@ -193,16 +194,18 @@ open class QPlayer {
             }
         })
     }
+    @discardableResult
     /// 设置播放资源
-    open func setMedia(url: URL?) {
+    open func setMedia(url: URL?) -> AVPlayerItem? {
         if let url = url {
-            self.setMedia(item: .init(url: url))
+            return self.setMedia(item: .init(url: url))
         } else {
-            self.setMedia(item: nil)
+            return self.setMedia(item: nil)
         }
     }
+    @discardableResult
     /// 设置播放资源
-    open func setMedia(item: AVPlayerItem?) {
+    open func setMedia(item: AVPlayerItem?) -> AVPlayerItem? {
         self.place?.isHidden = false
         if let p = self.player {
             p.replaceCurrentItem(with: item)
@@ -210,6 +213,7 @@ open class QPlayer {
             self.player = .init(playerItem: item)
         }
         self.observerbindReset()
+        return item
     }
     /// 开始播放（重播）
     open func play(replay: Bool = false) {
@@ -229,12 +233,14 @@ open class QPlayer {
     open func pause() {
         self.player?.rate = 0
     }
+    /// 中断方式
     public enum InterrupType {
+        /// 进入前后台
         case active
+        /// 页面跳转
         case appear
-        case custom1
-        case custom2
-        case custom3
+        /// 其他自定义
+        case custom1, custom2, custom3, custom4, custom5, custom6
     }
     /// 记录中断时，播放的rate
     private var _rate: Float?
@@ -293,7 +299,7 @@ open class QPlayer {
         }
         return time
     }
-    /// 获取总时长
+    /// 获取总时长, 只有status收到readToPlay之后，才能拿到
     open func getTotalTime() -> CMTime? {
         return self.player?.currentItem?.duration
     }
@@ -304,11 +310,11 @@ open class QPlayer {
         }
         return false
     }
-    /// 获取资源尺寸
+    /// 获取资源尺寸（视频分辨率）
     open func getMediaSize() -> CGSize? {
         return self.player?.currentItem?.presentationSize
     }
-    /// 缓冲的进度，可以取第一个，qlength计算加载的总长度
+    /// 缓冲的进度，（可以取第一个qlength计算加载的总长度）
     open func getLoadTimeRanges() -> [CMTimeRange] {
         return (self.player?.currentItem?.loadedTimeRanges as? [CMTimeRange]) ?? []
     }

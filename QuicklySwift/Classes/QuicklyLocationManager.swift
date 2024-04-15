@@ -159,7 +159,9 @@ public extension CLLocationManager {
     }
     @discardableResult
     func qshowsBackgroundLocationIndicator(_ show: Bool) -> Self {
-        self.showsBackgroundLocationIndicator = show
+        if #available(iOS 11.0, *) {
+            self.showsBackgroundLocationIndicator = show
+        }
         return self
     }
     @discardableResult
