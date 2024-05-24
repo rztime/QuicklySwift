@@ -11,9 +11,7 @@ import QuicklySwift
 import SnapKit
 
 class AVPlayerViewController: UIViewController {
-//    lazy var player = QuicklyAVPlayer.init(frame: .zero, target: self)
-    var player = QuicklyAVPlayer.init(frame: .qfull, options: .init(options: [.pauseAtFirst, .repeatPlay(count: 2)]))
-    
+
     let leftLabel = UILabel()
     let rightLable = UILabel()
     
@@ -32,9 +30,7 @@ class AVPlayerViewController: UIViewController {
         self.navigationItem.rightBarButtonItem = .init(customView: btn)
         self.view.backgroundColor = .white
         self.view.qbody([
-            player.qmakeConstraints({ make in
-                make.edges.equalToSuperview()
-            }),
+    
             VStackView.qbody([
                 leftLabel,
                 rightLable,
@@ -54,15 +50,9 @@ class AVPlayerViewController: UIViewController {
 //            self.view.layer.insertSublayer(p, at: 0)
 //            p.frame = self.view.bounds
 //        }
-        player.placeholderView.image = UIImage.init(named: "1111")
-        player.qplayWith(url: "https://img01.thecover.cn/E5682F0B5454428EA0105E1C735E5E1D.mp4")
-        
+ 
         playBtn.qtap { [weak self] _ in
-            if let p = self?.player.options.isPlaying, p == true {
-                self?.player.qpause()
-            } else {
-                self?.player.qplay()
-            }
+    
         }
 
 //        player.option.currentTimeChanged { [weak self] currentTime in
@@ -115,11 +105,6 @@ class AVPlayerViewController: UIViewController {
 //        player.isPlayingBlock = { [weak self] isPlaying in
 //            self?.playBtn.isSelected = isPlaying
 //        }
-        self.qwillDisAppear { [weak self] in
-            self?.player.qisActiviting = false
-        }
-        self.qwillAppear { [weak self] in
-            self?.player.qisActiviting = true
-        }
+ 
     }
 }

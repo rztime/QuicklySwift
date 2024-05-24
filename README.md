@@ -39,6 +39,7 @@ QuicklySwift is available under the MIT license. See the LICENSE file for more i
 
 | 相关 | 说明 |
 |:----|:----|
+|v0.8.0|优化以及新增功能QSlider, QSwitch, 可通过options来配置大小和圆角，可以直接设置相关view的颜色、图片来自定义|
 |v0.7.0|优化新增功能，文件管理，pcm音频转wav, 定位管理，AVPlayer封装等等|
 |v0.6.0|添加脚本以解决：库里包含的相关的权限申请的代码，在info.plist里没有配置相关使用说明时，编译时隐藏代码，避免提审时被拒|
 |v0.5.0|优化警告，新增QDispatch等|
@@ -70,6 +71,12 @@ QuicklySwift is available under the MIT license. See the LICENSE file for more i
 
 | 相关 | 说明 |
 |:----|:----|
+|QSlider, QSwitch|进度条、开关,和原生一样，还可以随意调整|
+|QPlayer|对AVPlayer的封装，可监听播放状态、时间、加载中、加载进度、循环播放、倍数播放等等|
+|QDispatch|串行、同步执行方法，可延迟触发方法等等|
+|QPublish|可监听改变操作|
+|QActionSheetController、QAlertViewController|自定义多种功能弹窗|
+|QuicklyAuthorization|权限相关，当info.plist里没有相关权限申请说明时，隐藏相关权限申请代码，防止审核被拒|
 |QGrayFloatManager|飘灰管理：给view在指定区域内添加一个黑白滤镜，并可一键控制滤镜开关|
 |UIView| 常用属性的快速设置、扩展设置（高斯模糊、气泡、手势、圆角等等）、size改变之后的回调、deinit之后的回调、常用动画等等 |
 |UIScrollView| contentSize和contentOffset改变回调、delegate的回调等等|

@@ -34,6 +34,7 @@
 		B2C0B17D2951ACAB00918951 /* GrayfloatVC2.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2C0B17C2951ACAB00918951 /* GrayfloatVC2.swift */; };
 		B2C4BC05284F3A1C00B7C25B /* IndexViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2C4BC04284F3A1C00B7C25B /* IndexViewController.swift */; };
 		B2C6F2D428FFEC2100A04167 /* AVPlayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2C6F2D328FFEC2100A04167 /* AVPlayerViewController.swift */; };
+		B2CEF33F2BFC7E9A00EDFED5 /* QSliderTestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2CEF33E2BFC7E9A00EDFED5 /* QSliderTestViewController.swift */; };
 		B2D5CB3D2852DA5A00C6C6EF /* CollectionViewDemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2D5CB3C2852DA5A00C6C6EF /* CollectionViewDemoViewController.swift */; };
 		B2E5853C286002C300921A91 /* LayoutIndexViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2E5853B286002C300921A91 /* LayoutIndexViewController.swift */; };
 		B2E5853E286011D500921A91 /* LayoutDemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2E5853D286011D500921A91 /* LayoutDemoViewController.swift */; };
@@ -89,6 +90,7 @@
 		B2C21346288AA8BB00B2C00B /* QuicklySwift_Example.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = QuicklySwift_Example.entitlements; sourceTree = "<group>"; };
 		B2C4BC04284F3A1C00B7C25B /* IndexViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IndexViewController.swift; sourceTree = "<group>"; };
 		B2C6F2D328FFEC2100A04167 /* AVPlayerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AVPlayerViewController.swift; sourceTree = "<group>"; };
+		B2CEF33E2BFC7E9A00EDFED5 /* QSliderTestViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QSliderTestViewController.swift; sourceTree = "<group>"; };
 		B2D5CB3C2852DA5A00C6C6EF /* CollectionViewDemoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewDemoViewController.swift; sourceTree = "<group>"; };
 		B2E5853B286002C300921A91 /* LayoutIndexViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayoutIndexViewController.swift; sourceTree = "<group>"; };
 		B2E5853D286011D500921A91 /* LayoutDemoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayoutDemoViewController.swift; sourceTree = "<group>"; };
@@ -245,6 +247,7 @@
 				B2BA01112BBABA3500F3774B /* QPlayerTestViewController.swift */,
 				B2B47DD22AF0ED2F0057FCFB /* DispatchViewController.swift */,
 				B2A864F62BCD163300F1AD65 /* TestViewController.swift */,
+				B2CEF33E2BFC7E9A00EDFED5 /* QSliderTestViewController.swift */,
 			);
 			path = Demo;
 			sourceTree = "<group>";
@@ -493,6 +496,7 @@
 				B2BA01122BBABA3500F3774B /* QPlayerTestViewController.swift in Sources */,
 				B2C0B17B2951A4A300918951 /* GrayfloatVC1.swift in Sources */,
 				B22C27442872849C00B34EEF /* TransitionTwoViewController.swift in Sources */,
+				B2CEF33F2BFC7E9A00EDFED5 /* QSliderTestViewController.swift in Sources */,
 				B2921D65285C1FF700CBC001 /* FriendView.swift in Sources */,
 				B2C6F2D428FFEC2100A04167 /* AVPlayerViewController.swift in Sources */,
 				B2C4BC05284F3A1C00B7C25B /* IndexViewController.swift in Sources */,

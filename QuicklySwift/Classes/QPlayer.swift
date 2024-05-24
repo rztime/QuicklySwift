@@ -64,7 +64,7 @@ open class QPlayer {
     /// 资源尺寸
     public let mediaSize: QPublish<CGSize?> = .init(value: nil)
     /// 是否加载中（缓冲中）
-    public let isLoading: QPublish<Bool> = .init(value: true)
+    public let isLoading: QPublish<Bool> = .init(value: false)
     /// 是否seek中
     public let isSeeking: QPublish<Bool> = .init(value: false)
     /// 是否有错误提示
@@ -122,7 +122,7 @@ open class QPlayer {
         self.currentTime.accept(nil)
         self.duration.accept(nil)
         self.mediaSize.accept(nil)
-        self.isLoading.accept(true)
+        self.isLoading.accept(false)
         self.isSeeking.accept(false)
         self.error.accept(nil)
         self.playEnd.accept(false)
@@ -148,7 +148,7 @@ open class QPlayer {
             /// 缓冲中
             if let buffing = player.currentItem?.isPlaybackBufferEmpty, buffing {
                 self.isLoading.accept(buffing)
-            } else if (player.currentItem?.isPlaybackLikelyToKeepUp ?? false) || (player.currentItem?.isPlaybackBufferFull ?? false){
+            } else if (player.currentItem?.isPlaybackLikelyToKeepUp ?? false) || (player.currentItem?.isPlaybackBufferFull ?? false) {
                 self.isLoading.accept(false)
             }
             /// 缓冲进度
@@ -303,9 +303,9 @@ open class QPlayer {
     open func getTotalTime() -> CMTime? {
         return self.player?.currentItem?.duration
     }
-    /// 是否播放完成
+    /// 是否播放完成, （< 0.02 结束时有可能最后一帧未播）
     open func playDidEnd() -> Bool {
-        if let c = self.getCurrentTime(), let d = self.getTotalTime(), c == d {
+        if let c = self.getCurrentTime(), let d = self.getTotalTime(), d.seconds - c.seconds < 0.02 {
             return true
         }
         return false

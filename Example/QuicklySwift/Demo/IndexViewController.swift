@@ -27,7 +27,8 @@ class IndexViewController: UIViewController {
         ("渐变", GradientLayerViewController.self),
         ("dispath", DispatchViewController.self),
         ("Qplayer", QPlayerTestViewController.self),
-        ("Test", TestViewController.self)
+        ("Test", TestViewController.self),
+        ("Slider", QSliderTestViewController.self),
     ]
     
     override func viewDidLoad() {

@@ -1,6 +1,6 @@
 {
   "name": "QuicklySwift",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "summary": "swift 常用方法扩展，便捷使用 qq交流群：580839749",
   "description": "swift 常用方法扩展，便捷使用，所有方法以“q”开头，使用链式语法  \"rztime@vip.qq.com\" \"https://github.com/rztime/QuicklySwift.git\"",
   "homepage": "https://github.com/rztime/QuicklySwift",
@@ -13,7 +13,7 @@
   },
   "source": {
     "git": "https://github.com/rztime/QuicklySwift.git",
-    "tag": "0.7.0"
+    "tag": "0.8.0"
   },
   "social_media_url": "https://github.com/rztime",
   "platforms": {

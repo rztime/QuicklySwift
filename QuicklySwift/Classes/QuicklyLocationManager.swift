@@ -10,7 +10,23 @@ import UIKit
 import CoreLocation
 
 private var qlocationhelper: UInt8 = 1
-
+public extension CLPlacemark {
+    /// 建议地址
+    var qsuggestionAddressString: String {
+        var loc = ""
+        if let name = self.areasOfInterest?.first {
+            loc = name
+        } else if let name = self.name {
+            loc = name
+        } else if let name = self.thoroughfare {
+            loc = name
+        }
+//        else {
+//            loc = "\(self.locality ?? "")\(self.subLocality ?? "")\(self.thoroughfare ?? "")"
+//        }
+        return loc
+    }
+}
 public extension CLLocation {
     /// 将坐标反地址编码，得到地址信息
     func qreverseGeocodeLocation(_ placemark: ((_ placemarks: [CLPlacemark]?, _ error: Error?) -> Void)?) {

@@ -33,6 +33,9 @@ class BaseViewDemoViewController: UIViewController {
         .qdeinit {
             print("label 被释放了")
         }
+        .qwillTouchIn { view in
+            print("----will touch in")
+        }
     let textBtn = UIButton.init(type: .custom)
         .qbackgroundColor(.red)
         .qtitle("测试")

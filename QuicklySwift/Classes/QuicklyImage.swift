@@ -109,7 +109,13 @@ public extension UIImage {
         }
         return data
     }
-    
+    /// 转换成Jpeg image
+    func qtoJpegImage() -> UIImage {
+        if let data = self.qtoJpegData(compressionQuality: 1) {
+            return .init(data: data) ?? self
+        }
+        return self
+    }
     /// 转换成PNG data
     func qtoPngData() -> Data? {
         #if swift(>=4.2)

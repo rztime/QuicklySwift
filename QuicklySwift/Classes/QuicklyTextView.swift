@@ -258,7 +258,9 @@ extension QTextViewHelper: UITextViewDelegate {
             selectedRange.length = 0
         }
         DispatchQueue.main.async {
-            textView.selectedRange = selectedRange
+            if textView.text.count >= selectedRange.upperBound {
+                textView.selectedRange = selectedRange
+            }
         }
     }
     public func textViewDidChangeSelection(_ textView: UITextView) {

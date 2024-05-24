@@ -254,7 +254,9 @@ open class QTextFieldHelper: UIView {
             selectedRange.length = 0
         }
         DispatchQueue.main.async {
-            textField.qselectedRange = selectedRange
+            if (textField.text?.count ?? 0) >= selectedRange.upperBound {
+                textField.qselectedRange = selectedRange
+            }
         }
     }
 }

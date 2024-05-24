@@ -100,10 +100,16 @@ extension QTableViewHelper: UITableViewDelegate {
         return estimatedheightForRow?(indexPath) ?? tableView.estimatedRowHeight
     }
     public func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        return viewForHeader?(tableView, section)
+        if let viewForHeader = viewForHeader {
+            return viewForHeader(tableView, section)
+        }
+        return .init() // 返回view，主要是在.plain下，去掉分割线
     }
     public func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        return viewForFooter?(tableView, section)
+        if let viewForFooter = viewForFooter {
+            return viewForFooter(tableView, section)
+        }
+        return .init() // 返回view，主要是在.plain下，去掉分割线
     }
     public func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         willDisplayCell?(cell, indexPath)
