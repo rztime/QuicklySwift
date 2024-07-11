@@ -15,12 +15,36 @@ public extension UIColor {
         return UIColor.init(red: CGFloat(r) / 255.0, green: CGFloat(g) / 255.0, blue: CGFloat(b) / 255.0, alpha: a)
     }
     /// 16进制颜色 0xff33ee
-    class func qhex(_ hex: Int) -> UIColor {
-        return qhex(hex, a: 1)
-    }
-    /// 16进制颜色 0xff33ee
-    class func qhex(_ hex: Int, a: CGFloat) -> UIColor {
+    class func qhex(_ hex: Int, a: CGFloat = 1) -> UIColor {
         return qrgba((hex >> 16) & 0xff, (hex >> 8) & 0xFF, hex & 0xFF, a: a)
+    }
+    /// 16进制颜色(字符串)  #ff33ee
+    class func qhex(_ hex: String, a: CGFloat? = nil) -> UIColor {
+        var hex = hex.trimmingCharacters(in: .whitespacesAndNewlines)
+        hex = hex.replacingOccurrences(of: "#", with: "")
+        if hex.count != 6 && hex.count != 8 {
+            return UIColor.clear
+        }
+        var rgbValue: UInt64 = 0
+        Scanner(string: hex).scanHexInt64(&rgbValue)
+        
+        let r, g, b: CGFloat
+        var tempa: CGFloat
+        if hex.count == 6 {
+            r = CGFloat((rgbValue & 0xFF0000) >> 16) / 255.0
+            g = CGFloat((rgbValue & 0x00FF00) >> 8) / 255.0
+            b = CGFloat(rgbValue & 0x0000FF) / 255.0
+            tempa = 1.0
+        } else {
+            r = CGFloat((rgbValue & 0xFF000000) >> 24) / 255.0
+            g = CGFloat((rgbValue & 0x00FF0000) >> 16) / 255.0
+            b = CGFloat((rgbValue & 0x0000FF00) >> 8) / 255.0
+            tempa = CGFloat(rgbValue & 0x000000FF) / 255.0
+        }
+        if let a = a {
+            tempa = a
+        }
+        return UIColor(red: r, green: g, blue: b, alpha: tempa)
     }
     /// 随机颜色
     class var qrandom: UIColor {
@@ -69,6 +93,10 @@ public extension CGColor {
     /// 16进制颜色 0xff33ee
     class func qhex(_ hex: Int, a: CGFloat) -> CGColor {
         return qrgba((hex >> 16) & 0xff, (hex >> 8) & 0xFF, hex & 0xFF, a: a)
+    }
+    /// 16进制颜色 #ff33ee
+    class func qhex(_ hex: String, a: CGFloat? = nil) -> CGColor {
+        return UIColor.qhex(hex, a: a).cgColor
     }
     /// 随机颜色
     class var qrandom: CGColor {

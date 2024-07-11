@@ -73,3 +73,23 @@ public extension UILabel {
         return self
     }
 }
+public class QLabel: UIView {
+    public lazy var textLabel: UILabel = .init().qthen {
+        self.qbody([
+            $0.qmakeConstraints({ make in
+                make.edges.equalToSuperview().inset(self.edges)
+            })
+        ])
+        $0.qisHiddenChanged { [weak self] view in
+            self?.isHidden = view.isHidden
+        }
+    }
+    /// 边距
+    public var edges: UIEdgeInsets = .zero {
+        didSet {
+            self.textLabel.snp.remakeConstraints { make in
+                make.edges.equalToSuperview().inset(self.edges)
+            }
+        }
+    }
+}

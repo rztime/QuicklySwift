@@ -28,7 +28,54 @@ public extension UIImage {
         return image ?? .init()
     }
 }
-
+public extension UIImage {
+    /// 将图片(png)重新绘制为另一个颜色
+    func qreDraw(color: UIColor) -> UIImage? {
+        let size = self.size
+        let rect = CGRect(origin: .zero, size: size)
+        UIGraphicsBeginImageContextWithOptions(size, false, self.scale)
+        guard let context = UIGraphicsGetCurrentContext() else {
+            UIGraphicsEndImageContext()
+            return nil
+        }
+        context.translateBy(x: 0, y: size.height)
+        context.scaleBy(x: 1.0, y: -1.0)
+        context.setBlendMode(.normal)
+        context.clip(to: rect, mask: self.cgImage!)
+        color.setFill()
+        context.fill(rect)
+        let newImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        return newImage
+    }
+    /// 将图片（png）重新绘制为渐变色， star、end的x、y范围只能为0-1
+    func qreDrawWithGradient(colors: [UIColor], star: CGPoint, end: CGPoint) -> UIImage? {
+        // 获取图片尺寸
+        let size = self.size
+        let rect = CGRect(origin: .zero, size: size)
+        UIGraphicsBeginImageContextWithOptions(size, false, self.scale)
+        guard let context = UIGraphicsGetCurrentContext() else {
+            UIGraphicsEndImageContext()
+            return nil
+        }
+        context.translateBy(x: 0, y: size.height)
+        context.scaleBy(x: 1.0, y: -1.0)
+        let colorSpace = CGColorSpaceCreateDeviceRGB()
+        let cgColors = colors.map { $0.cgColor } as CFArray
+        
+        guard let gradient = CGGradient(colorsSpace: colorSpace, colors: cgColors, locations: nil) else {
+            UIGraphicsEndImageContext()
+            return nil
+        }
+        let startPoint = CGPoint.init(x: rect.width * star.x, y: rect.height * star.y)
+        let endPoint = CGPoint.init(x: rect.width * end.x, y: rect.height * end.y)
+        context.clip(to: rect, mask: self.cgImage!)
+        context.drawLinearGradient(gradient, start: startPoint, end: endPoint, options: [])
+        let newImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        return newImage
+    }
+}
 public extension UIImage {
     /// 修正图片方向
     var qfixOrientation: UIImage {
