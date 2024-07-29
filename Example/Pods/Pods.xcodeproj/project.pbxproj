@@ -96,6 +96,7 @@
 		AAC2B2698C791DD9443C8B12469E7450 /* QuicklyImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AACD9F50815BE241F973E28A7E176EBC /* QuicklyImageView.swift */; };
 		B00402EE9CCE8B52B8696DAACDFECE83 /* QDispatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3CF556C646E32063D56BB11A4CDAFC5 /* QDispatch.swift */; };
 		B0087A0B7EDE11E1D3FF8227DDBA9EED /* LabelRZ.swift in Sources */ = {isa = PBXBuildFile; fileRef = 590CF5B86BB48CF086EF060CF4AEBAB8 /* LabelRZ.swift */; };
+		B288A11C2C57732A0012DE81 /* QuicklyNSAttributedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = B288A11B2C57732A0012DE81 /* QuicklyNSAttributedString.swift */; };
 		B45EBF7A50BD95B16731DA6F6E678ED1 /* QuicklyObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18DD89879A77EAD5B594370CD7E14F5F /* QuicklyObject.swift */; };
 		B52281F9F4340D4FC8ABB2FEB1FEC08E /* UIImage+Compare.m in Sources */ = {isa = PBXBuildFile; fileRef = 96123FF23C3956D9E1E6A99B0EB75EC3 /* UIImage+Compare.m */; };
 		B73F6BD868268588A3F9A827AE18E689 /* QuicklyUIControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D4E2E21CF823AA42B323E262EED67F0 /* QuicklyUIControl.swift */; };
@@ -307,6 +308,7 @@
 		AFFA01457B6B85850B7FE6C1F5504017 /* ConstraintLayoutSupport.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ConstraintLayoutSupport.swift; path = Source/ConstraintLayoutSupport.swift; sourceTree = "<group>"; };
 		B208D26B8CBD8EC5FFC11D05B7CE8512 /* UIImage+Snapshot.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "UIImage+Snapshot.m"; path = "FBSnapshotTestCase/Categories/UIImage+Snapshot.m"; sourceTree = "<group>"; };
 		B2607823D71B45CB6B2813E8621EE829 /* ConstraintLayoutSupportDSL.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ConstraintLayoutSupportDSL.swift; path = Source/ConstraintLayoutSupportDSL.swift; sourceTree = "<group>"; };
+		B288A11B2C57732A0012DE81 /* QuicklyNSAttributedString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = QuicklyNSAttributedString.swift; path = QuicklySwift/Classes/QuicklyNSAttributedString.swift; sourceTree = "<group>"; };
 		B3CF556C646E32063D56BB11A4CDAFC5 /* QDispatch.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = QDispatch.swift; path = QuicklySwift/Classes/QDispatch.swift; sourceTree = "<group>"; };
 		B65FE9FF6F11DF5CD859DF7053260733 /* QuicklySwift.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = QuicklySwift.debug.xcconfig; sourceTree = "<group>"; };
 		B84E4CD56BB45F853718ADEA228FAB76 /* ConstraintView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ConstraintView.swift; path = Source/ConstraintView.swift; sourceTree = "<group>"; };
@@ -501,6 +503,7 @@
 				F2E0818A2EC541C9F91BC33ADFA067F1 /* QuicklyScrollView.swift */,
 				69ED6A6BE70DD8FCE36A88800BF8BF3E /* QuicklyStackView.swift */,
 				449A80898CB0C21DDE63255CFB8812BE /* QuicklyString.swift */,
+				B288A11B2C57732A0012DE81 /* QuicklyNSAttributedString.swift */,
 				BC07C10255E61A28FE069C9A2C560EC7 /* QuicklySwift.swift */,
 				CC4A71798E99AEA7A51A3E6D26F5D839 /* QuicklyTableView.swift */,
 				DCB1E5D376DAE59789FCE7C5D5A79C9F /* QuicklyTextField.swift */,
@@ -1034,6 +1037,7 @@
 				1A15348813152F1AB77242036042ADED /* QSwitch.swift in Sources */,
 				67F53076DD45AF6D9A26AC2F7099A88B /* QTableViewHelper.swift in Sources */,
 				05D1CFC8E4DCB5325E7E7C4BDA1AC55C /* QuicklyAlertController.swift in Sources */,
+				B288A11C2C57732A0012DE81 /* QuicklyNSAttributedString.swift in Sources */,
 				E853350DD5DB0C41ACBBA6BC5256F59C /* QuicklyAppFrame.swift in Sources */,
 				61B3C6D15B8EADD5BAE77EF3AC2CBA7F /* QuicklyArray.swift in Sources */,
 				3D129F1255ECF498AC7F03AB699EAC34 /* QuicklyAuthorization.swift in Sources */,

@@ -144,6 +144,9 @@ open class QSlider: UIView {
         reload()
     }
     open override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+        if !self.isUserInteractionEnabled {
+            return nil
+        }
         let a = self.convert(point, to: thumbView)
         let width = min(self.frame.width, self.frame.height) + 20
         let bounds = CGRect(x: -10, y: -10, width: width, height: width)

@@ -140,6 +140,17 @@ public extension UITextField {
             return NSRange.init(location: location, length: length)
         }
     }
+    /// 输入中文，且输入拼音未完成 return true
+    func qisZhInput() -> Bool {
+        let language = UIApplication.shared.textInputMode?.primaryLanguage
+        if language?.hasPrefix("zh-Han") ?? false {
+            let position = self.position(from: (self.markedTextRange ?? .init()).start, offset: 0)
+            if position != nil {
+                return true
+            }
+        }
+        return false
+    }
 }
 
 // MARK: - textview delegate 的quickly方法
@@ -232,25 +243,22 @@ open class QTextFieldHelper: UIView {
             self.didChanged?(textField)
         }
         guard (self.maxCount > 0 || self.maxLength > 0), let text = textField.text else { return }
-        let language = UIApplication.shared.textInputMode?.primaryLanguage
-        if language?.hasPrefix("zh-Han") ?? false {
-            let position = textField.position(from: (textField.markedTextRange ?? .init()).start, offset: 0)
-            if position != nil {
-                return
-            }
+        /// 中文输入时，先不处理
+        if textField.qisZhInput() {
+            return
         }
-        var newText = text
+        var newText = textField.attributedText ?? .init()
         var selectedRange = textField.qselectedRange
-        if self.maxCount > 0, text.count > self.maxCount {
-            newText = text.qsubstring(emoji: .count, to: self.maxCount)
-        } else if self.maxLength > 0, (text as NSString).length > self.maxLength {
-            newText = text.qsubstring(emoji: .length, to: self.maxLength)
+        if self.maxCount > 0, newText.string.count > self.maxCount {
+            newText = newText.qsubstring(emoji: .count, to: self.maxCount)
+        } else if self.maxLength > 0, newText.string.qasNSString.length > self.maxLength {
+            newText = newText.qsubstring(emoji: .length, to: self.maxLength)
         }
-        textField.text = newText
-        if selectedRange.location > ("\(newText)" as NSString).length {
-            selectedRange.location = ("\(newText)" as NSString).length
+        textField.attributedText = newText
+        if selectedRange.location > newText.length {
+            selectedRange.location = newText.length
         }
-        if selectedRange.location + selectedRange.length > ("\(newText)" as NSString).length {
+        if selectedRange.location + selectedRange.length > newText.length {
             selectedRange.length = 0
         }
         DispatchQueue.main.async {

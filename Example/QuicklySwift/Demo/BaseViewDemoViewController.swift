@@ -75,7 +75,7 @@ class BaseViewDemoViewController: UIViewController {
         .qplaceholder("textField: 输入文本")
         .qleftView(UIView.init(frame: .init(x: 0, y: 0, width: 14, height: 14)), .always) // 左侧站位
         .qclearButtonMode(.always)
-        .qmaxCount(30) // 最多输入30个字符
+        .qmaxCount(10) // 最多输入30个字符
         .qcornerRadius(5, true)
         .qtextChanged { textField in
             print("-----textField:\(textField.text ?? "")")
@@ -90,7 +90,7 @@ class BaseViewDemoViewController: UIViewController {
         .qfont(.systemFont(ofSize: 15))
         .qtextColor(.black)
         .qplaceholder("textView: 输入文本")
-        .qmaxCount(30)
+        .qmaxLength(10)
         .qcornerRadiusCustom([.topLeft, .bottomRight], radii: 5)
         .qtextChanged { textView in
             print("-----textView:\(textView.text ?? "")")
