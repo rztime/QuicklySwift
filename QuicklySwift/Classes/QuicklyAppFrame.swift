@@ -48,6 +48,9 @@ public struct qAppFrame {
     public static func popToViewController(_ viewController: UIViewController, animated: Bool) {
         self.navigationController?.popToViewController(viewController, animated: animated)
     }
+    public static func popToRootViewController(animated: Bool) {
+        self.navigationController?.popToRootViewController(animated: animated)
+    }
 
     /// 从当前栈里移除viewcontroller
     /// animate：是否需要动画，如果移除的是顶端的，会有一个pop动画

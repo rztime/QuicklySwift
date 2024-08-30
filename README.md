@@ -39,6 +39,7 @@ QuicklySwift is available under the MIT license. See the LICENSE file for more i
 
 | 相关 | 说明 |
 |:----|:----|
+|v0.9.0|优化（颜色hexString的错误获取、TabController超出5个时，获取顶层vc），tableView新增预估高度的缓存避免刷新时跳动，以及其他优化|
 |v0.8.0|优化以及新增功能QSlider, QSwitch, 可通过options来配置大小和圆角，可以直接设置相关view的颜色、图片来自定义|
 |v0.7.0|优化新增功能，文件管理，pcm音频转wav, 定位管理，AVPlayer封装等等|
 |v0.6.0|添加脚本以解决：库里包含的相关的权限申请的代码，在info.plist里没有配置相关使用说明时，编译时隐藏代码，避免提审时被拒|

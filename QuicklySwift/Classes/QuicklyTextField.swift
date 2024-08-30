@@ -142,12 +142,13 @@ public extension UITextField {
     }
     /// 输入中文，且输入拼音未完成 return true
     func qisZhInput() -> Bool {
-        let language = UIApplication.shared.textInputMode?.primaryLanguage
-        if language?.hasPrefix("zh-Han") ?? false {
+        if self.isFirstResponder,
+            let language = UIApplication.shared.textInputMode?.primaryLanguage,
+            language.hasPrefix("zh-Han") {
             let position = self.position(from: (self.markedTextRange ?? .init()).start, offset: 0)
             if position != nil {
                 return true
-            }
+            }  
         }
         return false
     }

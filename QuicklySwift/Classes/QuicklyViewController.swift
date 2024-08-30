@@ -15,6 +15,12 @@ public extension UIViewController {
             return qtopViewController(nav.visibleViewController)
         }
         if let tab = base as? UITabBarController {
+            if let vc = tab.selectedViewController, let vc = qtopViewController(vc) {
+                return vc
+            }
+            if let more = tab.moreNavigationController.topViewController {
+                return qtopViewController(more)
+            }
             return qtopViewController(tab.selectedViewController)
         }
         if let presented = base?.presentedViewController {

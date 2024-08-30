@@ -136,17 +136,26 @@ public extension CGColor {
     }
     /// G  0-255
     var qG: Int {
-        if let g = self.components?[qsafe: 1] { return Int(g * 255) }
+        if self.numberOfComponents == 4, let v = self.components?[1] {
+            return Int(v * 255)
+        }
         return self.qR
     }
     /// B  0-255
     var qB: Int {
-        if let b = self.components?[qsafe: 2] { return Int(b * 255) }
+        if self.numberOfComponents == 4, let v = self.components?[2] {
+            return Int(v * 255)
+        }
         return self.qR
     }
     /// A  0.0-1.0
     var qA: CGFloat {
-        if let a = self.components?[qsafe: 3] { return a }
+        if self.numberOfComponents == 4, let v = self.components?[3] {
+            return v
+        }
+        if self.numberOfComponents == 2, let v = self.components?[1] {
+            return v
+        }
         return 1
     }
 }

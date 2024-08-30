@@ -46,6 +46,10 @@ open class QTableViewHelper: QScrollViewHelper {
 
     open var editingStyleForRow: ((_ indexPath: IndexPath) -> UITableViewCell.EditingStyle)?
     open var commitEditingStyle: ((_ style: UITableViewCell.EditingStyle, _ indexPath: IndexPath) -> Void)?
+    
+    open var cellEstimatedHeights: [String: CGFloat] = [:]
+    open var headEstimatedHeights: [String: CGFloat] = [:]
+    open var footEstimatedHeights: [String: CGFloat] = [:]
 }
 
 extension QTableViewHelper: UITableViewDataSource {
@@ -91,13 +95,31 @@ extension QTableViewHelper: UITableViewDelegate {
         return heightForRow?(indexPath) ?? UITableView.automaticDimension
     }
     public func tableView(_ tableView: UITableView, estimatedHeightForHeaderInSection section: Int) -> CGFloat {
-        return estimatedheightForHeader?(section) ?? tableView.estimatedSectionHeaderHeight
+        if let height = estimatedheightForHeader?(section) {
+            return height
+        }
+        if let height = self.headEstimatedHeights["\(section)"] {
+            return height
+        }
+        return tableView.estimatedSectionHeaderHeight
     }
     public func tableView(_ tableView: UITableView, estimatedHeightForFooterInSection section: Int) -> CGFloat {
-        return estimatedheightForFooter?(section) ?? tableView.estimatedSectionFooterHeight
+        if let height = estimatedheightForFooter?(section) {
+            return height
+        }
+        if let height = self.footEstimatedHeights["\(section)"] {
+            return height
+        }
+        return tableView.estimatedSectionFooterHeight
     }
     public func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
-        return estimatedheightForRow?(indexPath) ?? tableView.estimatedRowHeight
+        if let height = estimatedheightForRow?(indexPath) {
+            return height
+        }
+        if let height = self.cellEstimatedHeights["\(indexPath.section)_\(indexPath.row)"] {
+            return height
+        }
+        return tableView.estimatedRowHeight
     }
     public func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         if let viewForHeader = viewForHeader {
@@ -113,12 +135,15 @@ extension QTableViewHelper: UITableViewDelegate {
     }
     public func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         willDisplayCell?(cell, indexPath)
+        self.cellEstimatedHeights["\(indexPath.section)_\(indexPath.row)"] = cell.frame.height
     }
     public func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
         willDisplayHeader?(view, section)
+        self.headEstimatedHeights["\(section)"] = view.frame.height
     }
     public func tableView(_ tableView: UITableView, willDisplayFooterView view: UIView, forSection section: Int) {
         willDisplayFooter?(view, section)
+        self.footEstimatedHeights["\(section)"] = view.frame.height
     }
     public func tableView(_ tableView: UITableView, didEndDisplayingHeaderView view: UIView, forSection section: Int) {
         didEndDisplayHeader?(view, section)
