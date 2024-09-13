@@ -80,6 +80,8 @@ public extension Date {
         }
         return 0
     }
+}
+public extension Date {
     static func qdateBy(year: Int?, month: Int?, day: Int?, hour: Int?, minute: Int?, second: Int?) -> Date? {
         var c = DateComponents()
         c.year = year
@@ -93,8 +95,21 @@ public extension Date {
         }
         return nil
     }
+    static func qDateBy(text: String?, format: String) -> Date? {
+        guard let text = text else { return nil }
+        let formatter = DateFormatter.init()
+        formatter.dateFormat = format
+        formatter.locale = .init(identifier: "en_US")
+        if let date = formatter.date(from: text) {
+            return date
+        }
+        return nil
+    }
+    /// 计算当前时间 + value之后的时间
+    func qdate(byAdding component: Calendar.Component, value: Int) -> Date? {
+        return Calendar.current.date(byAdding: component, value: value, to: self)
+    }
 }
-
 public extension Date {
     /// 转换成字符串，在iOS 15.4之后，如果不设置locale，12小时制时，会有中文
     func qtoString(_ format: String) -> String {
@@ -120,15 +135,5 @@ public extension Date {
             return self.qtoString("MM-dd HH:mm")
         }
         return self.qtoString("yyyy-MM-dd HH:mm")
-    }
-    static func qDateBy(text: String?, format: String) -> Date? {
-        guard let text = text else { return nil }
-        let formatter = DateFormatter.init()
-        formatter.dateFormat = format
-        formatter.locale = .init(identifier: "en_US")
-        if let date = formatter.date(from: text) {
-            return date
-        }
-        return nil
     }
 }
