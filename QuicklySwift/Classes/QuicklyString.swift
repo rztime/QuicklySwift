@@ -90,3 +90,14 @@ public extension String {
         return NSString(string: self)
     }
 }
+public extension String {
+    /// 转换为时间
+    func qtoDate(_ format: String) -> Date? {
+        return Date.qDateBy(text: self, format: format)
+    }
+    /// condition = true时，返回v1，否则v2
+    static func qassert(condition: Bool, v1: String, v2: String) -> String {
+        if condition { return v1 }
+        return v2
+    }
+}

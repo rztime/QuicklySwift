@@ -48,6 +48,7 @@ public enum QContentInsetADjustmentBehavior: Int {
 }
 
 class QuicklyObjectHelper: UIView {
+    open var tagObject: Any?
     open var deinitAction: (() -> Void)?
     weak var target: NSObject?
     var handle: ((_ sender: NSObject?, _ key: String, _ value: [NSKeyValueChangeKey : Any]?) -> Void)?

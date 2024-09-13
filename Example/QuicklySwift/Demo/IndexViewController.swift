@@ -29,6 +29,8 @@ class IndexViewController: UIViewController {
         ("Qplayer", QPlayerTestViewController.self),
         ("Test", TestViewController.self),
         ("Slider", QSliderTestViewController.self),
+        ("UILabel", LabelTestViewController.self),
+        ("DatePicker", DatePickerTestViewController.self)
     ]
     
     override func viewDidLoad() {

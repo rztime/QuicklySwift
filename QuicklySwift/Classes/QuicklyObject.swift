@@ -9,6 +9,21 @@ import UIKit
 import Foundation
 
 public extension QuicklyProtocal where Self: NSObject {
+    /// 设置一个obj，可用于绑定数据
+    @discardableResult
+    func qtagObject(_ object: Any?) -> Self {
+        var helper = self.quicklyObj
+        if helper == nil {
+            helper = QuicklyObjectHelper.init(frame: .zero)
+            self.quicklyObj = helper
+        }
+        helper?.tagObject = object
+        return self
+    }
+    /// 获取此obj
+    func qtagObject() -> Any? {
+        return self.quicklyObj?.tagObject
+    }
     /// 被释放时的回调
     @discardableResult
     func qdeinit(_ de: (()-> Void)?) -> Self {
