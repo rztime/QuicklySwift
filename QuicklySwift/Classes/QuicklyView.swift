@@ -533,6 +533,10 @@ class QTouchView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+        guard let sup = self.superview else { return nil }
+        if !sup.isUserInteractionEnabled || sup.alpha < 0.01 || sup.isHidden {
+            return nil
+        }
         let point = self.convert(point, to: self)
         if self.bounds.contains(point) {
             self.willTouchIn?()

@@ -19,7 +19,7 @@ public class QuicklyFile {
         guard let url = url?.qtoURL else {
             complete?(nil)
             return
-        } 
+        }
         /// 如果是http文件
         if url.absoluteString.hasPrefix("http") {
             var request = URLRequest.init(url: url)
@@ -167,69 +167,77 @@ public extension FileManager {
     ///   - channels: 通道 1 or 2
     /// - Returns: wav的data
     func qPCM2WAV(pcmData: Data?, sample_rate: Int, channels: Int) -> Data? {
-        guard let data = pcmData else { return nil }
-        let total = data.count + 44
-        var header: [UInt8] = Array(repeating: 0, count: 44)
-        // RIFF/WAVE header
-        header[0] = UInt8(ascii: "R")
-        header[1] = UInt8(ascii: "I")
-        header[2] = UInt8(ascii: "F")
-        header[3] = UInt8(ascii: "F")
-        header[4] = (UInt8)(total & 0xff)
-        header[5] = (UInt8)((total >> 8) & 0xff)
-        header[6] = (UInt8)((total >> 16) & 0xff)
-        header[7] = (UInt8)((total >> 24) & 0xff)
-        //WAVE
-        header[8] = UInt8(ascii: "W")
-        header[9] = UInt8(ascii: "A")
-        header[10] = UInt8(ascii: "V")
-        header[11] = UInt8(ascii: "E")
-        // 'fmt' chunk
-        header[12] = UInt8(ascii: "f")
-        header[13] = UInt8(ascii: "m")
-        header[14] = UInt8(ascii: "t")
-        header[15] = UInt8(ascii: " ")
-        // 4 bytes: size of 'fmt ' chunk
-        header[16] = 16
-        header[17] = 0
-        header[18] = 0
-        header[19] = 0
-        // format = 1
-        header[20] = 1
-        header[21] = 0
-        //chanel
-        header[22] = UInt8(channels)
-        header[23] = 0
-        
-        header[24] = (UInt8)(sample_rate & 0xff)
-        header[25] = (UInt8)((sample_rate >> 8) & 0xff)
-        header[26] = (UInt8)((sample_rate >> 16) & 0xff)
-        header[27] = (UInt8)((sample_rate >> 24) & 0xff)
-        
-        let byteRate = sample_rate * channels * (16 >> 3)
-        header[28] = (UInt8)(byteRate & 0xff)
-        header[29] = (UInt8)((byteRate >> 8) & 0xff)
-        header[30] = (UInt8)((byteRate >> 16) & 0xff)
-        header[31] = (UInt8)((byteRate >> 24) & 0xff)
-        // block align
-        header[32] = 2 * (16 >> 3)
-        header[33] = 0
-        // bits per sample
-        header[34] = 16
-        header[35] = 0
-        //data
-        header[36] = UInt8(ascii: "d")
-        header[37] = UInt8(ascii: "a")
-        header[38] = UInt8(ascii: "t")
-        header[39] = UInt8(ascii: "a")
-        
-        let audioCount = data.count
-        
-        header[40] = UInt8(audioCount & 0xff)
-        header[41] = UInt8((audioCount >> 8) & 0xff)
-        header[42] = UInt8((audioCount >> 16) & 0xff)
-        header[43] = UInt8((audioCount >> 24) & 0xff)
-
-        return Data.init(header) + data
+        guard let pcmData = pcmData else {
+            return nil
+        }
+        // WAV 文件头的大小（44 字节）
+        let headerSize: Int32 = 44
+        // WAV 文件头
+        var header = [UInt8](repeating: 0, count: Int(headerSize))
+        // RIFF chunk descriptor
+        header[0] = 0x52 // 'R'
+        header[1] = 0x49 // 'I'
+        header[2] = 0x46 // 'F'
+        header[3] = 0x46 // 'F'
+        // Chunk size (36 + PCM data size)
+        let pcmDataSize = pcmData.count
+        let chunkSize = pcmDataSize + 36
+        header[4] = UInt8((chunkSize & 0xFF000000) >> 24)
+        header[5] = UInt8((chunkSize & 0x00FF0000) >> 16)
+        header[6] = UInt8((chunkSize & 0x0000FF00) >> 8)
+        header[7] = UInt8(chunkSize & 0x000000FF)
+        // Format type "WAVE"
+        header[8] = 0x57 // 'W'
+        header[9] = 0x41 // 'A'
+        header[10] = 0x56 // 'V'
+        header[11] = 0x45 // 'E'
+        // fmt sub-chunk
+        header[12] = 0x66 // 'f'
+        header[13] = 0x6D // 'm'
+        header[14] = 0x74 // 't'
+        header[15] = 0x20 // ' '
+        // Sub-chunk 1 size 16 for PCM
+        header[16] = 0x10 // 16
+        header[17] = 0x00
+        header[18] = 0x00
+        header[19] = 0x00
+        // Audio format (PCM = 1)
+        header[20] = 0x01
+        header[21] = 0x00
+        // Number of channels
+        header[22] = (UInt8)(channels & 0xFF)
+        header[23] = (UInt8)((channels >> 8) & 0xFF)
+        // Sample rate
+        header[24] = (UInt8)(sample_rate & 0xFF)
+        header[25] = (UInt8)((sample_rate >> 8) & 0xFF)
+        header[26] = (UInt8)((sample_rate >> 16) & 0xFF)
+        header[27] = (UInt8)((sample_rate >> 24) & 0xFF)
+        // Byte rate = SampleRate * NumChannels * BitsPerSample/8
+        let byteRate = sample_rate * channels * 2 // Assuming 16-bit samples
+        header[28] = (UInt8)(byteRate & 0xFF)
+        header[29] = (UInt8)((byteRate >> 8) & 0xFF)
+        header[30] = (UInt8)((byteRate >> 16) & 0xFF)
+        header[31] = (UInt8)((byteRate >> 24) & 0xFF)
+        // Block align = NumChannels * BitsPerSample/8
+        let blockAlign = channels * 2 // Assuming 16-bit samples
+        header[32] = (UInt8)(blockAlign & 0xFF)
+        header[33] = (UInt8)((blockAlign >> 8) & 0xFF)
+        // Bits per sample
+        header[34] = 0x10 // 16 bits
+        header[35] = 0x00
+        // Sub-chunk 2 descriptor
+        header[36] = 0x64 // 'd'
+        header[37] = 0x61 // 'a'
+        header[38] = 0x74 // 't'
+        header[39] = 0x61 // 'a'
+        // Sub-chunk 2 size = PCM data size
+        header[40] = (UInt8)(pcmDataSize & 0xFF)
+        header[41] = (UInt8)((pcmDataSize >> 8) & 0xFF)
+        header[42] = (UInt8)((pcmDataSize >> 16) & 0xFF)
+        header[43] = (UInt8)((pcmDataSize >> 24) & 0xFF)
+        // Combine header and PCM data
+        var wavData = Data(header)
+        wavData.append(pcmData)
+        return wavData
     }
 }

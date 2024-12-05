@@ -8,9 +8,11 @@
 import UIKit
 
 public extension UIColor {
+    /// rgb: 0-255
     class func qrgb(_ r: Int, _ g: Int, _ b: Int) -> UIColor {
         return qrgba(r, g, b, a: 1)
     }
+    /// rgb:0-255 a:0-1
     class func qrgba(_ r: Int, _ g: Int, _ b: Int, a: CGFloat) -> UIColor {
         return UIColor.init(red: CGFloat(r) / 255.0, green: CGFloat(g) / 255.0, blue: CGFloat(b) / 255.0, alpha: a)
     }
@@ -21,7 +23,7 @@ public extension UIColor {
     /// 16进制颜色(字符串)  #ff33ee
     class func qhex(_ hex: String, a: CGFloat? = nil) -> UIColor {
         var hex = hex.trimmingCharacters(in: .whitespacesAndNewlines)
-        hex = hex.replacingOccurrences(of: "#", with: "")
+        hex = hex.replacingOccurrences(of: "#", with: "").replacingOccurrences(of: "0x", with: "")
         if hex.count != 6 && hex.count != 8 {
             return UIColor.clear
         }

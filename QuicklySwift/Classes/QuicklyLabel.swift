@@ -92,4 +92,32 @@ public class QLabel: UIView {
             }
         }
     }
+    public var text: String? {
+        set { self.textLabel.text = newValue }
+        get { return self.textLabel.text }
+    }
+    public var attributedText: NSAttributedString? {
+        set { self.textLabel.attributedText = newValue }
+        get { return self.textLabel.attributedText }
+    }
+    public var numberOfLines: Int {
+        set { self.textLabel.numberOfLines = newValue }
+        get { return self.textLabel.numberOfLines }
+    }
+    public var font: UIFont {
+        set { self.textLabel.font = newValue }
+        get { return self.textLabel.font }
+    }
+    public var textColor: UIColor {
+        set { self.textLabel.textColor = newValue }
+        get { return self.textLabel.textColor }
+    }
+    public var textAlignment: NSTextAlignment {
+        set { self.textLabel.textAlignment = newValue }
+        get { return self.textLabel.textAlignment }
+    }
+    public var lineBreakMode: NSLineBreakMode {
+        set { self.textLabel.lineBreakMode = newValue }
+        get { return self.textLabel.lineBreakMode }
+    }
 }

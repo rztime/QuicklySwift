@@ -243,7 +243,7 @@ open class QTextFieldHelper: UIView {
         defer {
             self.didChanged?(textField)
         }
-        guard (self.maxCount > 0 || self.maxLength > 0), let text = textField.text else { return }
+        guard (self.maxCount > 0 || self.maxLength > 0), let _ = textField.text else { return }
         /// 中文输入时，先不处理
         if textField.qisZhInput() {
             return
@@ -254,6 +254,8 @@ open class QTextFieldHelper: UIView {
             newText = newText.qsubstring(emoji: .count, to: self.maxCount)
         } else if self.maxLength > 0, newText.string.qasNSString.length > self.maxLength {
             newText = newText.qsubstring(emoji: .length, to: self.maxLength)
+        } else {
+            return
         }
         textField.attributedText = newText
         if selectedRange.location > newText.length {

@@ -258,6 +258,8 @@ extension QTextViewHelper: UITextViewDelegate {
             newText = newText.qsubstring(emoji: .count, to: self.maxCount)
         } else if self.maxLength > 0, newText.string.qasNSString.length > self.maxLength {
             newText = newText.qsubstring(emoji: .length, to: self.maxLength)
+        } else {
+            return
         }
         textView.attributedText = newText
         if selectedRange.location > newText.length {
