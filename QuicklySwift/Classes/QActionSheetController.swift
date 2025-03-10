@@ -45,6 +45,7 @@ public class QActionSheetController: UIViewController {
                 make.edges.equalToSuperview()
             }).qtap({ [weak self] _ in
                 if self?.options.dismissWhenTouchOut == true {
+                    self?.selectedIndex = -2
                     self?.contentShow(false)
                 }
             }),
@@ -140,6 +141,7 @@ public class QActionSheetController: UIViewController {
                     make.height.equalTo(10)
                 }).qbackgroundColor(self.options.separatorColor),
                 addLabel(title: t).qtap({ [weak self] view in
+                    self?.selectedIndex = -1
                     self?.contentShow(false)
                 }),
             ])
@@ -168,6 +170,10 @@ public class QActionSheetController: UIViewController {
         contentShow(true)
     }
     public func contentShow(_ show: Bool) {
+        if !show, self.options.dismissByYourself {
+            self.finishHandle?(self.selectedIndex ?? -1)
+            return
+        }
         self.view.alpha = show ? 0 : 1
         self.contentView.snp.remakeConstraints { make in
             if show {
@@ -189,6 +195,20 @@ public class QActionSheetController: UIViewController {
             }
         }
     }
+    public func dismissBySelf() {
+        self.view.alpha = 1
+        self.contentView.snp.remakeConstraints { make in
+            make.top.equalTo(self.view.snp.bottom)
+            make.centerX.equalToSuperview()
+            make.width.equalToSuperview()
+        }
+        UIView.animate(withDuration: 0.38, delay: 0) {
+            self.view.alpha = 0
+            self.view.layoutIfNeeded()
+        } completion: { _ in
+            self.dismiss(animated: false) { }
+        }
+    }
     @discardableResult
     func addLabel(title: NSAttributedString) -> UIView {
         let v = UIView()
@@ -203,6 +223,11 @@ public class QActionSheetController: UIViewController {
                 })
         ])
         return v
+    }
+    deinit {
+#if DEBUG
+        print("----actionsheet deinit")
+#endif
     }
 }
 
@@ -259,6 +284,8 @@ public class QAlertControllerOptions {
         case separatorColor(UIColor)
         /// 渐变色
         case gradientColor(UIColor)
+        /// 需要调用vc.dismissBySelf，弹窗才会消失（最好检查一下循环引用问题）
+        case dismissByYourself
     }
     
     var title: NSAttributedString?
@@ -272,6 +299,7 @@ public class QAlertControllerOptions {
     var dismissWhenTouchOutByAlert: Bool = false
     var separatorColor: UIColor = .init(white: 0.8, alpha: 0.3)
     var gradientColor: UIColor = .black.withAlphaComponent(0.7)
+    var dismissByYourself = false
     public init(options: [QAlertControllerOptions.Options]) {
         let p = NSMutableParagraphStyle.init()
         p.alignment = .center
@@ -338,6 +366,8 @@ public class QAlertControllerOptions {
                 self.separatorColor = color
             case .gradientColor(let color):
                 self.gradientColor = color
+            case .dismissByYourself:
+                self.dismissByYourself = true
             }
         }
     }

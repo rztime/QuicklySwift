@@ -30,9 +30,9 @@ class IndexViewController: UIViewController {
         ("Test", TestViewController.self),
         ("Slider", QSliderTestViewController.self),
         ("UILabel", LabelTestViewController.self),
-        ("DatePicker", DatePickerTestViewController.self)
+        ("DatePicker", DatePickerTestViewController.self),
+        ("弹窗", QAlertTestViewController.self)
     ]
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.title = "首页"
@@ -42,22 +42,6 @@ class IndexViewController: UIViewController {
             tableView.qmakeConstraints({ make in
                 make.edges.equalToSuperview()
             }),
-            UIImageView.init(image: .init(named: "1111"))
-                .qmakeConstraints({ make in
-                    make.top.left.equalToSuperview().inset(100)
-                    make.size.equalTo(200)
-                })
-                .qalpha(0.7)
-                .qgaussBlur(.light, 1),
-            
-            UIButton.init().qbackgroundColor(.red)
-                .qmakeConstraints({ make in
-                    make.bottom.right.equalToSuperview()
-                    make.size.equalTo(100)
-                })
-                .qtap({ [weak self] view in
-                    self?.tableView.reloadRows(at: [.init(row: 1, section: 0)], with: .automatic)
-                })
         ])
         tableView.qnumberofRows { [weak self] section in
             return self?.source.count ?? 0
@@ -69,7 +53,9 @@ class IndexViewController: UIViewController {
             let item = self?.source[indexPath.row]
             cell.textLabel?.text = item?.0
             cell.textLabel?.textColor = .blue
-            cell.detailTextLabel?.text = "\(String(describing: item?.1.self)))"
+            if let a = item?.1.self {
+                cell.detailTextLabel?.text = "\(String(describing: a))"
+            }
             return cell
         }.qdidSelectRow { [weak self] tableView, indexPath in
             tableView.deselectRow(at: indexPath, animated: false)

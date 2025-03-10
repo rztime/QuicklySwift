@@ -44,6 +44,7 @@ public class QAlertViewController: UIViewController {
                 make.edges.equalToSuperview()
             }).qtap({ [weak self] view in
                 if self?.options.dismissWhenTouchOutByAlert == true {
+                    self?.selectedIndex = -2
                     self?.contentShow(false)
                 }
             }),
@@ -121,6 +122,7 @@ public class QAlertViewController: UIViewController {
             actionStack.qbody(acs)
             if let t = self.options.cancel, t.length > 0 {
                 let c = addLabel(title: t).qtap { [weak self] view in
+                    self?.selectedIndex = -1
                     self?.contentShow(false)
                 }
                 c.qbody([
@@ -165,6 +167,7 @@ public class QAlertViewController: UIViewController {
             }
             if let t = self.options.cancel, t.length > 0 {
                 let c = addLabel(title: t).qtap { [weak self] view in
+                    self?.selectedIndex = -1
                     self?.contentShow(false)
                 }
                 c.qbody([
@@ -224,6 +227,10 @@ public class QAlertViewController: UIViewController {
         contentShow(true)
     }
     public func contentShow(_ show: Bool) {
+        if !show, self.options.dismissByYourself {
+            self.finishHandle?(self.selectedIndex ?? -1)
+            return
+        }
         self.view.alpha = show ? 0 : 1
         UIView.animate(withDuration: 0.38, delay: 0) {
             self.contentView.transform = show ? CGAffineTransform(scaleX: 1, y: 1) : CGAffineTransform(scaleX: 0.1, y: 0.1)
@@ -234,6 +241,15 @@ public class QAlertViewController: UIViewController {
                     self.finishHandle?(self.selectedIndex ?? -1)
                 }
             }
+        }
+    }
+    public func dismissBySelf() {
+        self.view.alpha = 1
+        UIView.animate(withDuration: 0.38, delay: 0) {
+            self.contentView.transform = CGAffineTransform(scaleX: 0.1, y: 0.1)
+            self.view.alpha = 0
+        } completion: { _ in
+            self.dismiss(animated: false) { }
         }
     }
     @discardableResult
@@ -250,5 +266,10 @@ public class QAlertViewController: UIViewController {
                 })
         ])
         return v
+    }
+    deinit {
+#if DEBUG
+        print("----alert deinit")
+#endif
     }
 }

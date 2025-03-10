@@ -51,9 +51,7 @@ class GrayfloatVC1: UIViewController {
             qAppFrame.pushViewController(vc)
         }
         imageViwe.qtap { view in
-            UIAlertController.qwith(title: "hhh", "hahhdfa", actions: ["去人"], complete: { index in
-                
-            })
+      
         }
     }
 }

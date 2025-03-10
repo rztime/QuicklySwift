@@ -52,7 +52,7 @@ class ViewController: UIViewController {
                 
         let btn = UIButton.init(type: .custom)
             .qtitle("去首页")
-            .qtitle("去首页 +  ⇋澳门", .selected)
+            .qtitle("去首页", .selected)
             .qtitleColor(.white)
             .qbackgroundColor(.red)
             .qcornerRadius(5, true)
@@ -67,49 +67,13 @@ class ViewController: UIViewController {
             })
             // 设置拖拽，则不能使用约束，否则改变状态之后，会还原
             .qdrag(.nearBorder(edge: .init(top: qnavigationbarHeight, left: 10, bottom: qbottomSafeHeight, right: 10)))
+        
         self.view.qbody([
             btn.qframe(.init(x: 100, y: 400, width: 300, height: 60)),
 
-            UIView().qbackgroundColor(.green).qframe(.init(x: 100, y: 100, width: 100, height: 100))
-            .qtap({ _ in
-                QuicklyFileBrowser.show()
-                return ;
+            UIView().qbackgroundColor(.green).qframe(.init(x: 100, y: 0, width: 100, height: 100))
+            .qtap({ _ in                
                 
-                /// 自定义AtionSheet 支持图文混排
-                let t = NSAttributedString.rz.colorfulConfer { confer in
-                    confer.paragraphStyle?.alignment(.right)
-                    confer.image(UIImage.init(named: "1111"))?.size(.init(width: 0, height: 17), align: .center, font: .systemFont(ofSize: 17))
-                    confer.text(" 我是一个标题我是一个标")?.font(.systemFont(ofSize: 17)).textColor(.red)
-                }
-                let r = NSAttributedString.rz.colorfulConfer { confer in
-                    confer.text("我是一个选项我是一个选项我是一个选项我是一个选项")?.font(.systemFont(ofSize: 16)).textColor(.blue).paragraphStyle?.alignment(.center)//.numberOfLines(1, maxWidth: 120).lineBreakMode(.byTruncatingTail)
-                }
-                let c = NSAttributedString.rz.colorfulConfer { confer in
-                    confer.text("取消")?.font(.systemFont(ofSize: 17)).textColor(.red).paragraphStyle?.alignment(.center)
-                }
-//                QActionSheetController
-//                QAlertViewController
-                QActionSheetController.show(options: .init(options: [
-                    .titleAttributeText(t),
-                    .description("我是一个小描述我"),
-                    .actionAttributeText(r),
-                    .action("2"),
-                    .action("3"),
-//                    .action("4"),
-//                    .action("5"),
-//                    .action("6"),
-//                    .subDescription("我是第二个小提示我是第二个小提示"),
-//                    .cancel("取消"),
-                    .cancelAttributeText(c),
-//                    .dismissWhenTouchOut(false), // 点空白区域不消失
-//                    .backgroundColor(.white), // 背景
-//                    .separatorColor(.white), // 分割线背景色
-                    ])) { index in
-                    print("index:\(index)")
-//                    let vc = QuicklyFileBrowser()
-//                    qAppFrame.pushViewController(vc, animated: true)
-                        
-                }
             })
             .qtapNumberof(touches: 1, taps: 2, { view in
                 print("2222")

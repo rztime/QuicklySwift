@@ -12,9 +12,9 @@ import AVFoundation
  可以播放视频、音频，需要显示视频内容时，将playerView加在view上即可
  **/
 open class QPlayer {
-    private var player: AVPlayer?
-    private var playerLayer: AVPlayerLayer?
-    private var place: UIImageView?
+    open var player: AVPlayer?
+    open var playerLayer: AVPlayerLayer?
+    open var place: UIImageView?
     /// 占位图，当视频可以播时，会立即隐藏
     open lazy var placeholderImageView: UIImageView = .init().qthen {
         $0.qcornerRadius(0, true).qcontentMode(.scaleAspectFit)
