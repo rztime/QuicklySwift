@@ -32,7 +32,6 @@ Pod::Spec.new do |s|
     find "$info_plist_path" -iname "info.plist" | while read -r line; do
       auth_list=("NSCameraUsageDescription" "NSPhotoLibraryUsageDescription" "NSMicrophoneUsageDescription" "NSContactsUsageDescription" "NSLocationWhenInUseUsageDescription" "NSLocationAlwaysUsageDescription" "NSLocationAlwaysAndWhenInUseUsageDescription" "NSCalendarsUsageDescription" "NSRemindersUsageDescription" "NSAppleMusicUsageDescription" "NSSpeechRecognitionUsageDescription" "NSMotionUsageDescription" "NSSiriUsageDescription" "NSUserTrackingUsageDescription")
       use_list=("\$(inherited)")
-#      infoplist_content=$(cat "$line")
       infoplist_content=$(cat "$line" | perl -0777 -pe "s/<!--.*?-->//gs")
       for auth in "${auth_list[@]}"; do
         if grep -q "${auth}" <<< "${infoplist_content}"; then

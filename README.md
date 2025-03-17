@@ -39,7 +39,7 @@ QuicklySwift is available under the MIT license. See the LICENSE file for more i
 
 | 相关 | 说明 |
 |:----|:----|
-|v1.0.0|新增时间选择，弹窗自主关闭|
+|v1.0.0|新增时间选择，弹窗自主关闭，WKWebView的q方法|
 |v0.9.0|优化（颜色hexString的错误获取、TabController超出5个时，获取顶层vc），tableView新增预估高度的缓存避免刷新时跳动，以及其他优化|
 |v0.8.0|优化以及新增功能QSlider, QSwitch, 可通过options来配置大小和圆角，可以直接设置相关view的颜色、图片来自定义|
 |v0.7.0|优化新增功能，文件管理，pcm音频转wav, 定位管理，AVPlayer封装等等|
@@ -89,6 +89,7 @@ QuicklySwift is available under the MIT license. See the LICENSE file for more i
 |UIAlertController| 快速使用|
 |QuicklyPopmenu| 菜单view|
 |Number, Int等等|根据配置转换成字符串，取整，保留几位小数，不足位补0等等|
+|WKWebView|nav、ui delegate回调，与原生交互，等等|
 等等
 
 - UIView:
