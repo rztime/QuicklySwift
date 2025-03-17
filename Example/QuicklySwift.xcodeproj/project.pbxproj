@@ -28,6 +28,7 @@
 		B288A1232C5CB95D0012DE81 /* LabelTestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B288A1222C5CB95D0012DE81 /* LabelTestViewController.swift */; };
 		B2921D60285C070E00CBC001 /* FriendDemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2921D5F285C070E00CBC001 /* FriendDemoViewController.swift */; };
 		B2921D65285C1FF700CBC001 /* FriendView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2921D64285C1FF700CBC001 /* FriendView.swift */; };
+		B293EC4E2D7E8183003EACAC /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B293EC4D2D7E8183003EACAC /* WebViewController.swift */; };
 		B2A864F72BCD163300F1AD65 /* TestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2A864F62BCD163300F1AD65 /* TestViewController.swift */; };
 		B2B47DD32AF0ED2F0057FCFB /* DispatchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2B47DD22AF0ED2F0057FCFB /* DispatchViewController.swift */; };
 		B2B4D12A2AB3F6B700270C44 /* GradientLayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2B4D1292AB3F6B700270C44 /* GradientLayerViewController.swift */; };
@@ -86,6 +87,7 @@
 		B288A1222C5CB95D0012DE81 /* LabelTestViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabelTestViewController.swift; sourceTree = "<group>"; };
 		B2921D5F285C070E00CBC001 /* FriendDemoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendDemoViewController.swift; sourceTree = "<group>"; };
 		B2921D64285C1FF700CBC001 /* FriendView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendView.swift; sourceTree = "<group>"; };
+		B293EC4D2D7E8183003EACAC /* WebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewController.swift; sourceTree = "<group>"; };
 		B2A864F62BCD163300F1AD65 /* TestViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestViewController.swift; sourceTree = "<group>"; };
 		B2B47DD22AF0ED2F0057FCFB /* DispatchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DispatchViewController.swift; sourceTree = "<group>"; };
 		B2B4D1292AB3F6B700270C44 /* GradientLayerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientLayerViewController.swift; sourceTree = "<group>"; };
@@ -257,6 +259,7 @@
 				B288A1222C5CB95D0012DE81 /* LabelTestViewController.swift */,
 				B26FAB992C898B97000894E1 /* DatePickerTestViewController.swift */,
 				B23C355A2D013B37008C6CD3 /* QAlertTestViewController.swift */,
+				B293EC4D2D7E8183003EACAC /* WebViewController.swift */,
 			);
 			path = Demo;
 			sourceTree = "<group>";
@@ -510,6 +513,7 @@
 				B22C27442872849C00B34EEF /* TransitionTwoViewController.swift in Sources */,
 				B2CEF33F2BFC7E9A00EDFED5 /* QSliderTestViewController.swift in Sources */,
 				B2921D65285C1FF700CBC001 /* FriendView.swift in Sources */,
+				B293EC4E2D7E8183003EACAC /* WebViewController.swift in Sources */,
 				B2C6F2D428FFEC2100A04167 /* AVPlayerViewController.swift in Sources */,
 				B2C4BC05284F3A1C00B7C25B /* IndexViewController.swift in Sources */,
 			);

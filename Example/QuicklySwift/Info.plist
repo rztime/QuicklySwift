@@ -27,10 +27,12 @@
 		<key>NSAllowsArbitraryLoads</key>
 		<true/>
 	</dict>
-    <key>NSAppleMusicUsageDescription</key>
+	<key>NSAppleMusicUsageDescription</key>
 	<string>music 音乐</string>
 	<key>NSCalendarsUsageDescription</key>
 	<string>日历</string>
+	<key>NSCameraUsageDescription</key>
+	<string>相机</string>
 	<key>NSContactsUsageDescription</key>
 	<string>通讯录</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>

@@ -31,7 +31,8 @@ class IndexViewController: UIViewController {
         ("Slider", QSliderTestViewController.self),
         ("UILabel", LabelTestViewController.self),
         ("DatePicker", DatePickerTestViewController.self),
-        ("弹窗", QAlertTestViewController.self)
+        ("弹窗", QAlertTestViewController.self),
+        ("webview", WebViewController.self),
     ]
     override func viewDidLoad() {
         super.viewDidLoad()
