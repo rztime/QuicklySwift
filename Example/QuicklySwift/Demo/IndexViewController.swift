@@ -33,6 +33,7 @@ class IndexViewController: UIViewController {
         ("DatePicker", DatePickerTestViewController.self),
         ("弹窗", QAlertTestViewController.self),
         ("webview", WebViewController.self),
+        ("PHAsset", AssetViewController.self),
     ]
     override func viewDidLoad() {
         super.viewDidLoad()

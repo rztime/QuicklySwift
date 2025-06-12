@@ -35,12 +35,12 @@ class WebViewController: UIViewController {
             })
             .qdidFinish { webView, nav in
                 print("--- finish")
-//                webView.qgetOuterHtml { html, error in
-//                    print("----- 全文 outer html:\(html ?? "")")
-//                }
-                webView.qgetOuterHtml(elementSelector: "div") { html, error in
-                    print("----- div outer html:\(html ?? "")")
+                webView.qgetOuterHtml { html, error in
+                    print("----- 全文 outer html:\(html ?? "")")
                 }
+//                webView.qgetOuterHtml(elementSelector: "div") { html, error in
+//                    print("----- div outer html:\(html ?? "")")
+//                }
 //                webView.qgetInnerText { text, error in
 //                    print("----- 全文 text:\(text ?? "")")
 //                }
@@ -49,7 +49,7 @@ class WebViewController: UIViewController {
 //                }
 //                webView.qgetInnerText(elementSelector: "div.divclass") { text, error in
 //                    print("----- div text:\(text ?? "")")
-//                }                
+//                }
             }
             .qdidFailWithError { webView, nav, error in
                 print("--- fail: \(error)")
@@ -110,7 +110,7 @@ class WebViewController: UIViewController {
         webView.qtitlePublish.subscribe({ [weak self] value in
             self?.title = value
         }, disposebag: self.obj)
-        webView.loadHTMLString(JSHtml, baseURL: nil)
+        webView.loadHTMLString(JSHtml, baseURL: "https://www.baidu.com".qtoURL)
 //        webView.qloadURL("http://www.baidu.com".qtoURL)
     }
 }

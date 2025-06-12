@@ -483,6 +483,7 @@ public extension UIView {
         if self.superview == nil && self.frame.isEmpty {
             qappKeyWindow.addSubview(self)
             flag = true
+            self.sizeToFit()
         }
         self.layoutIfNeeded()
         let image = self.layer.qtoImage()

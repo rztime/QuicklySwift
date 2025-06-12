@@ -39,6 +39,7 @@ QuicklySwift is available under the MIT license. See the LICENSE file for more i
 
 | 相关 | 说明 |
 |:----|:----|
+|v1.1.0|对UIImage、PHAsset等的方法扩展和优化|
 |v1.0.0|新增时间选择，弹窗自主关闭，WKWebView的q方法|
 |v0.9.0|优化（颜色hexString的错误获取、TabController超出5个时，获取顶层vc），tableView新增预估高度的缓存避免刷新时跳动，以及其他优化|
 |v0.8.0|优化以及新增功能QSlider, QSwitch, 可通过options来配置大小和圆角，可以直接设置相关view的颜色、图片来自定义|

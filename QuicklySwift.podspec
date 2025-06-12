@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'QuicklySwift'
-  s.version          = '1.0.0'
+  s.version          = '1.1.0'
   s.summary          = 'swift 常用方法扩展，便捷使用 qq交流群：580839749'
   
   s.description      = <<-DESC

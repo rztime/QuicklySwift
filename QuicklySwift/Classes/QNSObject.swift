@@ -12,41 +12,33 @@ public extension QuicklyProtocal where Self: NSObject {
     /// 设置一个obj，可用于绑定数据
     @discardableResult
     func qtagObject(_ object: Any?) -> Self {
-        var helper = self.quicklyObj
-        if helper == nil {
-            helper = QuicklyObjectHelper.init(frame: .zero)
-            self.quicklyObj = helper
-        }
-        helper?.tagObject = object
+        self.quicklyObj.qsetValue(object, key: "quickly_object")
         return self
     }
     /// 获取此obj
     func qtagObject() -> Any? {
-        return self.quicklyObj?.tagObject
+        return self.quicklyObj.qvalue(for: "quickly_object")
+    }
+    /// 将value绑定到self
+    func qsetValue(_ value: Any?, key: String) {
+        self.quicklyObj.cacheData[key] = value
+    }
+    /// 获取key对应的数据
+    func qvalue(for key: String) -> Any? {
+        return self.quicklyObj.cacheData[key]
     }
     /// 被释放时的回调
     @discardableResult
     func qdeinit(_ de: (()-> Void)?) -> Self {
-        /// 通过给NSobject，添加一个obj，然后再obj里添加view的方式持有，当NSObject要被释放时，
-        var helper = self.quicklyObj
-        if helper == nil {
-            helper = QuicklyObjectHelper.init(frame: .zero)
-            self.quicklyObj = helper
-        }
         let v = QuicklyObjectHelper.init(frame: .zero)
-        helper?.addSubview(v)
+        self.quicklyObj.addSubview(v)
         v.deinitAction = de
         return self
     }
+    /// 添加KVO
     func qaddObserver(key: String, options: NSKeyValueObservingOptions, context: UnsafeMutableRawPointer?, handle: ((_ sender: Self, _ key: String, _ value: [NSKeyValueChangeKey : Any]?) -> Void)?) {
-        /// 通过给NSobject，添加一个obj，然后再obj里添加view的方式持有，当NSObject要被释放时，
-        var helper = self.quicklyObj
-        if helper == nil {
-            helper = QuicklyObjectHelper.init(frame: .zero)
-            self.quicklyObj = helper
-        }
         let v = QuicklyObjectHelper.init(frame: .zero)
-        helper?.addSubview(v)
+        self.quicklyObj.addSubview(v)
         v.addObs(target: self, key: key, options: options, context: context) { [weak self] sender, key, value in
             if let sender = sender as? Self, sender == self {
                 handle?(sender, key, value)
@@ -62,12 +54,17 @@ public extension QuicklyProtocal where Self: NSObject {
 
 private var quicklyobjnameaddres: UInt8 = 1
 fileprivate extension NSObject {
-    var quicklyObj: QuicklyObjectHelper? {
+    var quicklyObj: QuicklyObjectHelper {
         set {
             objc_setAssociatedObject(self, &quicklyobjnameaddres, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         }
         get {
-            return objc_getAssociatedObject(self, &quicklyobjnameaddres) as? QuicklyObjectHelper
+            if let obj = objc_getAssociatedObject(self, &quicklyobjnameaddres) as? QuicklyObjectHelper {
+                return obj
+            }
+            let helper = QuicklyObjectHelper.init(frame: .zero)
+            self.quicklyObj = helper
+            return helper
         }
     }
 }

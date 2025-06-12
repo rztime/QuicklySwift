@@ -19,6 +19,7 @@
 		B22C27412872848900B34EEF /* TransitionOneViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B22C27402872848900B34EEF /* TransitionOneViewController.swift */; };
 		B22C27442872849C00B34EEF /* TransitionTwoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B22C27432872849C00B34EEF /* TransitionTwoViewController.swift */; };
 		B22C27472872892400B34EEF /* TransitionThreeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B22C27462872892400B34EEF /* TransitionThreeViewController.swift */; };
+		B2387EF62DA3695500567855 /* AssetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2387EF52DA3695500567855 /* AssetViewController.swift */; };
 		B23C355B2D013B37008C6CD3 /* QAlertTestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B23C355A2D013B37008C6CD3 /* QAlertTestViewController.swift */; };
 		B26C6A7F2850519E009512EC /* QuicklyDemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B26C6A7E2850519E009512EC /* QuicklyDemoViewController.swift */; };
 		B26C6A81285073CC009512EC /* TableViewDemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B26C6A80285073CC009512EC /* TableViewDemoViewController.swift */; };
@@ -78,6 +79,7 @@
 		B22C27402872848900B34EEF /* TransitionOneViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransitionOneViewController.swift; sourceTree = "<group>"; };
 		B22C27432872849C00B34EEF /* TransitionTwoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransitionTwoViewController.swift; sourceTree = "<group>"; };
 		B22C27462872892400B34EEF /* TransitionThreeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransitionThreeViewController.swift; sourceTree = "<group>"; };
+		B2387EF52DA3695500567855 /* AssetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetViewController.swift; sourceTree = "<group>"; };
 		B23C355A2D013B37008C6CD3 /* QAlertTestViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QAlertTestViewController.swift; sourceTree = "<group>"; };
 		B26C6A7E2850519E009512EC /* QuicklyDemoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuicklyDemoViewController.swift; sourceTree = "<group>"; };
 		B26C6A80285073CC009512EC /* TableViewDemoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewDemoViewController.swift; sourceTree = "<group>"; };
@@ -260,6 +262,7 @@
 				B26FAB992C898B97000894E1 /* DatePickerTestViewController.swift */,
 				B23C355A2D013B37008C6CD3 /* QAlertTestViewController.swift */,
 				B293EC4D2D7E8183003EACAC /* WebViewController.swift */,
+				B2387EF52DA3695500567855 /* AssetViewController.swift */,
 			);
 			path = Demo;
 			sourceTree = "<group>";
@@ -343,7 +346,7 @@
 					607FACCF1AFB9204008FA782 = {
 						CreatedOnToolsVersion = 6.3.1;
 						DevelopmentTeam = 9363D6U2QU;
-						LastSwiftMigration = 0900;
+						LastSwiftMigration = 1620;
 					};
 					607FACE41AFB9204008FA782 = {
 						CreatedOnToolsVersion = 6.3.1;
@@ -504,6 +507,7 @@
 				B2921D60285C070E00CBC001 /* FriendDemoViewController.swift in Sources */,
 				607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */,
 				B23C355B2D013B37008C6CD3 /* QAlertTestViewController.swift in Sources */,
+				B2387EF62DA3695500567855 /* AssetViewController.swift in Sources */,
 				B2E5853C286002C300921A91 /* LayoutIndexViewController.swift in Sources */,
 				B26C6A81285073CC009512EC /* TableViewDemoViewController.swift in Sources */,
 				B288A1232C5CB95D0012DE81 /* LabelTestViewController.swift in Sources */,
@@ -663,6 +667,7 @@
 			baseConfigurationReference = F92772CC4E67BBCE51EEBDB1 /* Pods-QuicklySwift_Example.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = QuicklySwift_Example.entitlements;
 				DEVELOPMENT_TEAM = 9363D6U2QU;
 				INFOPLIST_FILE = QuicklySwift/Info.plist;
@@ -671,6 +676,8 @@
 				MODULE_NAME = ExampleApp;
 				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.demo.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
@@ -682,6 +689,7 @@
 			baseConfigurationReference = 372E01D0CBAC2F251CD52063 /* Pods-QuicklySwift_Example.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = QuicklySwift_Example.entitlements;
 				DEVELOPMENT_TEAM = 9363D6U2QU;
 				INFOPLIST_FILE = QuicklySwift/Info.plist;
@@ -690,6 +698,7 @@
 				MODULE_NAME = ExampleApp;
 				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.demo.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;

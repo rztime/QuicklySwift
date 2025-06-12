@@ -76,14 +76,16 @@ public extension CALayer {
     /// 转换成图片
     @discardableResult
     func qtoImage() -> UIImage? {
-        var image: UIImage?
-        UIGraphicsBeginImageContextWithOptions(self.bounds.size, false, UIScreen.main.scale)
-        if let context = UIGraphicsGetCurrentContext() {
-            self.render(in: context)
-            image = UIGraphicsGetImageFromCurrentImageContext()
+        var size = self.bounds.size
+        if size.width == 0 || size.height == 0 {
+            assert(false, "size无效，请检查")
         }
-        UIGraphicsEndImageContext()
-        return image
+        if size.width == 0 { size.width = 1 }
+        if size.height == 0 { size.height = 1 }
+        let renderer = UIGraphicsImageRenderer(size: size)
+        return renderer.image { context in
+            self.render(in: context.cgContext)
+        }
     }
     /// 设置渐变色 （UILabel设置之后，文字将无法显示）
     /// - Parameters:

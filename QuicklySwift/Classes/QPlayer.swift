@@ -106,9 +106,9 @@ open class QPlayer {
             self.player?.volume = newValue
         }
     }
-    private var timer: Timer?
-    private var destoryObj: NSObject = .init()
-    private var timerTasking = false
+    public var timer: Timer?
+    public var destoryObj: NSObject = .init()
+    public var timerTasking = false
     
     public init() { }
     /// 重置

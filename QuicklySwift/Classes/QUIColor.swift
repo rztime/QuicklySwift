@@ -109,15 +109,14 @@ public extension CGColor {
     }
     /// 颜色转换图片
     func qtoImage(_ size: CGSize = .init(width: 1, height: 1)) -> UIImage? {
-        var res: UIImage? = nil
-        let rect = CGRect(x: 0, y: 0, width: size.width, height: size.height)
-        UIGraphicsBeginImageContextWithOptions(rect.size, false, UIScreen.main.scale)
-        let context = UIGraphicsGetCurrentContext()
-        context?.setFillColor(self)
-        context?.fill(rect)
-        res = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-        return res
+        var size = size
+        if size.width == 0 { size.width = 1 }
+        if size.height == 0 { size.height = 1 }
+        let renderer = UIGraphicsImageRenderer(size: size)
+        return renderer.image { context in
+            context.cgContext.setFillColor(self)
+            context.cgContext.fill(CGRect(origin: .zero, size: size))
+        }
     }
     /// 颜色对应的16进制  ff9900
     /// 如果有透明值，则有八位，最后两位是透明值

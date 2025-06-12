@@ -33,50 +33,56 @@ public extension UIImage {
     func qreDraw(color: UIColor) -> UIImage? {
         let size = self.size
         let rect = CGRect(origin: .zero, size: size)
-        UIGraphicsBeginImageContextWithOptions(size, false, self.scale)
-        guard let context = UIGraphicsGetCurrentContext() else {
-            UIGraphicsEndImageContext()
-            return nil
+        let renderer = UIGraphicsImageRenderer(size: size, format: .default())
+        return renderer.image { [weak self] context in
+            color.setFill()
+            context.fill(rect)
+            self?.draw(in: rect, blendMode: .destinationIn, alpha: 1.0)
         }
-        context.translateBy(x: 0, y: size.height)
-        context.scaleBy(x: 1.0, y: -1.0)
-        context.setBlendMode(.normal)
-        context.clip(to: rect, mask: self.cgImage!)
-        color.setFill()
-        context.fill(rect)
-        let newImage = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-        return newImage
     }
     /// 将图片（png）重新绘制为渐变色， star、end的x、y范围只能为0-1
     func qreDrawWithGradient(colors: [UIColor], star: CGPoint, end: CGPoint) -> UIImage? {
-        // 获取图片尺寸
         let size = self.size
-        let rect = CGRect(origin: .zero, size: size)
-        UIGraphicsBeginImageContextWithOptions(size, false, self.scale)
-        guard let context = UIGraphicsGetCurrentContext() else {
-            UIGraphicsEndImageContext()
-            return nil
+        let renderer = UIGraphicsImageRenderer(size: size, format: .default())
+        return renderer.image { [weak self] ctx in
+            let colorSpace = CGColorSpaceCreateDeviceRGB()
+            let cgColors = colors.map { $0.cgColor } as CFArray
+            guard let gradient = CGGradient(colorsSpace: colorSpace,
+                                            colors: cgColors,
+                                            locations: nil) else { return }
+            let startPoint = CGPoint(x: size.width * star.x, y: size.height * star.y)
+            let endPoint = CGPoint(x: size.width * end.x, y: size.height * end.y)
+            ctx.cgContext.drawLinearGradient(gradient,
+                                             start: startPoint,
+                                             end: endPoint,
+                                             options: [])
+            self?.draw(in: CGRect(origin: .zero, size: size), blendMode: .destinationIn, alpha: 1.0)
         }
-        context.translateBy(x: 0, y: size.height)
-        context.scaleBy(x: 1.0, y: -1.0)
-        let colorSpace = CGColorSpaceCreateDeviceRGB()
-        let cgColors = colors.map { $0.cgColor } as CFArray
-        
-        guard let gradient = CGGradient(colorsSpace: colorSpace, colors: cgColors, locations: nil) else {
-            UIGraphicsEndImageContext()
-            return nil
-        }
-        let startPoint = CGPoint.init(x: rect.width * star.x, y: rect.height * star.y)
-        let endPoint = CGPoint.init(x: rect.width * end.x, y: rect.height * end.y)
-        context.clip(to: rect, mask: self.cgImage!)
-        context.drawLinearGradient(gradient, start: startPoint, end: endPoint, options: [])
-        let newImage = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-        return newImage
     }
 }
 public extension UIImage {
+    /// 旋转（方向）
+    func qrotatedBy(orientation: UIImage.Orientation) -> UIImage? {
+        guard let cgImage = self.cgImage else { return self }
+        return UIImage(cgImage: cgImage, scale: self.scale, orientation: orientation)
+    }
+    /// 旋转(角度)
+    func qrotatedBy(degrees: CGFloat) -> UIImage? {
+        let size = self.size
+        let radians = degrees * .pi / 180
+        var rotatedSize = CGRect(origin: .zero, size: size)
+            .applying(CGAffineTransform(rotationAngle: radians))
+            .integral.size
+        let format = UIGraphicsImageRendererFormat()
+        format.scale = self.scale
+        let renderer = UIGraphicsImageRenderer(size: rotatedSize, format: format)
+        return renderer.image { [weak self] ctx in
+            let context = ctx.cgContext
+            context.translateBy(x: rotatedSize.width/2, y: rotatedSize.height/2)
+            context.rotate(by: radians)
+            self?.draw(in: CGRect(x: -size.width/2, y: -size.height/2, width: size.width, height: size.height))
+        }
+    }
     /// 修正图片方向
     var qfixOrientation: UIImage {
         if self.imageOrientation == .up {
@@ -130,11 +136,12 @@ public extension UIImage {
     func qscaleTo(width: CGFloat) -> UIImage {
         guard width > 0 else { return self }
         let size = self.size.qscaleto(width: width)
-        UIGraphicsBeginImageContext(size)
-        self.draw(in: CGRect.init(x: 0, y: 0, width: size.width, height: size.height))
-        let res = UIGraphicsGetImageFromCurrentImageContext() ?? self
-        UIGraphicsEndImageContext()
-        return res
+        let format = UIGraphicsImageRendererFormat()
+        format.scale = self.scale  // 保持原图缩放比例
+        let renderer = UIGraphicsImageRenderer(size: size, format: format)
+        return renderer.image { [weak self] _ in
+            self?.draw(in: CGRect(origin: .zero, size: size))
+        }
     }
     /// 转换为jpeg data
     func qtoJpegData(compressionQuality: CGFloat) -> Data? {
@@ -148,13 +155,34 @@ public extension UIImage {
     /// 转换为JPEG data，单位byte， 1kb = 1024byte
     /// - Parameter maxLength: 最大长度
     func qtoJpegData(maxLength: CGFloat) -> Data? {
-        guard var data = self.qtoJpegData(compressionQuality: 1) else { return nil }
-        var rate = CGFloat(data.count) / maxLength
-        while CGFloat(data.count) > maxLength {
-            data = self.qtoJpegData(compressionQuality: 1/rate) ?? .init()
-            rate += 0.1
+        return self.qtoJepgData(maxBytes: Int(maxLength), maxIterations: 10)
+    }
+    /// 转换为最接近maxBytes的data, 单位byte， 1kb = 1024byte
+    func qtoJepgData(maxBytes: Int, maxIterations: Int = 10) -> Data? {
+        guard maxBytes > 0 else { return nil }
+        if let maxQualityData = jpegData(compressionQuality: 1), maxQualityData.count <= maxBytes {
+            return maxQualityData
         }
-        return data
+        guard let minQualityData = jpegData(compressionQuality: 0.1) else { return nil }
+        if minQualityData.count > maxBytes {
+            return minQualityData
+        }
+        var (minQ, maxQ) = (CGFloat(0.1), CGFloat(0.95))
+        var bestData: Data? = minQualityData
+        autoreleasepool {
+            for _ in 0..<maxIterations {
+                let midQ = (minQ + maxQ) / 2
+                guard let data = jpegData(compressionQuality: midQ) else { continue }
+                if data.count <= maxBytes {
+                    bestData = data
+                    minQ = midQ
+                } else {
+                    maxQ = midQ
+                }
+                if (maxQ - minQ) < 0.01 { break }
+            }
+        }
+        return bestData
     }
     /// 转换成Jpeg image
     func qtoJpegImage() -> UIImage {

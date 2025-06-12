@@ -48,7 +48,7 @@ public enum QContentInsetADjustmentBehavior: Int {
 }
 
 class QuicklyObjectHelper: UIView {
-    open var tagObject: Any?
+    open var cacheData: [String: Any] = [:]
     open var deinitAction: (() -> Void)?
     weak var target: NSObject?
     var handle: ((_ sender: NSObject?, _ key: String, _ value: [NSKeyValueChangeKey : Any]?) -> Void)?
@@ -93,6 +93,7 @@ class QuicklyObjectHelper: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     deinit {
+        self.cacheData.removeAll()
         self.deinitAction?()
     }
 }
