@@ -16,6 +16,8 @@ open class QViewOptions {
     open var sliderHeight: CGFloat = 3 { didSet { self.layout?() }}
     /// 滑条圆角，< 0 为半圆角
     open var sliderCornerRadius: CGFloat = -1 { didSet { self.layout?() }}
+    /// 手指区边距，横向时取左右，竖向取上下
+    open var thumbEdges: UIEdgeInsets = .zero { didSet { self.layout?() }}
     /// 刷新
     var layout: (() -> Void)?
     /// 刷新

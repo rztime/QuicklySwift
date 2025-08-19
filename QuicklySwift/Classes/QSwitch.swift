@@ -63,13 +63,15 @@ open class QSwitch: UIView {
         let thumbViewSize = self.thumbView.frame.size
         switch direction {
         case .horizontal:
-            point.x = (self.frame.size.width - thumbViewSize.width) * (isOn ? 1 : 0)
+            let margin = isOn ? -self.options.thumbEdges.right : self.options.thumbEdges.left
+            point.x = (self.frame.size.width - thumbViewSize.width) * (isOn ? 1 : 0) + margin
             point.y = self.thumbView.frame.origin.y
             if isOn == false { minsize.width = 0 }
             else if isOn == true { minsize.width = self.frame.size.width }
         case .vertical:
             point.x = self.thumbView.frame.origin.x
-            point.y = (self.frame.size.height - thumbViewSize.height) * (isOn ? 1 : 0)
+            let margin = isOn ? -self.options.thumbEdges.bottom : self.options.thumbEdges.top
+            point.y = (self.frame.size.height - thumbViewSize.height) * (isOn ? 1 : 0) + margin
             if isOn == false { minsize.height = 0 }
             else if isOn == true { minsize.height = self.frame.size.height }
         @unknown default: return;

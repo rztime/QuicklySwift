@@ -313,7 +313,7 @@ public extension QTextViewHelper {
                 self?.placeHolderLabel?.snp.remakeConstraints({ make in
                     make.left.equalToSuperview().inset(textView.contentInset.left + 4)
                     make.top.equalToSuperview().inset(rect.origin.y)
-                    let w = textView.frame.size.width - textView.contentInset.left - textView.contentInset.right
+                    let w = textView.frame.size.width - textView.contentInset.left - textView.contentInset.right - 4
                     make.width.equalTo(w)
                 })
             }
