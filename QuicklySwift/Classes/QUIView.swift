@@ -82,6 +82,30 @@ public extension UIView {
         }
         return self
     }
+    /// 向上查找父视图
+    @discardableResult
+    func qfindParentView<T: UIView>(ofType type: T.Type) -> T? {
+        var parent = self.superview
+        while parent != nil {
+            if let v = parent as? T {
+                return v
+            }
+            parent = parent?.superview
+        }
+        return nil
+    }
+    /// 向上查找父视图
+    @discardableResult
+    func qfindParentView(_ condition: ((_ view: UIView) -> Bool)?) -> UIView? {
+        var parent = self.superview
+        while parent != nil {
+            if let v = parent, let result = condition?(v), result {
+                return v
+            }
+            parent = parent?.superview
+        }
+        return nil
+    }
 }
 // MARK: - 属性设置方法
 public extension UIView {

@@ -66,6 +66,46 @@ public extension Array {
         }
         return temp
     }
+    /// 将数组按固定的格子进行重新排序(适应collectioViewFlowLayout，横向滚动)
+    /// - Parameters:
+    ///   - columns: 多少行
+    ///   - rows: 一行有几个
+    /// collectioViewFlowLayout 横向滚动时，columns:3,  rows:4 如数据源[0,1,2,3,4,5,6,7,8,9,10,11,12],显示后顺序为
+    /// [0, 3 ,6, 9,         12,15](第二页)
+    /// [1, 4, 7, 10,        13,]
+    /// [2, 5, 8, 11,        14,]
+    /// 排序后，数据源变成[0,4,8,1,5,9,2,6,10,3,7,11,12,p,p,13,p,p,14,p,p,15,p,p],即显示后为
+    /// [0,1,2, 3,          12,13,14,15](第二页)
+    /// [4,5,6,7,             p , p, p, p]
+    /// [8,9,10,11,          p, p, p, p]
+    ///  为了正确显示最后一页的数据，最后一页不足位以placeholder作为占位，UI可按需处理
+    func qreorderDataForGridLayout(columns: Int, rows: Int, placeholder: Element) -> [Element] {
+        let data = self
+        var result: [Element] = []
+        let itemsPerPage = columns * rows
+        let totalPages = (data.count + itemsPerPage - 1) / itemsPerPage
+        
+        for page in 0..<totalPages {
+            let pageStartIndex = page * itemsPerPage
+            let pageEndIndex = Swift.min(pageStartIndex + itemsPerPage, data.count)
+            
+            // 获取当前页的数据
+            let pageData = Array(data[pageStartIndex..<pageEndIndex])
+            
+            // 按列优先顺序重新排列当前页
+            for row in 0..<rows {
+                for column in 0..<columns {
+                    let originalIndex = column * rows + row
+                    if originalIndex < pageData.count {
+                        result.append(pageData[originalIndex])
+                    } else {
+                        result.append(placeholder)
+                    }
+                }
+            }
+        }
+        return result
+    }
 }
 
 /// 【动态规划】 如[1,2,3,4,5,6,7,8,9] 分成3份，每份总数尽量接近 ，最后为[[6,9] [7, 8],[1,2,3,4, 5] ]
