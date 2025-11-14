@@ -104,18 +104,18 @@ extension QWKWebViewHelper: WKNavigationDelegate {
     }
     public func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: any Error) {
         self.didFailProvisionalNavigationWithError?(webView, navigation, error)
-        webView._qestimatedProgressPublish?.accept(.none)
+        webView.qestimatedProgressPublish?.accept(.none)
     }
     public func webView(_ webView: WKWebView, didCommit navigation: WKNavigation!) {
         self.didCommit?(webView, navigation)
     }
     public func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         self.didFinish?(webView, navigation)
-        webView._qestimatedProgressPublish?.accept(.none)
+        webView.qestimatedProgressPublish?.accept(.none)
     }
     public func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: any Error) {
         self.didFailWithError?(webView, navigation, error)
-        webView._qestimatedProgressPublish?.accept(.none)
+        webView.qestimatedProgressPublish?.accept(.none)
     }
     public func webView(_ webView: WKWebView, didReceive challenge: URLAuthenticationChallenge, completionHandler: @escaping @MainActor (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
         if let d = self.didReceiveChallengeCompletionHandler {

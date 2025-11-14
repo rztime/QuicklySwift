@@ -80,6 +80,7 @@ public extension Array {
     /// [8,9,10,11,          p, p, p, p]
     ///  为了正确显示最后一页的数据，最后一页不足位以placeholder作为占位，UI可按需处理
     func qreorderDataForGridLayout(columns: Int, rows: Int, placeholder: Element) -> [Element] {
+        guard columns > 0, rows > 0 else { return [] }
         let data = self
         var result: [Element] = []
         let itemsPerPage = columns * rows

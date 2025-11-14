@@ -95,52 +95,54 @@ private var quicklyWKTitle: UInt8 = 2
 public extension WKWebView {
     /// 进度监听
     var qestimatedProgressPublish: QPublish<QWKWebViewLoadingProgress>? {
-        if let p = self._qestimatedProgressPublish {
-            return p
+        if let v = self.qvalue(for: "qestimatedProgressPublish") as? QPublish<QWKWebViewLoadingProgress> {
+            return v
         }
-        let p = QPublish<QWKWebViewLoadingProgress>.init(value: .none)
-        self._qestimatedProgressPublish = p
-        self.qaddObserver(key: "estimatedProgress", options: [.new, .old, .initial], context: nil) { [weak self] sender, key, value in
-            guard let self = self else { return }
-            let progress = CGFloat(self.estimatedProgress)
+        let v = QPublish<QWKWebViewLoadingProgress>.init(value: .none)
+        self.qsetValue(v, key: "qestimatedProgressPublish")
+        self.qaddObserver(key: "estimatedProgress", options: [.new, .old, .initial], context: nil) { [weak v] sender, key, value in
+            let progress = CGFloat(sender.estimatedProgress)
             if progress < 0.05 || progress >= 1 {
-                self._qestimatedProgressPublish?.accept(.none)
+                v?.accept(.none)
             } else {
-                self._qestimatedProgressPublish?.accept(.progress(progress: progress))
+                v?.accept(.progress(progress: progress))
             }
         }
-        return p
+        return v
     }
     /// 标题变化
     var qtitlePublish: QPublish<String?> {
-        set {
-            objc_setAssociatedObject(self, &quicklyWKTitle, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+        if let v = self.qvalue(for: "qtitlePublish") as? QPublish<String?> {
+            return v
         }
-        get {
-            if let t = objc_getAssociatedObject(self, &quicklyWKTitle) as? QPublish<String?> {
-                return t
-            }
-            let t = QPublish<String?>.init(value: nil)
-            self.qtitlePublish = t
-            self.qaddObserver(key: "title", options: [.new, .old], context: nil) { [weak t] sender, key, value in
-                t?.accept(sender.title)
-            }
-            return t
+        let v = QPublish<String?>.init(value: nil)
+        self.qsetValue(v, key: "qtitlePublish")
+        self.qaddObserver(key: "title", options: [.new, .old], context: nil) { [weak v] sender, key, value in
+            v?.accept(sender.title)
         }
+        return v
     }
-}
-extension WKWebView {
-    /// wkwebviewHelper内部使用
-    internal var _qestimatedProgressPublish: QPublish<QWKWebViewLoadingProgress>? {
-        set {
-            objc_setAssociatedObject(self, &quicklyWKProgress, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+    var qcanGoBack: QPublish<Bool>? {
+        if let v = self.qvalue(for: "q_cangoback") as? QPublish<Bool> {
+            return v
         }
-        get {
-            if let p = objc_getAssociatedObject(self, &quicklyWKProgress) as? QPublish<QWKWebViewLoadingProgress> {
-                return p
-            }
-            return nil
+        let v = QPublish<Bool>.init(value: false)
+        self.qsetValue(v, key: "q_cangoback")
+        self.qaddObserver(key: #keyPath(WKWebView.canGoBack), options: [.new, .old], context: nil) { [weak v] sender, key, value in
+            v?.accept(sender.canGoBack)
         }
+        return v
+    }
+    var qcanGoForward: QPublish<Bool>? {
+        if let v = self.qvalue(for: "q_canGoForward") as? QPublish<Bool> {
+            return v
+        }
+        let v = QPublish<Bool>.init(value: false)
+        self.qsetValue(v, key: "q_canGoForward")
+        self.qaddObserver(key: #keyPath(WKWebView.canGoForward), options: [.new, .old], context: nil) { [weak v] sender, key, value in
+            v?.accept(sender.canGoForward)
+        }
+        return v
     }
 }
 // MARK: WKNavigationDelegate

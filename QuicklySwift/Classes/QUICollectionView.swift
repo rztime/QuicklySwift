@@ -234,4 +234,122 @@ public extension UICollectionView {
         return self
     }
 }
- 
+
+public extension UICollectionView {
+    class QAutoRollCycle {
+        public var timeInterval: TimeInterval = 0
+        public var page: Int = 0
+        public var timerObs = NSObject()
+        public var currentPagePublish: QPublish<Int> = .init(value: 0)
+        
+        public var timer: Timer?
+        public var currentPage: Int = 0 {
+            didSet {
+                let p = currentPage % page
+                if p != self.currentPagePublish.value {
+                    currentPagePublish.accept(p)
+                }
+            }
+        }
+        public init() { }
+    }
+    var qauto_roll_target: QAutoRollCycle? {
+        get {
+            if let obj = self.qvalue(for: "qauto_roll_target") as? QAutoRollCycle {
+                return obj
+            }
+            let obj = QAutoRollCycle.init()
+            self.qsetValue(obj, key: "qauto_roll_target")
+            return obj
+        }
+        set {
+            self.qsetValue(newValue, key: "qauto_roll_target")
+        }
+    }
+    /// 无限循环滚动，timer = 0 时，停止滚动，
+    /// page为原始滚动页数，
+    /// 数据源请至少复制3次，无限循环一直在2里
+    func qautoRollCycle(timer: TimeInterval, page: Int) {
+        self.stopAutoScroll()
+        if timer <= 0 {
+            self.qdidEndDragging(nil)
+                .qdidEndDecelerating(nil)
+                .qdidEndScrollingAnimation(nil)
+                .qshowToWindow(nil)
+            return
+        }
+        let target = self.qauto_roll_target
+        target?.timeInterval = timer
+        target?.page = page
+        target?.timerObs = .init()
+        self
+            .qdidEndDragging { [weak self] _, decelerate in
+                if !decelerate {
+                    self?.starAutoScroll()
+                }
+            }
+            .qdidEndDecelerating { [weak self] _ in
+                self?.starAutoScroll()
+                self?.resetContentOffsetIfNeeded()
+            }
+            .qdidEndScrollingAnimation { [weak self] _ in
+                self?.resetContentOffsetIfNeeded()
+            }
+            .qshowToWindow { [weak self] _, show in
+                if show {
+                    self?.qauto_roll_target?.timer?.qresume()
+                    self?.resetContentOffsetIfNeeded()
+                } else {
+                    self?.qauto_roll_target?.timer?.qpause()
+                }
+            }
+        DispatchQueue.main.async(execute: { [weak self] in
+            self?.starAutoScroll()
+        })
+    }
+    func starAutoScroll() {
+        stopAutoScroll()
+        guard let target = self.qauto_roll_target else { return }
+        target.timer = Timer.qtimer(interval: target.timeInterval, target: target.timerObs, repeats: true, mode: .common) { [weak self] _ in
+            self?.scrollToNextPage()
+        }
+        resetContentOffsetIfNeeded()
+    }
+    func stopAutoScroll() {
+        self.qauto_roll_target?.timerObs = .init()
+    }
+    func scrollToNextPage() {
+        guard let target = self.qauto_roll_target else { return }
+        resetContentOffsetIfNeeded()
+        let nextIndex = target.currentPage + 1
+        let x = CGFloat(nextIndex) * self.frame.size.width
+        self.scrollRectToVisible(.init(x: x, y: 0, width: self.frame.size.width, height: self.frame.size.height), animated: true)
+        target.currentPage = nextIndex
+    }
+    // 处理无限循环的关键逻辑
+    func resetContentOffsetIfNeeded() {
+        let w = self.frame.size.width
+        guard w > 0, let target = self.qauto_roll_target else { return }
+
+        let offsetX = self.contentOffset.x
+        var page = Int(offsetX / w)
+        if Int(offsetX) % Int(w) != 0 {
+            page = page + 1
+        }
+        if page <= target.page - 1 {
+            page += target.page
+        } else if page >= target.page * 2 + 1 {
+            page -= target.page
+        }
+        let x = CGFloat(page) * w
+        if Int(x) != Int(offsetX) {
+            self.scrollRectToVisible(.init(x: x, y: 0, width: w, height: self.frame.size.height), animated: false)
+        }
+        // 更新当前页码
+        let newx =  self.contentOffset.x
+        let index = Int(newx / w)
+        if target.currentPage != index {
+            target.currentPage = index
+        }
+    }
+}
