@@ -13,7 +13,7 @@ import AVFoundation
 class IndexViewController: UIViewController {
     let tableView = UITableView.init(frame: .zero, style: .plain)
     
-    let source:[(String, AnyClass)] = [
+    lazy var source:[(String, AnyClass)] = [
         ("飘灰demo", GrayfloatIndexViewController.self),
         ("布局", LayoutIndexViewController.self),
         ("基础控件的方法", BaseViewDemoViewController.self),
@@ -23,7 +23,6 @@ class IndexViewController: UIViewController {
         ("动画测试", AnimateDemoViewController.self),
         ("LED", LedDemoViewController.self),
         ("push pop 转场", TransitionOneViewController.self),
-        ("avplayer", AVPlayerViewController.self),
         ("渐变", GradientLayerViewController.self),
         ("dispath", DispatchViewController.self),
         ("Qplayer", QPlayerTestViewController.self),
@@ -34,6 +33,7 @@ class IndexViewController: UIViewController {
         ("弹窗", QAlertTestViewController.self),
         ("webview", WebViewController.self),
         ("PHAsset", AssetViewController.self),
+        ("嵌套webview", TableWebViewController.self)
     ]
     override func viewDidLoad() {
         super.viewDidLoad()

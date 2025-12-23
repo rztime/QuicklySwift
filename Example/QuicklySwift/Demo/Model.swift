@@ -49,4 +49,6 @@ struct Model {
     let isfollow = [true, false][Int.random(in: 0..<2)]
     
     let flag = ["", "热门", "推荐", "已关注的话题", "1  2  3"][Int.random(in: 0..<5)]
+    
+    let color = UIColor.qrandom
 }

@@ -16,17 +16,37 @@ class WebViewController: UIViewController {
     var webView = WKWebView.init()
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        let back = UILabel().qtext("后退").qtap { [weak self] view in
+            if let self = self, self.webView.canGoBack {
+                self.webView.goBack()
+            }
+        }
+        let right = UILabel().qtext("前进").qtap {  [weak self] view in
+            if let self = self, self.webView.canGoForward {
+                self.webView.goForward()
+            }
+        }
+        
+        let btn = UILabel().qtext("刷新").qtap { [weak self] _ in
+            self?.webView.reload()
+        }
+        self.navigationItem.rightBarButtonItems = [.init(customView: btn),
+                                                   .init(customView: right),
+                                                   .init(customView: back)]
+        self.view.backgroundColor = .red
         self.view.qbody([
             webView.qmakeConstraints({ make in
                 make.edges.equalToSuperview()
             }),
             progressLabel.qmakeConstraints({ make in
-                make.center.equalToSuperview()
-            })
+                make.bottom.right.equalToSuperview().inset(qbottomSafeHeight)
+            }),
         ])
         webView.configuration.allowsInlineMediaPlayback = true
         webView.configuration.mediaTypesRequiringUserActionForPlayback = []
         webView
+            
         .qdecidePolicyForNavigationActionDecisionHandler({ webView, navAction, completionHandler in
                 completionHandler(.allow)
             })
@@ -60,9 +80,19 @@ class WebViewController: UIViewController {
             // 加桥
             .qaddJSMessage("nativeBridge")
             // 加桥后，收到消息的回调
-            .qdidReceiveJSMessage { controller, message in
+            .qdidReceiveJSMessage { [weak self] controller, message in
                 if message.name == "nativeBridge" {
-                    print("js: \(message.body)")
+//                    print("js: \(message.body)")
+//                    DispatchQueue.main.asyncAfter(deadline: .now() + 3, execute: {
+                        let jsCode = "receiveAudio" + "('{\"token\":\"12345\"}')"
+                        self?.webView.evaluateJavaScript(jsCode) { (result, error) in
+                            if let error = error {
+                                print("JavaScript执行错误: \(error)")
+                            }
+                        }
+//                    })
+                    
+                    
                 }
             }
             .qwebViewDidClose({ webView in
@@ -106,12 +136,23 @@ class WebViewController: UIViewController {
                 self?.progressLabel.text = "加载中\(progress)"
             }
         }, disposebag: self.obj)
+        var files = ["1", "2", "3", "4"]
+        let js = "callback" + "(\(files))"
         /// 标题监听
         webView.qtitlePublish.subscribe({ [weak self] value in
             self?.title = value
         }, disposebag: self.obj)
-        webView.loadHTMLString(JSHtml, baseURL: "https://www.baidu.com".qtoURL)
-//        webView.qloadURL("http://www.baidu.com".qtoURL)
+//        webView.loadHTMLString(JSHtml, baseURL: "https://www.baidu.com".qtoURL)
+        webView.qcanGoBack?.subscribe({ value in
+            print("---- can go back: \(value)")
+            back.isEnabled = value
+            back.alpha = value ? 1 : 0.4
+        }, disposebag: self.obj)
+        webView.qcanGoForward?.subscribe({ value in
+            right.isEnabled = value
+            right.alpha = value ? 1 : 0.4
+        }, disposebag: self.obj)
+        webView.qloadURL("https://www.baidu.com".qtoURL)
     }
 }
 let JSHtml = """
@@ -144,6 +185,9 @@ let JSHtml = """
         function sendMessage() {
             // 发送消息给原生代码
             window.webkit.messageHandlers.nativeBridge.postMessage("Hello from JavaScript!");
+        }
+        function receiveAudio(url) {
+            alert(url);
         }
         function alertAction() {
             alert("alert action");

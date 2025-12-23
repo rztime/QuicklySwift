@@ -265,7 +265,7 @@ open class QPlayer {
     }
     /// 设置进度0-1.0
     open func seek(progress: Float, complete: ((Bool) -> Void)?) {
-        guard let d = self.getTotalTime() else {
+        guard let d = self.getTotalTime(), d.seconds > 0 else {
             complete?(false)
             return
         }
@@ -275,7 +275,7 @@ open class QPlayer {
     }
     /// seek  complete: 是否成功
     open func seek(time: CMTime?, complete: ((Bool) -> Void)?) {
-        guard self.player?.currentItem?.status == .readyToPlay, var time = time, let d = self.getTotalTime() else {
+        guard self.player?.currentItem?.status == .readyToPlay, var time = time, let d = self.getTotalTime(), d.seconds > 0 else {
             complete?(false)
             return
         }
@@ -305,7 +305,7 @@ open class QPlayer {
     }
     /// 是否播放完成, （< 0.02 结束时有可能最后一帧未播）
     open func playDidEnd() -> Bool {
-        if let c = self.getCurrentTime(), let d = self.getTotalTime(), d.seconds - c.seconds < 0.02 {
+        if let c = self.getCurrentTime(), c.seconds > 0, let d = self.getTotalTime(), d.seconds > 0, d.seconds - c.seconds < 0.02 {
             return true
         }
         return false
