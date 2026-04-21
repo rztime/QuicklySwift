@@ -98,6 +98,17 @@ public extension QuicklyNumberProtoal where Self: Any {
         }
         return String(format: "%02d:%02d", min, s)
     }
+    /// 转换为中文，如1001转为一千零一
+    var qcnNumber: String {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .spellOut
+        formatter.locale = Locale(identifier: "zh_CN")
+        let number = NSDecimalNumber.init(string: "\(self)")
+        if let result = formatter.string(from: number) {
+            return result.replacingOccurrences(of: "〇", with: "零")
+        }
+        return "\(self)"
+    }
 }
 
 extension NSNumber: QuicklyNumberProtoal {}

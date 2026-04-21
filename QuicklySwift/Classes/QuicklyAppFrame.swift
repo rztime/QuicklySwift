@@ -32,24 +32,26 @@ public struct qAppFrame {
         vc.hidesBottomBarWhenPushed = true
         self.navigationController?.pushViewController(vc, animated: animated)
         /// 当加载显示出来之后，解除标记
-        vc.qdidAppear(1) {
+        DispatchQueue.main.async(execute: {
             ispushinganimate = false
-        }
+        })
     }
     /// present跳转vc
     public static func present(_ vc: UIViewController, animated: Bool, completion: (() -> Void)?) {
         vc.hidesBottomBarWhenPushed = true
         UIViewController.qtopViewController()?.qcanPresentViewController()?.present(vc, animated: animated, completion: completion)
     }
-    
-    public static func popViewController(animated: Bool) {
-        self.navigationController?.popViewController(animated: animated)
+    @discardableResult
+    public static func popViewController(animated: Bool) -> UIViewController? {
+        return self.navigationController?.popViewController(animated: animated)
     }
-    public static func popToViewController(_ viewController: UIViewController, animated: Bool) {
-        self.navigationController?.popToViewController(viewController, animated: animated)
+    @discardableResult
+    public static func popToViewController(_ viewController: UIViewController, animated: Bool) -> [UIViewController]? {
+        return self.navigationController?.popToViewController(viewController, animated: animated)
     }
-    public static func popToRootViewController(animated: Bool) {
-        self.navigationController?.popToRootViewController(animated: animated)
+    @discardableResult
+    public static func popToRootViewController(animated: Bool) -> [UIViewController]? {
+        return self.navigationController?.popToRootViewController(animated: animated)
     }
 
     /// 从当前栈里移除viewcontroller

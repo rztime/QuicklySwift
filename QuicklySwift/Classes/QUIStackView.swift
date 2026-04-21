@@ -143,3 +143,31 @@ open class QStackView: UIStackView {
         view.removeFromSuperview()
     }
 }
+/// 用于stackView里的弹簧View
+open class QSpacrView: UIView {
+    open class func qinit(target: UIView?) -> Self {
+        return self.qinit(width: nil, height: nil, target: target)
+    }
+    /// 生成一个用于stackView里的弹簧, target: 弹簧将根据target的显示隐藏而改变
+    open class func qinit(width: CGFloat?, height: CGFloat?, target: UIView?) -> Self {
+        let view = Self.init()
+        view.snp.makeConstraints({ make in
+            if let width = width {
+                make.width.equalTo(width)
+            }
+            if let height = height {
+                make.height.equalTo(height)
+            }
+        })
+        target?.qisHiddenChanged { [weak view] v in
+            view?.isHidden = v.isHidden
+        }
+        return view
+    }
+    open class func qwidth(_ width: CGFloat?, target: UIView?) -> Self {
+        return Self.qinit(width: width, height: nil, target: target)
+    }
+    open class func qheight(_ height: CGFloat?, target: UIView?) -> Self {
+        return Self.qinit(width: nil, height: height, target: target)
+    }
+}

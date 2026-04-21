@@ -23,12 +23,33 @@ public extension PHAsset {
     }
     /// 是否是iCloud资源，此方法会卡线程，谨慎使用
     var qisIcloud: Bool {
+        if let v = self.qvalue(for: "qisIcloud_value") as? Bool {
+            return v
+        }
+        var result = false
         let resource = PHAssetResource.assetResources(for: self)
         if resource.count >= 1 {
             let islocal = (resource.first?.value(forKey: "locallyAvailable") as? Bool) ?? false
-            return !islocal
+            result = !islocal
         }
-        return false
+        self.qsetValue(result, key: "qisIcloud_value")
+        return result
+    }
+    var qisIcloudPublish: QPublish<Bool?> {
+        if let v = self.qvalue(for: "qisIcloudPublish_value") as? QPublish<Bool?> {
+            return v
+        }
+        let p = QPublish<Bool?>(value: nil)
+        self.qsetValue(p, key: "qisIcloudPublish_value")
+        DispatchQueue.global().async { [weak self] in
+            guard let self = self else { return }
+            let isIcloud = self.qisIcloud
+            DispatchQueue.main.async(execute: { [weak self] in
+                guard let self = self else { return }
+                p.accept(isIcloud)
+            })
+        }
+        return p
     }
     /// 文件大小size
     var qbyteSize: Double {

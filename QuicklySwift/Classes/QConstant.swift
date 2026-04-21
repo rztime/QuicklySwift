@@ -63,20 +63,17 @@ public extension CGSize {
 
 /// app 的 keywindow
 public var qappKeyWindow: UIWindow {
-    if let window = UIApplication.shared.delegate?.window, let window = window {
-        return window
-    }
     if #available(iOS 13.0, *) {
-        let arraySet: Set = UIApplication.shared.connectedScenes
-        let windowScene: UIWindowScene? = arraySet.first(where: { sce in
-            if let _ = sce as? UIWindowScene {
-                return true
-            }
-            return false
-        }) as? UIWindowScene
-        if let window = windowScene?.windows.first(where: {$0.isKeyWindow}) {
+        if let window = UIApplication.shared.connectedScenes
+            .filter({$0.activationState == .foregroundActive})
+            .compactMap({$0 as? UIWindowScene})
+            .first?.windows
+            .first(where: {$0.isKeyWindow}) {
             return window
         }
+    }
+    if let window = UIApplication.shared.delegate?.window, let window = window {
+        return window
     }
     if let window = UIApplication.shared.windows.first(where: {$0.isKeyWindow}) {
         return window

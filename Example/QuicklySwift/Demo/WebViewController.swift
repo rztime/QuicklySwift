@@ -136,8 +136,6 @@ class WebViewController: UIViewController {
                 self?.progressLabel.text = "加载中\(progress)"
             }
         }, disposebag: self.obj)
-        var files = ["1", "2", "3", "4"]
-        let js = "callback" + "(\(files))"
         /// 标题监听
         webView.qtitlePublish.subscribe({ [weak self] value in
             self?.title = value
@@ -152,7 +150,8 @@ class WebViewController: UIViewController {
             right.isEnabled = value
             right.alpha = value ? 1 : 0.4
         }, disposebag: self.obj)
-        webView.qloadURL("https://www.baidu.com".qtoURL)
+//        webView.qloadURL("https://www.baidu.com".qtoURL)
+        webView.qloadURL("/Users/rztime/Desktop/test/a.html".qtoURL)
     }
 }
 let JSHtml = """

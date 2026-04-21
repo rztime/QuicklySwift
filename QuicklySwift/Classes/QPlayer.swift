@@ -16,17 +16,18 @@ open class QPlayer {
     open var playerLayer: AVPlayerLayer?
     open var place: UIImageView?
     /// 占位图，当视频可以播时，会立即隐藏
-    open lazy var placeholderImageView: UIImageView = .init().qthen {
+    open lazy var placeholderImageView: UIImageView = .init().qthen { [weak self] in
         $0.qcornerRadius(0, true).qcontentMode(.scaleAspectFit)
-        self.playerView.qbody([
+        self?.playerView.qbody([
             $0.qmakeConstraints({ make in
                 make.edges.equalToSuperview()
             })
         ])
-        self.place = $0
+        self?.place = $0
     }
     /// 如果不调用，则不会显示视频
-    open lazy var playerView: UIView = .init().qthen {
+    open lazy var playerView: UIView = .init().qthen { [weak self] in
+        guard let self = self else { return }
         $0.backgroundColor = .black
         let layer = AVPlayerLayer(player: self.player)
         layer.videoGravity = .resizeAspect

@@ -135,9 +135,17 @@ open class QSlider: UIView {
         self.lineBackgroundView.qcenter(self.bounds.qcenter)
         self.lineBackgroundView.qcornerRadius(self.options.sbc(direction: self.direction), true)
         self.maxView.frame = self.lineBackgroundView.bounds
-        self.minView.frame = self.lineBackgroundView.bounds
+        
+        var thumbViewCenter = self.thumbView.center
+        if self.direction == .horizontal {
+            self.minView.frame = .init(x: 0, y: 0, width: self.minView.frame.size.width, height: self.options.sliderHeight)
+            thumbViewCenter.y = (self.frame.size.height - self.options.thumbSize.height) / 2 + self.options.thumbSize.height / 2
+        } else {
+            self.minView.frame = .init(x: 0, y: 0, width: self.options.sliderHeight, height:  self.minView.frame.size.height)
+            thumbViewCenter.x = (self.frame.size.width - self.options.thumbSize.width) / 2 + self.options.thumbSize.width / 2
+        }
         self.thumbView.qsize(self.options.thumbSize)
-        self.thumbView.qcenter(self.bounds.qcenter)
+        self.thumbView.qcenter(thumbViewCenter)
         self.thumbView.qcornerRadius(self.options.tbc(direction: self.direction), true)
         self.setValue(self._value, animate: false)
     }

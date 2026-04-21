@@ -10,99 +10,69 @@ import UIKit
 import QuicklySwift
 
 class QSliderTestViewController: UIViewController {
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        self.view.backgroundColor = .brown
-        
-        let slider = UISlider.init()
-        self.view.qbody([
-            slider.qmakeConstraints({ make in
-                make.centerX.equalToSuperview()
-                make.top.equalToSuperview().inset(100)
-                make.width.equalTo(300)
-                make.height.equalTo(44)
-            })
-        ])
-        slider.minimumValueImage = UIImage(named: "zan_h")
-        slider.maximumValueImage = UIImage(named: "zan")
-        slider.minimumTrackTintColor = .red
-        slider.maximumTrackTintColor = .blue
- 
-        let s = QSlider.init(frame: .zero)
-        s.options.thumbSize = .init(width: 40, height: 40)
-        s.options.thumbCornerRadius = 3
-        s.options.sliderHeight = 5
-        s.thumbView.qimage(UIImage(named: "zan_h"))
-        
-        s.qaction(for: .valueChanged) { sender in
+    lazy var slider = UISlider.init().qthen { [weak self] in
+        $0.minimumValueImage = UIImage(named: "zan_h")
+        $0.maximumValueImage = UIImage(named: "zan")
+        $0.minimumTrackTintColor = .red
+        $0.maximumTrackTintColor = .blue
+        $0.qactionFor(.valueChanged) { [weak self] sender in
+            self?.s2.value = CGFloat(sender.value)
+        }
+    }
+    lazy var s = QSlider.init(frame: .zero).qthen {
+        $0.options.thumbSize = .init(width: 40, height: 40)
+        $0.options.thumbCornerRadius = 3
+        $0.options.sliderHeight = 5
+        $0.thumbView.qimage(UIImage(named: "zan_h"))
+        $0.qaction(for: .valueChanged) { sender in
             print("value changed: \(sender.value)")
         }.qaction(for: .valueChangedByThumb) { sender in
             print("value changed thumb: \(sender.value)")
         }.qaction(for: .thumbEnd) { sender in
             print("value changed thumb end: \(sender.value)")
         }
-
-        let s1 = QSlider.init(frame: .zero, direction: .vertical)
-//     
-//
-        let switchbtn = QSwitch.init(frame: .zero, direction: .horizontal)
-//        switchbtn.isOn = true
-        switchbtn.options.sliderHeight = 20
-        switchbtn.options.thumbEdges = .init(top: 0, left: 1, bottom: 0, right: 1)
-        switchbtn.options.thumbSize = .init(width: 18, height: 18)
-        switchbtn.minView.backgroundColor = .white
-        switchbtn.qactionForValueChanged { sender in
+    }
+    let s1 = QSlider.init(frame: .zero, direction: .vertical)
+    let s2 = QSlider.init(frame: .zero, direction: .horizontal).qthen {
+        $0.options.sliderHeight = 4
+        $0.options.thumbSize = .zero
+        $0.options.sliderCornerRadius = 2
+        $0.maxView.backgroundColor = .qhex("#E9F1FD")
+        $0.minView.backgroundColor = .qhex("#2B7BED")
+    }
+    lazy var switchbtn = QSwitch.init(frame: .zero, direction: .horizontal).qthen {
+        $0.options.sliderHeight = 20
+        $0.options.thumbEdges = .init(top: 0, left: 1, bottom: 0, right: 1)
+        $0.options.thumbSize = .init(width: 18, height: 18)
+        $0.minView.backgroundColor = .white
+        $0.qactionForValueChanged { sender in
             print("------switch \(sender.isOn)")
         }.qactionForValueWillChange { sender in
             return true
         }
-//        
-//        let switchbtn1 = QSwitch.init(frame: .zero, direction: .vertical)
-//  
-        let s2 = QSlider.init(frame: .zero, direction: .horizontal).qthen {
-            $0.options.sliderHeight = 4
-            $0.options.thumbSize = .zero
-            $0.options.sliderCornerRadius = 2
-            $0.maxView.backgroundColor = .qhex("#E9F1FD")
-            $0.minView.backgroundColor = .qhex("#2B7BED")
-        }
+    }
+    lazy var uiswitch = UISwitch().qthen {
+        $0.onTintColor = .yellow
+        $0.tintColor = .systemRed
+        $0.thumbTintColor = .blue
+        $0.subviews.forEach({$0.qtransform(scale: 100/63.0, 30/28.0);$0.qx(0).qy(0)})
+    }
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        self.view.backgroundColor = .brown
         self.view.qbody([
-            s.qmakeConstraints({ make in
-                make.top.equalTo(slider.snp.bottom).offset(50)
-                make.centerX.equalTo(slider)
-                make.height.equalTo(44)
-                make.width.equalTo(300)
-            }),
-            s1.qmakeConstraints({ make in
-                make.top.equalTo(s.snp.bottom).offset(50)
-                make.centerX.equalToSuperview()
-                make.width.equalTo(44)
-                make.height.equalTo(300)
-            }),
-            switchbtn.qmakeConstraints({ make in
-                make.top.equalTo(s1.snp.bottom).offset(20)
-                make.width.equalTo(40)
-                make.height.equalTo(20)
-                make.centerX.equalToSuperview()
-            }),
-//            switchbtn1.qmakeConstraints({ make in
-//                make.top.equalTo(switchbtn.snp.bottom).offset(20)
-//                make.width.equalTo(20)
-//                make.height.equalTo(40)
-//                make.centerX.equalToSuperview()
-//            }),
-            s2.qmakeConstraints({ make in
-                make.top.equalTo(slider.snp.bottom).offset(20)
-                make.width.equalTo(40)
-                make.height.equalTo(4)
-                make.centerX.equalToSuperview()
-            }),
+            [
+                slider.qmakeConstraints({$0.width.equalTo(300); $0.height.equalTo(44)}),
+                s.qmakeConstraints({$0.width.equalTo(300); $0.height.equalTo(44)}),
+                s1.qmakeConstraints({$0.width.equalTo(44); $0.height.equalTo(300)}),
+                switchbtn.qmakeConstraints({$0.width.equalTo(40); $0.height.equalTo(20)}),
+                s2.qmakeConstraints({$0.width.equalTo(40); $0.height.equalTo(4)}),
+                uiswitch.qmakeConstraints({$0.width.equalTo(100); $0.height.equalTo(30)}),
+            ].qjoined(aixs: .vertical, spacing: 20, align: .center, distribution: .equalSpacing)
+                .qmakeConstraints({ make in
+                    make.top.equalToSuperview().inset(qnavigationbarHeight + 20)
+                    make.left.right.equalToSuperview()
+                })
         ])
-        slider.qactionFor(.valueChanged) { sender in
-//            s?.value = CGFloat(sender.value)
-//            s1?.value = CGFloat(sender.value)
-            s2.value = CGFloat(sender.value)
-        }
     }
 }
