@@ -33,7 +33,7 @@ Pod::Spec.new do |s|
         auth_list=("NSCameraUsageDescription" "NSPhotoLibraryUsageDescription" "NSMicrophoneUsageDescription" "NSContactsUsageDescription" "NSLocationWhenInUseUsageDescription" "NSLocationAlwaysUsageDescription" "NSLocationAlwaysAndWhenInUseUsageDescription" "NSCalendarsUsageDescription" "NSRemindersUsageDescription" "NSAppleMusicUsageDescription" "NSSpeechRecognitionUsageDescription" "NSMotionUsageDescription" "NSSiriUsageDescription" "NSUserTrackingUsageDescription")
         # 收集所有相关的 Info.plist
         # 排除 Pods, .git, Tests 目录
-        ALL_PLISTS=$(find "$ROOT_PATH" -name "Info.plist" -not -path "*/Pods/*" -not -path "*/.git/*" -not -path "*/Tests/*")
+        ALL_PLISTS=$(find "$ROOT_PATH" -name "Info.plist" -not -path "*/Pods/*" -not -path "*/.git/*" -not -path "*/Tests/*" -not -path "*.framework/*")
         
         if [ -z "$ALL_PLISTS" ]; then
             echo "QuicklySwift: 未发现任何 Info.plist，跳过"

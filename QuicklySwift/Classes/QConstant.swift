@@ -82,7 +82,6 @@ public var qappKeyWindow: UIWindow {
 }
 
 /// app 上下左右安全距离，没有刘海屏，则顶部为状态栏高度，其余为0
-@MainActor
 public var qappSafeAreaInsets: UIEdgeInsets {
     if #available(iOS 11.0, *) {
         return qappKeyWindow.safeAreaInsets
@@ -91,7 +90,6 @@ public var qappSafeAreaInsets: UIEdgeInsets {
     }
 }
 /// 是否是刘海屏
-@MainActor
 public var qisiPhoneNotch: Bool {
     if #available(iOS 11.0, *) {
         return qappKeyWindow.safeAreaInsets.bottom > 0
@@ -100,13 +98,11 @@ public var qisiPhoneNotch: Bool {
     }
 }
 /// 底部安全区域 刘海屏是34， 也有21
-@MainActor
 public var qbottomSafeHeight: CGFloat {
     return qappSafeAreaInsets.bottom
 }
 /// 状态栏高度
 /// iOS13之后，状态栏高度不固定
-@MainActor
 public var qstatusbarHeight: CGFloat {
     if #available(iOS 13.0, *),
        let height = qappKeyWindow.windowScene?.statusBarManager?.statusBarFrame.size.height {
@@ -115,12 +111,10 @@ public var qstatusbarHeight: CGFloat {
     return UIApplication.shared.statusBarFrame.size.height
 }
 /// 导航栏高度 44 + 状态栏高度
-@MainActor
 public var qnavigationbarHeight: CGFloat {
     return qstatusbarHeight + 44
 }
 /// 设备是否横屏
-@MainActor
 public var qisdeviceLandscape: Bool {
     var type: UIInterfaceOrientation = UIApplication.shared.statusBarOrientation
     if #available(iOS 13.0, *), let t = qappKeyWindow.windowScene?.interfaceOrientation {
