@@ -11,6 +11,7 @@ import AVFoundation
  AVPlayer的封装
  可以播放视频、音频，需要显示视频内容时，将playerView加在view上即可
  **/
+@MainActor
 open class QPlayer {
     open var player: AVPlayer?
     open var playerLayer: AVPlayerLayer?
@@ -286,8 +287,10 @@ open class QPlayer {
         let tempComplete = complete
         self.isSeeking.accept(true)
         self.player?.currentItem?.seek(to: time, toleranceBefore: .zero, toleranceAfter: .zero, completionHandler: { [weak self] res in
-            self?.isSeeking.accept(false)
-            tempComplete?(res)
+            DispatchQueue.main.async {
+                self?.isSeeking.accept(false)
+                tempComplete?(res)
+            }
         })
     }
     /// 获取当前播放时长

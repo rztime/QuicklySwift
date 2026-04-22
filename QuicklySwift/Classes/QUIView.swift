@@ -106,6 +106,32 @@ public extension UIView {
         }
         return nil
     }
+    /// 查找子视图
+    func qfindSubview<T: UIView>(ofType type: T.Type) -> T? {
+        var queue = [UIView]()
+        queue.append(contentsOf: subviews)
+        while !queue.isEmpty {
+            let currentView = queue.removeFirst()
+            if let matched = currentView as? T {
+                return matched
+            }
+            queue.append(contentsOf: currentView.subviews)
+        }
+        return nil
+    }
+    /// 查找子视图
+    func qfindSubview(_ condition: ((_ view: UIView) -> Bool)?) -> UIView? {
+        var queue = [UIView]()
+        queue.append(contentsOf: subviews)
+        while !queue.isEmpty {
+            let currentView = queue.removeFirst()
+            if let matched = condition?(currentView), matched {
+                return currentView
+            }
+            queue.append(contentsOf: currentView.subviews)
+        }
+        return nil
+    }
 }
 // MARK: - 属性设置方法
 public extension UIView {
@@ -211,6 +237,7 @@ public extension UIView {
         return self
     }
 }
+@MainActor
 public extension QuicklyProtocal where Self: UIView {
     /// view isHidden 改变的回调
     @discardableResult
@@ -347,6 +374,7 @@ public extension UIView {
         return self
     }
 }
+@MainActor
 public extension QuicklyProtocal where Self: UIView {
     /// UIView将要被点击的时候触发(点击子视图时，也会触发), 一个view只能设置一次，多次设置将以最新的覆盖之前的
     @discardableResult
@@ -485,7 +513,6 @@ public extension UIView {
         }
         return self
     }
-
     /// 移除轻扫手势
     @discardableResult
     func qremoveSwipe(numberof touches: Int, direction: UISwipeGestureRecognizer.Direction) -> Self {

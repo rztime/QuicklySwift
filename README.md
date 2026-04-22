@@ -2,7 +2,6 @@
 
 本代码只为提高 Swift UI 层的开发效率，使写代码更简洁、更易读、易维护
 
-[![CI Status](https://img.shields.io/travis/rztime/QuicklySwift.svg?style=flat)](https://travis-ci.org/rztime/QuicklySwift)
 [![Version](https://img.shields.io/cocoapods/v/QuicklySwift.svg?style=flat)](https://cocoapods.org/pods/QuicklySwift)
 [![License](https://img.shields.io/cocoapods/l/QuicklySwift.svg?style=flat)](https://cocoapods.org/pods/QuicklySwift)
 [![Platform](https://img.shields.io/cocoapods/p/QuicklySwift.svg?style=flat)](https://cocoapods.org/pods/QuicklySwift)
@@ -27,6 +26,15 @@ pod 'QuicklySwift'
 pod 'QuicklySwift', :git => 'https://github.com/rztime/QuicklySwift.git'
 ```
 
+#### Swift Package Manager
+
+- File > Add Package Dependency
+- Add `https://github.com/rztime/QuicklySwift.git`
+- Select "Up to Next Major" with "1.1.0"
+
+##### 注意：
+选用Swift Package导入时，QuicklyAuthorization里的方法将不可使用
+
 ## Author
 
 rztime, rztime@vip.qq.com, qq交流群：580839749
@@ -39,7 +47,7 @@ QuicklySwift is available under the MIT license. See the LICENSE file for more i
 
 | 相关 | 说明 |
 |:----|:----|
-|v1.1.0|对UIImage、PHAsset等的方法扩展和优化|
+|v1.1.0|对UIImage、PHAsset等的方法扩展和优化，添加了swift package manager|
 |v1.0.0|新增时间选择，弹窗自主关闭，WKWebView的q方法|
 |v0.9.0|优化（颜色hexString的错误获取、TabController超出5个时，获取顶层vc），tableView新增预估高度的缓存避免刷新时跳动，以及其他优化|
 |v0.8.0|优化以及新增功能QSlider, QSwitch, 可通过options来配置大小和圆角，可以直接设置相关view的颜色、图片来自定义|

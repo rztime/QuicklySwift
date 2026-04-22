@@ -56,7 +56,7 @@ public extension UIControl {
         return self
     }
 }
-
+@MainActor
 public extension QuicklyProtocal where Self: UIControl {
     /// control的事件回调
     @discardableResult

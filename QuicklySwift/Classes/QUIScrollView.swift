@@ -141,7 +141,7 @@ public extension UIScrollView {
         return self
     }
 }
-
+@MainActor
 public extension QuicklyProtocal where Self: UIScrollView {
     /// contentSize 改变之后的回调
     @discardableResult

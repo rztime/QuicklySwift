@@ -9,7 +9,8 @@ import UIKit
 import SnapKit
 class QuicklySwift { }
 
-private var viewConstraintMake: UInt8 = 1
+private nonisolated(unsafe) var viewConstraintMake: UInt8 = 1
+@MainActor
 public extension UIView {
     /// 用于添加自动布局
     var qconstraintMake: ((_ make: ConstraintMaker) -> Void)? {
@@ -21,7 +22,8 @@ public extension UIView {
         }
     }
 }
-private var qtextfieldhelperkey: UInt8 = 1
+private nonisolated(unsafe) var qtextfieldhelperkey: UInt8 = 1
+@MainActor
 public extension UITextField {
     var qtextFieldHelper: QTextFieldHelper {
         set {
@@ -38,7 +40,8 @@ public extension UITextField {
     }
 }
 
-private var qscrollviewhelperkey : UInt8 = 1
+private nonisolated(unsafe) var qscrollviewhelperkey : UInt8 = 1
+@MainActor
 public extension UIScrollView {
     var qhelper: QScrollViewHelper {
         set {

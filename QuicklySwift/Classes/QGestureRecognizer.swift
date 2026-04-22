@@ -6,7 +6,7 @@
 //
 
 import UIKit
-private var qgesturehandle: UInt8 = 1
+private nonisolated(unsafe) var qgesturehandle: UInt8 = 1
 public extension UIGestureRecognizer {
     @discardableResult
     func qhandle(_ gesture: ((_ gesture: UIGestureRecognizer) -> Void)?) -> Self {

@@ -13,7 +13,7 @@ public let qfloatgrayChangeName = Notification.Name("qfloatgrayChangeName")
 public let qfloatgrayzpositionChangeName = Notification.Name("qfloatgrayzpositionChangeName")
 public let qfloatgrayColorChangeName = Notification.Name("qfloatgrayColorChangeName")
 
-private var quicklyFloatgrayKey: UInt8 = 2
+private nonisolated(unsafe) var quicklyFloatgrayKey: UInt8 = 2
 
 /// 给UIView添加一个滤镜，用于飘灰
 /// 在tableView等设置frame区域，可以飘灰比如首屏，之后的正常显示
@@ -83,6 +83,7 @@ public extension UIView {
 }
 
 /// 飘灰管理
+@MainActor
 public class QGrayFloatManager {
     
     public static var shared: QGrayFloatManager = .init()

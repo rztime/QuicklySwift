@@ -285,6 +285,7 @@ public extension UIViewController {
 /// 4.如果有交互动画，则走UIPercentDrivenInteractiveTransition来通过上下文，以及手势实现动画
 ///
 /// 这里只实现了push pop 以及返回的手势动画处理，push的动画手势暂没有写
+@MainActor
 open class QuicklyViewControllerAnimation: UIViewController {
     /// 是否支持动画
     public var operationEnable: ((_ operation: QControllerTransitionOperation) -> Bool)?
@@ -357,7 +358,9 @@ open class QuicklyViewControllerAnimation: UIViewController {
         qAppFrame.navigationController?.delegate = nil
     }
     deinit {
-        qAppFrame.navigationController?.delegate = nil
+        DispatchQueue.main.async {
+            qAppFrame.navigationController?.delegate = nil
+        }
     }
     /// 交互式返回的设置
     open func setupPanPopInteractive() {

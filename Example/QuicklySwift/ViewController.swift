@@ -114,7 +114,7 @@ class ViewController: UIViewController {
             nav?.navigationBar.qgrayfloatRemove()
         }
         
-        let xxxxxxx = UIButton().qtitle("飘灰").qtitleColor(.brown)
+        let xxxxxxx = UIButton().qtitle("飘灰").qtitleColor(.brown).qframe(.init(x: 10, y: 200, width: 60, height: 20))
             .qdrag(.nearHorizontal(edge: .init(top: 100, left: 40, bottom: 40, right: 40)))
             .qtap { view in
                 let isgr = QGrayFloatManager.shared.isgrayActive

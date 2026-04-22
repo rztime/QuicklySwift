@@ -101,7 +101,7 @@ public extension QDispatch {
         self.helper?.taskItem(task)
     }
 }
-var syncindex = 0
+nonisolated(unsafe) var syncindex = 0
 class QDispatchHelper: NSObject {
     var id: String = ""
     var execute: QExecuteBlock?
@@ -110,7 +110,7 @@ class QDispatchHelper: NSObject {
     
     var taskList: [QDispatchTaskItem] = []
     
-    static let share: QDispatchHelper = .init()
+    static nonisolated(unsafe) let share: QDispatchHelper = .init()
     
     var finish: QExecuteBlock?
     

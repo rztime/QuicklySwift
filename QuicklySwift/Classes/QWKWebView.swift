@@ -89,8 +89,8 @@ public enum QWKWebViewLoadingProgress {
     case none  // 未加载 | 加载结束（失败|成功）
     case progress(progress: CGFloat)   // 0-1
 }
-private var quicklyWKProgress: UInt8 = 1
-private var quicklyWKTitle: UInt8 = 2
+private nonisolated(unsafe) var quicklyWKProgress: UInt8 = 1
+private nonisolated(unsafe) var quicklyWKTitle: UInt8 = 2
 /// 添加监听
 public extension WKWebView {
     /// 进度监听

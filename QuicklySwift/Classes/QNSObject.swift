@@ -36,7 +36,7 @@ public extension QuicklyProtocal where Self: NSObject {
         return self
     }
     /// 添加KVO
-    func qaddObserver(key: String, options: NSKeyValueObservingOptions, context: UnsafeMutableRawPointer?, handle: ((_ sender: Self, _ key: String, _ value: [NSKeyValueChangeKey : Any]?) -> Void)?) {
+    @MainActor func qaddObserver(key: String, options: NSKeyValueObservingOptions, context: UnsafeMutableRawPointer?, handle: ((_ sender: Self, _ key: String, _ value: [NSKeyValueChangeKey : Any]?) -> Void)?) {
         let v = QuicklyObjectHelper.init(frame: .zero)
         self.quicklyObj.addSubview(v)
         v.addObs(target: self, key: key, options: options, context: context) { [weak self] sender, key, value in
@@ -52,7 +52,7 @@ public extension QuicklyProtocal where Self: NSObject {
     }
 }
 
-private var quicklyobjnameaddres: UInt8 = 1
+private nonisolated(unsafe) var quicklyobjnameaddres: UInt8 = 1
 fileprivate extension NSObject {
     var quicklyObj: QuicklyObjectHelper {
         set {

@@ -119,7 +119,7 @@ public extension PHAsset {
     }
     /// 获取原视频（如果是iCloud会下载）
     @discardableResult
-    func qoriginVideo(progress: ((_ progress: Double) -> Void)?, complete: ((_ video: AVURLAsset?) -> Void)?) -> PHImageRequestID {
+    @MainActor func qoriginVideo(progress: ((_ progress: Double) -> Void)?, complete: ((_ video: AVURLAsset?) -> Void)?) -> PHImageRequestID {
         guard self.mediaType == .video else {
             progress?(1)
             complete?(nil)
@@ -138,7 +138,7 @@ public extension PHAsset {
         }
     }
     /// 导出视频到沙盒，并转换格式
-    func qconvertTo(_ type: AVFileType, progress: ((_ progress: Double) -> Void)?, complete: @escaping ((_ url: URL?, _ error: Error?) -> Void)) {
+    @MainActor func qconvertTo(_ type: AVFileType, progress: ((_ progress: Double) -> Void)?, complete: @escaping ((_ url: URL?, _ error: Error?) -> Void)) {
         guard self.mediaType == .video else {
             complete(nil, NSError(domain: "非视频文件", code: 0))
             return
@@ -197,13 +197,13 @@ public extension PHAsset {
 }
 public extension AVURLAsset {
     /// 导出视频到沙盒，并转换格式
-    func convertTo(_ type: AVFileType, progress: ((_ progress: Double) -> Void)?, complete: @escaping ((_ url: URL?, _ error: Error?) -> Void)) {
+    @MainActor func convertTo(_ type: AVFileType, progress: ((_ progress: Double) -> Void)?, complete: @escaping ((_ url: URL?, _ error: Error?) -> Void)) {
         let video = self
         guard let exportSession = AVAssetExportSession(asset: video, presetName: AVAssetExportPresetHighestQuality) else {
             complete(nil, NSError(domain: "导出视频失败", code: 0))
             return
         }
-        var session: AVAssetExportSession?
+        nonisolated(unsafe) var session: AVAssetExportSession?
         session = exportSession
         let tmpPath = APPLive.share.tmpPath
         let url = "\(tmpPath)/\(type.nameExtension)_\(getFile_index()).\(type.nameExtension)".qtoURL
@@ -247,7 +247,7 @@ public extension AVURLAsset {
         }
     }
 }
-
+@MainActor
 public class APPLive {
     public static var share = APPLive.init()
     public let target = NSObject()
@@ -263,7 +263,7 @@ public class APPLive {
     }
 }
 
-public var file_index: Int = 0
+public nonisolated(unsafe) var file_index: Int = 0
 public func getFile_index() -> Int {
     file_index += 1
     return file_index

@@ -7,7 +7,8 @@
 
 import UIKit
 import WebKit
-private var qwkwebviewhelper: UInt8 = 1
+private  nonisolated(unsafe) var qwkwebviewhelper: UInt8 = 1
+@MainActor
 public extension WKWebView {
     var qdelegateHelper: QWKWebViewHelper {
         set {
@@ -61,7 +62,7 @@ open class QWKWebViewHelper: NSObject {
     
     open var jsContent: [WKUserContentController] = []
     open weak var _webView: WKWebView?
-    public init(webView: WKWebView) {
+    @MainActor public init(webView: WKWebView) {
         super.init()
         _webView = webView
         webView.qdeinit { [weak self] in
@@ -271,7 +272,7 @@ extension QWKWebViewHelper: WKScriptMessageHandler {
     public func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
         self.userContentControllerDidReceiveMessage?(userContentController, message)
     }
-    public func qaddJSMessageWith(names: [String]) {
+    @MainActor public func qaddJSMessageWith(names: [String]) {
         guard !names.isEmpty, let c = self._webView?.configuration.userContentController else { return }
         if let _ = self.jsContent.first(where: {$0 == c}) {
             
@@ -282,7 +283,8 @@ extension QWKWebViewHelper: WKScriptMessageHandler {
         names.forEach({c.add(self, name: $0)})
     }
 }
-private var qwkuserContentControllerJSNames: UInt8 = 1
+private nonisolated(unsafe) var qwkuserContentControllerJSNames: UInt8 = 1
+@MainActor
 public extension WKUserContentController {
     var jsNames: [String] {
         set {

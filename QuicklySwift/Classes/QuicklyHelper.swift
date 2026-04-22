@@ -48,8 +48,8 @@ public enum QContentInsetADjustmentBehavior: Int {
 }
 
 class QuicklyObjectHelper: UIView {
-    open var cacheData: [String: Any] = [:]
-    open var deinitAction: (() -> Void)?
+    open nonisolated(unsafe) var cacheData: [String: Any] = [:]
+    open nonisolated(unsafe) var deinitAction: (() -> Void)?
     weak var target: NSObject?
     var handle: ((_ sender: NSObject?, _ key: String, _ value: [NSKeyValueChangeKey : Any]?) -> Void)?
     var key: String = ""

@@ -80,7 +80,7 @@ public extension UIViewController {
 }
 
 open class QViewControllerHelper: UIViewController {
-    open var didpop: (() -> Void)?
+    open nonisolated(unsafe) var didpop: (() -> Void)?
     open var willAppear: (() -> Void)?
     open var didAppear: (() -> Void)?
     open var willDisAppear: (() -> Void)?

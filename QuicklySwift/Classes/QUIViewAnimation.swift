@@ -39,6 +39,7 @@ public extension UIView {
     }
 }
 // MARK: - 位移、旋转、缩放相关的
+@MainActor
 public extension QuicklyProtocal where Self: UIView {
     /// 旋转一定角度
     /// - Parameters:

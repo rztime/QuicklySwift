@@ -7,11 +7,12 @@
 
 import UIKit
 
-private var ispushinganimate: Bool = false
+private nonisolated(unsafe) var ispushinganimate: Bool = false
 /// 整体框架
+@MainActor
 public struct qAppFrame {
     /// 当前显示的主navigationController
-    public static var navigationController: UINavigationController? {
+    public static nonisolated(unsafe) var navigationController: UINavigationController? {
         return UIViewController.qtopViewController()?.navigationController
     }
     /// 获取当前显示的vc栈里，所有的viewcontrollers

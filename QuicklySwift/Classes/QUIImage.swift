@@ -70,7 +70,7 @@ public extension UIImage {
     func qrotatedBy(degrees: CGFloat) -> UIImage? {
         let size = self.size
         let radians = degrees * .pi / 180
-        var rotatedSize = CGRect(origin: .zero, size: size)
+        let rotatedSize = CGRect(origin: .zero, size: size)
             .applying(CGAffineTransform(rotationAngle: radians))
             .integral.size
         let format = UIGraphicsImageRendererFormat()
@@ -244,7 +244,7 @@ struct QImageHelper {
     }
 }
 class QImageDownload {
-    static var share: QImageDownload = .init()
+    static nonisolated(unsafe) var share: QImageDownload = .init()
     var list: [QImageHelper] = []
     func dowm(helper: QImageHelper) {
         if let _ = self.list.first(where: {$0.url == helper.url}) {

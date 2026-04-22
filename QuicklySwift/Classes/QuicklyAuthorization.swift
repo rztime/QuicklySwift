@@ -90,6 +90,7 @@ public struct QAuthorizationResult {
     }
 }
 // MARK: - iOS 权限 判断 方法入口
+@MainActor
 public struct QuicklyAuthorization {
     ///内部使用单例，用于单独获取某一个权限时的方法
     static var shared = QuicklyAuthorizationHelper.init()
