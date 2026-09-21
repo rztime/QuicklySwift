@@ -202,12 +202,61 @@ public extension UITextField {
         self.qtextFieldHelper.shouldReturn = value
         return self
     }
+    /// 结束编辑（带 reason，iOS 10+）。系统若调用此回调，会替代无 reason 的 didEndEditing
+    @discardableResult
+    func qdidEndEditingWithReason(_ value: ((_ textField: UITextField, _ reason: UITextField.DidEndEditingReason) -> Void)?) -> Self {
+        self.qtextFieldHelper.didEndEditingWithReason = value
+        return self
+    }
+    /// 自定义选区编辑菜单（iOS 16+），返回 nil 使用系统默认菜单
+    @available(iOS 16.0, *)
+    @discardableResult
+    func qeditMenuForCharactersInRange(_ value: ((_ textField: UITextField, _ range: NSRange, _ suggestedActions: [UIMenuElement]) -> UIMenu?)?) -> Self {
+        if let value = value {
+            self.qtextFieldHelper.editMenuForCharactersInRange = { textField, range, suggestedActions in
+                let actions = (suggestedActions as? [UIMenuElement]) ?? []
+                return value(textField, range, actions)
+            }
+        } else {
+            self.qtextFieldHelper.editMenuForCharactersInRange = nil
+        }
+        return self
+    }
+    /// 编辑菜单即将显示（iOS 16+）
+    @available(iOS 16.0, *)
+    @discardableResult
+    func qwillPresentEditMenuWithAnimator(_ value: ((_ textField: UITextField, _ animator: any UIEditMenuInteractionAnimating) -> Void)?) -> Self {
+        if let value = value {
+            self.qtextFieldHelper.willPresentEditMenuWithAnimator = { textField, animator in
+                guard let animator = animator as? UIEditMenuInteractionAnimating else { return }
+                value(textField, animator)
+            }
+        } else {
+            self.qtextFieldHelper.willPresentEditMenuWithAnimator = nil
+        }
+        return self
+    }
+    /// 编辑菜单即将消失（iOS 16+）
+    @available(iOS 16.0, *)
+    @discardableResult
+    func qwillDismissEditMenuWithAnimator(_ value: ((_ textField: UITextField, _ animator: any UIEditMenuInteractionAnimating) -> Void)?) -> Self {
+        if let value = value {
+            self.qtextFieldHelper.willDismissEditMenuWithAnimator = { textField, animator in
+                guard let animator = animator as? UIEditMenuInteractionAnimating else { return }
+                value(textField, animator)
+            }
+        } else {
+            self.qtextFieldHelper.willDismissEditMenuWithAnimator = nil
+        }
+        return self
+    }
 }
 open class QTextFieldHelper: UIView {
     open var shouldBeginEditing: ((_ textField: UITextField) -> Bool)?
     open var didBeginEditing: ((_ textField: UITextField) -> Void)?
     open var shouldEndEditing: ((_ textField: UITextField) -> Bool)?
     open var didEndEditing: ((_ textField: UITextField) -> Void)?
+    open var didEndEditingWithReason: ((_ textField: UITextField, _ reason: UITextField.DidEndEditingReason) -> Void)?
     open var shouldChangeText: ((_ textField: UITextField, _ range: NSRange, _ replaceText: String) -> Bool)?
     
     open var didChangeSelection: ((_ textField: UITextField) -> Void)?
@@ -227,6 +276,12 @@ open class QTextFieldHelper: UIView {
     
     open var shouldClear: ((_ textField: UITextField) -> Bool)?
     open var shouldReturn: ((_ textField: UITextField) -> Bool)?
+    /// 返回 UIMenu?（iOS 16+），suggestedActions / 返回值用 Any 擦除以兼容更低部署版本
+    open var editMenuForCharactersInRange: ((_ textField: UITextField, _ range: NSRange, _ suggestedActions: [Any]) -> Any?)?
+    /// animator 为 iOS 16+ 类型，用 Any 擦除
+    open var willPresentEditMenuWithAnimator: ((_ textField: UITextField, _ animator: Any) -> Void)?
+    /// animator 为 iOS 16+ 类型，用 Any 擦除
+    open var willDismissEditMenuWithAnimator: ((_ textField: UITextField, _ animator: Any) -> Void)?
     open weak var target: UITextField?
     public init(target: UITextField) {
         super.init(frame: .zero)
@@ -272,6 +327,23 @@ open class QTextFieldHelper: UIView {
     }
 }
 extension QTextFieldHelper: UITextFieldDelegate {
+    open override func responds(to aSelector: Selector!) -> Bool {
+        if #available(iOS 16.0, *) {
+            if aSelector == #selector(textField(_:editMenuForCharactersIn:suggestedActions:)) {
+                return editMenuForCharactersInRange != nil
+            }
+            if aSelector == #selector(textField(_:willPresentEditMenuWith:)) {
+                return willPresentEditMenuWithAnimator != nil
+            }
+            if aSelector == #selector(textField(_:willDismissEditMenuWith:)) {
+                return willDismissEditMenuWithAnimator != nil
+            }
+        }
+        if aSelector == #selector(textFieldDidEndEditing(_:reason:)) {
+            return didEndEditingWithReason != nil
+        }
+        return super.responds(to: aSelector)
+    }
     public func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
         return shouldBeginEditing?(textField) ?? true
     }
@@ -282,6 +354,11 @@ extension QTextFieldHelper: UITextFieldDelegate {
         return shouldEndEditing?(textField) ?? true
     }
     public func textFieldDidEndEditing(_ textField: UITextField) {
+        didEndEditing?(textField)
+    }
+    /// 若实现本方法，系统会替代调用无 reason 的 textFieldDidEndEditing:
+    public func textFieldDidEndEditing(_ textField: UITextField, reason: UITextField.DidEndEditingReason) {
+        didEndEditingWithReason?(textField, reason)
         didEndEditing?(textField)
     }
     public func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
@@ -296,5 +373,17 @@ extension QTextFieldHelper: UITextFieldDelegate {
     }
     public func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         return shouldReturn?(textField) ?? true
+    }
+    @available(iOS 16.0, *)
+    public func textField(_ textField: UITextField, editMenuForCharactersIn range: NSRange, suggestedActions: [UIMenuElement]) -> UIMenu? {
+        return editMenuForCharactersInRange?(textField, range, suggestedActions) as? UIMenu
+    }
+    @available(iOS 16.0, *)
+    public func textField(_ textField: UITextField, willPresentEditMenuWith animator: any UIEditMenuInteractionAnimating) {
+        willPresentEditMenuWithAnimator?(textField, animator)
+    }
+    @available(iOS 16.0, *)
+    public func textField(_ textField: UITextField, willDismissEditMenuWith animator: any UIEditMenuInteractionAnimating) {
+        willDismissEditMenuWithAnimator?(textField, animator)
     }
 }
