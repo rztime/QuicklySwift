@@ -18,6 +18,17 @@ open class QCollectionViewHelper: QScrollViewHelper {
     open var moveAction: ((_ indexPath: IndexPath, _ toIndexPath: IndexPath) -> Void)?
     open var canEditItem: ((_ indexPath: IndexPath) -> Bool)?
     open var didSelectItem:((_ collectionView: UICollectionView, _ indexPath: IndexPath) -> Void)?
+    open var didDeselectItem:((_ collectionView: UICollectionView, _ indexPath: IndexPath) -> Void)?
+    open var shouldSelectItem: ((_ indexPath: IndexPath) -> Bool)?
+    open var shouldDeselectItem: ((_ indexPath: IndexPath) -> Bool)?
+    open var shouldHighlightItem: ((_ indexPath: IndexPath) -> Bool)?
+    open var didHighlightItem: ((_ indexPath: IndexPath) -> Void)?
+    open var didUnhighlightItem: ((_ indexPath: IndexPath) -> Void)?
+    open var targetIndexPathForMoveFromItem: ((_ fromIndexPath: IndexPath, _ toProposedIndexPath: IndexPath) -> IndexPath)?
+    /// 返回 UIContextMenuConfiguration?（iOS 13+），用 Any 擦除以兼容更低部署版本
+    open var contextMenuConfiguration: ((_ indexPath: IndexPath, _ point: CGPoint) -> Any?)?
+    /// configuration / animator 为 iOS 13+ 类型，用 Any 擦除
+    open var willPerformPreviewAction: ((_ configuration: Any, _ animator: Any) -> Void)?
     open var willDisplayCell: ((_ cell: UICollectionViewCell, _ indexPath: IndexPath) -> Void)?
     open var didEndDisplayCell: ((_ cell: UICollectionViewCell, _ indexPath: IndexPath) -> Void)?
     open var willDisplaySupplementaryView: ((_ view: UICollectionReusableView, _ kind: String, _ indexPath: IndexPath) -> Void)?
@@ -28,6 +39,18 @@ open class QCollectionViewHelper: QScrollViewHelper {
     open var minimumInteritemSpacing: ((_ layout: UICollectionViewLayout, _ section: Int) -> CGFloat)?
     open var referenceSizeForHeader: ((_ layout: UICollectionViewLayout, _ section: Int) -> CGSize)?
     open var referenceSizeForFooter: ((_ layout: UICollectionViewLayout, _ section: Int) -> CGSize)?
+    
+    open override func responds(to aSelector: Selector!) -> Bool {
+        if #available(iOS 13.0, *) {
+            if aSelector == #selector(collectionView(_:contextMenuConfigurationForItemAt:point:)) {
+                return contextMenuConfiguration != nil
+            }
+            if aSelector == #selector(collectionView(_:willPerformPreviewActionForMenuWith:animator:)) {
+                return willPerformPreviewAction != nil
+            }
+        }
+        return super.responds(to: aSelector)
+    }
 }
 extension QCollectionViewHelper: UICollectionViewDataSource {
     public func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -70,6 +93,24 @@ extension QCollectionViewHelper: UICollectionViewDelegate {
     public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         didSelectItem?(collectionView, indexPath)
     }
+    public func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
+        didDeselectItem?(collectionView, indexPath)
+    }
+    public func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
+        return shouldSelectItem?(indexPath) ?? true
+    }
+    public func collectionView(_ collectionView: UICollectionView, shouldDeselectItemAt indexPath: IndexPath) -> Bool {
+        return shouldDeselectItem?(indexPath) ?? true
+    }
+    public func collectionView(_ collectionView: UICollectionView, shouldHighlightItemAt indexPath: IndexPath) -> Bool {
+        return shouldHighlightItem?(indexPath) ?? true
+    }
+    public func collectionView(_ collectionView: UICollectionView, didHighlightItemAt indexPath: IndexPath) {
+        didHighlightItem?(indexPath)
+    }
+    public func collectionView(_ collectionView: UICollectionView, didUnhighlightItemAt indexPath: IndexPath) {
+        didUnhighlightItem?(indexPath)
+    }
     public func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         willDisplayCell?(cell, indexPath)
     }
@@ -84,6 +125,17 @@ extension QCollectionViewHelper: UICollectionViewDelegate {
     }
     public func collectionView(_ collectionView: UICollectionView, canEditItemAt indexPath: IndexPath) -> Bool {
         return canEditItem?(indexPath) ?? true
+    }
+    public func collectionView(_ collectionView: UICollectionView, targetIndexPathForMoveFromItemAt originalIndexPath: IndexPath, toProposedIndexPath proposedIndexPath: IndexPath) -> IndexPath {
+        return targetIndexPathForMoveFromItem?(originalIndexPath, proposedIndexPath) ?? proposedIndexPath
+    }
+    @available(iOS 13.0, *)
+    public func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
+        return contextMenuConfiguration?(indexPath, point) as? UIContextMenuConfiguration
+    }
+    @available(iOS 13.0, *)
+    public func collectionView(_ collectionView: UICollectionView, willPerformPreviewActionForMenuWith configuration: UIContextMenuConfiguration, animator: UIContextMenuInteractionCommitAnimating) {
+        willPerformPreviewAction?(configuration, animator)
     }
 }
 extension QCollectionViewHelper: UICollectionViewDelegateFlowLayout {

@@ -286,3 +286,139 @@ public extension UITableView {
         return self
     }
 }
+
+// MARK: - DataSource / Delegate 补全
+public extension UITableView {
+    /// section index title 对应的 section
+    @discardableResult
+    func qsectionForSectionIndexTitle(_ section: ((_ title: String, _ index: Int) -> Int)?) -> Self {
+        self.qtableViewHelper.sectionForSectionIndexTitle = section
+        return self
+    }
+    /// 将要选中cell
+    @discardableResult
+    func qwillSelectRow(_ row: ((_ tableView: UITableView, _ indexPath: IndexPath) -> IndexPath?)?) -> Self {
+        self.qtableViewHelper.willSelectRow = row
+        return self
+    }
+    /// 将要取消选中cell
+    @discardableResult
+    func qwillDeselectRow(_ row: ((_ tableView: UITableView, _ indexPath: IndexPath) -> IndexPath?)?) -> Self {
+        self.qtableViewHelper.willDeselectRow = row
+        return self
+    }
+    /// 是否可以高亮
+    @discardableResult
+    func qshouldHighlightRow(_ should: ((_ indexPath: IndexPath) -> Bool)?) -> Self {
+        self.qtableViewHelper.shouldHighlightRow = should
+        return self
+    }
+    /// 已高亮
+    @discardableResult
+    func qdidHighlightRow(_ highlight: ((_ indexPath: IndexPath) -> Void)?) -> Self {
+        self.qtableViewHelper.didHighlightRow = highlight
+        return self
+    }
+    /// 取消高亮
+    @discardableResult
+    func qdidUnhighlightRow(_ unhighlight: ((_ indexPath: IndexPath) -> Void)?) -> Self {
+        self.qtableViewHelper.didUnhighlightRow = unhighlight
+        return self
+    }
+    /// 点击 accessory button
+    @discardableResult
+    func qaccessoryButtonTapped(_ tapped: ((_ indexPath: IndexPath) -> Void)?) -> Self {
+        self.qtableViewHelper.accessoryButtonTapped = tapped
+        return self
+    }
+    /// 缩进等级
+    @discardableResult
+    func qindentationLevelForRow(_ level: ((_ indexPath: IndexPath) -> Int)?) -> Self {
+        self.qtableViewHelper.indentationLevelForRow = level
+        return self
+    }
+    /// 编辑时是否缩进
+    @discardableResult
+    func qshouldIndentWhileEditing(_ should: ((_ indexPath: IndexPath) -> Bool)?) -> Self {
+        self.qtableViewHelper.shouldIndentWhileEditing = should
+        return self
+    }
+    /// 将要开始编辑
+    @discardableResult
+    func qwillBeginEditingRow(_ begin: ((_ indexPath: IndexPath) -> Void)?) -> Self {
+        self.qtableViewHelper.willBeginEditingRow = begin
+        return self
+    }
+    /// 结束编辑
+    @discardableResult
+    func qdidEndEditingRow(_ end: ((_ indexPath: IndexPath?) -> Void)?) -> Self {
+        self.qtableViewHelper.didEndEditingRow = end
+        return self
+    }
+    /// 移动时目标 indexPath
+    @discardableResult
+    func qtargetIndexPathForMove(_ target: ((_ fromIndexPath: IndexPath, _ toProposedIndexPath: IndexPath) -> IndexPath)?) -> Self {
+        self.qtableViewHelper.targetIndexPathForMove = target
+        return self
+    }
+    /// 删除确认按钮文案
+    @discardableResult
+    func qtitleForDeleteConfirmationButton(_ title: ((_ indexPath: IndexPath) -> String?)?) -> Self {
+        self.qtableViewHelper.titleForDeleteConfirmationButton = title
+        return self
+    }
+    /// 左侧滑动 actions（iOS 11+）
+    @available(iOS 11.0, *)
+    @discardableResult
+    func qleadingSwipeActions(_ actions: ((_ indexPath: IndexPath) -> UISwipeActionsConfiguration?)?) -> Self {
+        if let actions = actions {
+            self.qtableViewHelper.leadingSwipeActions = { indexPath in
+                return actions(indexPath)
+            }
+        } else {
+            self.qtableViewHelper.leadingSwipeActions = nil
+        }
+        return self
+    }
+    /// 右侧滑动 actions（iOS 11+）
+    @available(iOS 11.0, *)
+    @discardableResult
+    func qtrailingSwipeActions(_ actions: ((_ indexPath: IndexPath) -> UISwipeActionsConfiguration?)?) -> Self {
+        if let actions = actions {
+            self.qtableViewHelper.trailingSwipeActions = { indexPath in
+                return actions(indexPath)
+            }
+        } else {
+            self.qtableViewHelper.trailingSwipeActions = nil
+        }
+        return self
+    }
+    /// 上下文菜单（iOS 13+）
+    @available(iOS 13.0, *)
+    @discardableResult
+    func qcontextMenuConfiguration(_ configuration: ((_ indexPath: IndexPath, _ point: CGPoint) -> UIContextMenuConfiguration?)?) -> Self {
+        if let configuration = configuration {
+            self.qtableViewHelper.contextMenuConfiguration = { indexPath, point in
+                return configuration(indexPath, point)
+            }
+        } else {
+            self.qtableViewHelper.contextMenuConfiguration = nil
+        }
+        return self
+    }
+    /// 上下文菜单 preview action（iOS 13+）
+    @available(iOS 13.0, *)
+    @discardableResult
+    func qwillPerformPreviewAction(_ action: ((_ configuration: UIContextMenuConfiguration, _ animator: UIContextMenuInteractionCommitAnimating) -> Void)?) -> Self {
+        if let action = action {
+            self.qtableViewHelper.willPerformPreviewAction = { configuration, animator in
+                guard let configuration = configuration as? UIContextMenuConfiguration,
+                      let animator = animator as? UIContextMenuInteractionCommitAnimating else { return }
+                action(configuration, animator)
+            }
+        } else {
+            self.qtableViewHelper.willPerformPreviewAction = nil
+        }
+        return self
+    }
+}

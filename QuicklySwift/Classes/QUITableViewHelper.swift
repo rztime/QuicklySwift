@@ -43,13 +43,55 @@ open class QTableViewHelper: QScrollViewHelper {
     open var moveAction: ((_ indexPath: IndexPath, _ toIndexPath: IndexPath) -> Void)?
     
     open var sectionIndexTitles: (() -> [String]?)?
+    open var sectionForSectionIndexTitle: ((_ title: String, _ index: Int) -> Int)?
 
     open var editingStyleForRow: ((_ indexPath: IndexPath) -> UITableViewCell.EditingStyle)?
     open var commitEditingStyle: ((_ style: UITableViewCell.EditingStyle, _ indexPath: IndexPath) -> Void)?
     
+    open var willSelectRow: ((_ tableView: UITableView, _ indexPath: IndexPath) -> IndexPath?)?
+    open var willDeselectRow: ((_ tableView: UITableView, _ indexPath: IndexPath) -> IndexPath?)?
+    open var shouldHighlightRow: ((_ indexPath: IndexPath) -> Bool)?
+    open var didHighlightRow: ((_ indexPath: IndexPath) -> Void)?
+    open var didUnhighlightRow: ((_ indexPath: IndexPath) -> Void)?
+    open var accessoryButtonTapped: ((_ indexPath: IndexPath) -> Void)?
+    open var indentationLevelForRow: ((_ indexPath: IndexPath) -> Int)?
+    open var shouldIndentWhileEditing: ((_ indexPath: IndexPath) -> Bool)?
+    open var willBeginEditingRow: ((_ indexPath: IndexPath) -> Void)?
+    open var didEndEditingRow: ((_ indexPath: IndexPath?) -> Void)?
+    open var targetIndexPathForMove: ((_ fromIndexPath: IndexPath, _ toProposedIndexPath: IndexPath) -> IndexPath)?
+    open var titleForDeleteConfirmationButton: ((_ indexPath: IndexPath) -> String?)?
+    /// 返回 UISwipeActionsConfiguration?（iOS 11+），用 Any 擦除以兼容更低部署版本
+    open var leadingSwipeActions: ((_ indexPath: IndexPath) -> Any?)?
+    /// 返回 UISwipeActionsConfiguration?（iOS 11+），用 Any 擦除以兼容更低部署版本
+    open var trailingSwipeActions: ((_ indexPath: IndexPath) -> Any?)?
+    /// 返回 UIContextMenuConfiguration?（iOS 13+），用 Any 擦除以兼容更低部署版本
+    open var contextMenuConfiguration: ((_ indexPath: IndexPath, _ point: CGPoint) -> Any?)?
+    /// configuration / animator 为 iOS 13+ 类型，用 Any 擦除
+    open var willPerformPreviewAction: ((_ configuration: Any, _ animator: Any) -> Void)?
+    
     open var cellEstimatedHeights: [String: CGFloat] = [:]
     open var headEstimatedHeights: [String: CGFloat] = [:]
     open var footEstimatedHeights: [String: CGFloat] = [:]
+    
+    open override func responds(to aSelector: Selector!) -> Bool {
+        if #available(iOS 11.0, *) {
+            if aSelector == #selector(tableView(_:leadingSwipeActionsConfigurationForRowAt:)) {
+                return leadingSwipeActions != nil
+            }
+            if aSelector == #selector(tableView(_:trailingSwipeActionsConfigurationForRowAt:)) {
+                return trailingSwipeActions != nil
+            }
+        }
+        if #available(iOS 13.0, *) {
+            if aSelector == #selector(tableView(_:contextMenuConfigurationForRowAt:point:)) {
+                return contextMenuConfiguration != nil
+            }
+            if aSelector == #selector(tableView(_:willPerformPreviewActionForMenuWith:animator:)) {
+                return willPerformPreviewAction != nil
+            }
+        }
+        return super.responds(to: aSelector)
+    }
 }
 
 extension QTableViewHelper: UITableViewDataSource {
@@ -76,6 +118,9 @@ extension QTableViewHelper: UITableViewDataSource {
     }
     public func sectionIndexTitles(for tableView: UITableView) -> [String]? {
         return sectionIndexTitles?()
+    }
+    public func tableView(_ tableView: UITableView, sectionForSectionIndexTitle title: String, at index: Int) -> Int {
+        return sectionForSectionIndexTitle?(title, index) ?? index
     }
     public func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         commitEditingStyle?(editingStyle, indexPath)
@@ -165,5 +210,63 @@ extension QTableViewHelper: UITableViewDelegate {
     }
     public func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
         return editingStyleForRow?(indexPath) ?? .none
+    }
+    public func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
+        if let willSelectRow = willSelectRow {
+            return willSelectRow(tableView, indexPath)
+        }
+        return indexPath
+    }
+    public func tableView(_ tableView: UITableView, willDeselectRowAt indexPath: IndexPath) -> IndexPath? {
+        if let willDeselectRow = willDeselectRow {
+            return willDeselectRow(tableView, indexPath)
+        }
+        return indexPath
+    }
+    public func tableView(_ tableView: UITableView, shouldHighlightRowAt indexPath: IndexPath) -> Bool {
+        return shouldHighlightRow?(indexPath) ?? true
+    }
+    public func tableView(_ tableView: UITableView, didHighlightRowAt indexPath: IndexPath) {
+        didHighlightRow?(indexPath)
+    }
+    public func tableView(_ tableView: UITableView, didUnhighlightRowAt indexPath: IndexPath) {
+        didUnhighlightRow?(indexPath)
+    }
+    public func tableView(_ tableView: UITableView, accessoryButtonTappedForRowWith indexPath: IndexPath) {
+        accessoryButtonTapped?(indexPath)
+    }
+    public func tableView(_ tableView: UITableView, indentationLevelForRowAt indexPath: IndexPath) -> Int {
+        return indentationLevelForRow?(indexPath) ?? 0
+    }
+    public func tableView(_ tableView: UITableView, shouldIndentWhileEditingRowAt indexPath: IndexPath) -> Bool {
+        return shouldIndentWhileEditing?(indexPath) ?? true
+    }
+    public func tableView(_ tableView: UITableView, willBeginEditingRowAt indexPath: IndexPath) {
+        willBeginEditingRow?(indexPath)
+    }
+    public func tableView(_ tableView: UITableView, didEndEditingRowAt indexPath: IndexPath?) {
+        didEndEditingRow?(indexPath)
+    }
+    public func tableView(_ tableView: UITableView, targetIndexPathForMoveFromRowAt sourceIndexPath: IndexPath, toProposedIndexPath proposedDestinationIndexPath: IndexPath) -> IndexPath {
+        return targetIndexPathForMove?(sourceIndexPath, proposedDestinationIndexPath) ?? proposedDestinationIndexPath
+    }
+    public func tableView(_ tableView: UITableView, titleForDeleteConfirmationButtonForRowAt indexPath: IndexPath) -> String? {
+        return titleForDeleteConfirmationButton?(indexPath)
+    }
+    @available(iOS 11.0, *)
+    public func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        return leadingSwipeActions?(indexPath) as? UISwipeActionsConfiguration
+    }
+    @available(iOS 11.0, *)
+    public func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        return trailingSwipeActions?(indexPath) as? UISwipeActionsConfiguration
+    }
+    @available(iOS 13.0, *)
+    public func tableView(_ tableView: UITableView, contextMenuConfigurationForRowAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
+        return contextMenuConfiguration?(indexPath, point) as? UIContextMenuConfiguration
+    }
+    @available(iOS 13.0, *)
+    public func tableView(_ tableView: UITableView, willPerformPreviewActionForMenuWith configuration: UIContextMenuConfiguration, animator: UIContextMenuInteractionCommitAnimating) {
+        willPerformPreviewAction?(configuration, animator)
     }
 }

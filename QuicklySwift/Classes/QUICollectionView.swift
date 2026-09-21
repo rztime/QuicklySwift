@@ -235,6 +235,80 @@ public extension UICollectionView {
     }
 }
 
+// MARK: - DataSource / Delegate 补全
+public extension UICollectionView {
+    /// 取消选中item
+    @discardableResult
+    func qdidDeselectItem(_ item: ((_ collectionView: UICollectionView, _ indexPath: IndexPath) -> Void)?) -> Self {
+        self.qcollectionViewHelper.didDeselectItem = item
+        return self
+    }
+    /// 是否可以选中
+    @discardableResult
+    func qshouldSelectItem(_ should: ((_ indexPath: IndexPath) -> Bool)?) -> Self {
+        self.qcollectionViewHelper.shouldSelectItem = should
+        return self
+    }
+    /// 是否可以取消选中
+    @discardableResult
+    func qshouldDeselectItem(_ should: ((_ indexPath: IndexPath) -> Bool)?) -> Self {
+        self.qcollectionViewHelper.shouldDeselectItem = should
+        return self
+    }
+    /// 是否可以高亮
+    @discardableResult
+    func qshouldHighlightItem(_ should: ((_ indexPath: IndexPath) -> Bool)?) -> Self {
+        self.qcollectionViewHelper.shouldHighlightItem = should
+        return self
+    }
+    /// 已高亮
+    @discardableResult
+    func qdidHighlightItem(_ highlight: ((_ indexPath: IndexPath) -> Void)?) -> Self {
+        self.qcollectionViewHelper.didHighlightItem = highlight
+        return self
+    }
+    /// 取消高亮
+    @discardableResult
+    func qdidUnhighlightItem(_ unhighlight: ((_ indexPath: IndexPath) -> Void)?) -> Self {
+        self.qcollectionViewHelper.didUnhighlightItem = unhighlight
+        return self
+    }
+    /// 移动时目标 indexPath
+    @discardableResult
+    func qtargetIndexPathForMoveFromItem(_ target: ((_ fromIndexPath: IndexPath, _ toProposedIndexPath: IndexPath) -> IndexPath)?) -> Self {
+        self.qcollectionViewHelper.targetIndexPathForMoveFromItem = target
+        return self
+    }
+    /// 上下文菜单（iOS 13+）
+    @available(iOS 13.0, *)
+    @discardableResult
+    func qcontextMenuConfiguration(_ configuration: ((_ indexPath: IndexPath, _ point: CGPoint) -> UIContextMenuConfiguration?)?) -> Self {
+        if let configuration = configuration {
+            self.qcollectionViewHelper.contextMenuConfiguration = { indexPath, point in
+                return configuration(indexPath, point)
+            }
+        } else {
+            self.qcollectionViewHelper.contextMenuConfiguration = nil
+        }
+        return self
+    }
+    /// 上下文菜单 preview action（iOS 13+）
+    @available(iOS 13.0, *)
+    @discardableResult
+    func qwillPerformPreviewAction(_ action: ((_ configuration: UIContextMenuConfiguration, _ animator: UIContextMenuInteractionCommitAnimating) -> Void)?) -> Self {
+        if let action = action {
+            self.qcollectionViewHelper.willPerformPreviewAction = { configuration, animator in
+                guard let configuration = configuration as? UIContextMenuConfiguration,
+                      let animator = animator as? UIContextMenuInteractionCommitAnimating else { return }
+                action(configuration, animator)
+            }
+        } else {
+            self.qcollectionViewHelper.willPerformPreviewAction = nil
+        }
+        return self
+    }
+}
+
 public extension UICollectionView {
     class QAutoRollCycle {
         public var timeInterval: TimeInterval = 0
