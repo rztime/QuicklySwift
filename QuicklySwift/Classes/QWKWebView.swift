@@ -153,6 +153,22 @@ public extension WKWebView {
         self.qdelegateHelper.decidePolicyForNavigationActionDecisionHandler = handle
         return self
     }
+    /// 发送请求前决定是否跳转，并可修改网页偏好（iOS 13+）。设置后优先于此方法，无 preferences 版本不会再被系统调用
+    @discardableResult
+    @available(iOS 13.0, *)
+    func qdecidePolicyForNavigationActionPreferencesDecisionHandler(_ handle: ((_ webView: WKWebView, _ navAction: WKNavigationAction, _ preferences: WKWebpagePreferences, _ completionHandler: @escaping ((WKNavigationActionPolicy, WKWebpagePreferences) -> Void)) -> Void)?) -> Self {
+        if let handle = handle {
+            self.qdelegateHelper.decidePolicyForNavigationActionPreferencesDecisionHandler = { webView, navAction, preferences, complete in
+                let prefs = (preferences as? WKWebpagePreferences) ?? WKWebpagePreferences()
+                handle(webView, navAction, prefs, { policy, newPrefs in
+                    complete(policy, newPrefs)
+                })
+            }
+        } else {
+            self.qdelegateHelper.decidePolicyForNavigationActionPreferencesDecisionHandler = nil
+        }
+        return self
+    }
     /// 接到响应后，决定是否跳转
     @discardableResult
     func qdecidePolicyForNavigationResponseDecisionHandler(_ handle: ((_ webView: WKWebView, _ navResponse: WKNavigationResponse, _ completionHandler: @escaping ((WKNavigationResponsePolicy) -> Void)) -> Void)?) -> Self {
@@ -335,6 +351,21 @@ public extension WKWebView {
         }
         return self
     }
+    /// 显示锁定模式首次使用提示（iOS 16+）；未设置时走系统默认提示
+    @discardableResult
+    @available(iOS 16.0, *)
+    func qshowLockdownModeFirstUseMessageCompletionHandler(_ r: ((_ webView: WKWebView, _ message: String, _ completionHandler: @escaping ((WKDialogResult) -> Void)) -> Void)?) -> Self {
+        if let r = r {
+            self.qdelegateHelper.showLockdownModeFirstUseMessageCompletionHandler = { webView, message, complete in
+                r(webView, message, { result in
+                    complete(result)
+                })
+            }
+        } else {
+            self.qdelegateHelper.showLockdownModeFirstUseMessageCompletionHandler = nil
+        }
+        return self
+    }
     /// 即将显示编辑菜单时调用，允许通过animator自定义菜单的呈现动画或行为
     @discardableResult
     @available(iOS 16.4, *)
@@ -354,6 +385,23 @@ public extension WKWebView {
             self.qdelegateHelper.willDismissEditMenuWithAnimator = w
         } else {
             self.qdelegateHelper.willDismissEditMenuWithAnimator = nil
+        }
+        return self
+    }
+    /// 文件选择面板（iOS 18.4+）。仅在设置回调时 responds，未设置时保留系统默认文件选择行为
+    @discardableResult
+    @available(iOS 18.4, *)
+    func qrunOpenPanelWithParametersInitiatedByFrameCompletionHandler(_ r: ((_ webView: WKWebView, _ parameters: WKOpenPanelParameters, _ frame: WKFrameInfo, _ completionHandler: @escaping (([URL]?) -> Void)) -> Void)?) -> Self {
+        if let r = r {
+            self.qdelegateHelper.runOpenPanelWithParametersInitiatedByFrameCompletionHandler = { webView, parameters, frame, complete in
+                guard let parameters = parameters as? WKOpenPanelParameters else {
+                    complete(nil)
+                    return
+                }
+                r(webView, parameters, frame, complete)
+            }
+        } else {
+            self.qdelegateHelper.runOpenPanelWithParametersInitiatedByFrameCompletionHandler = nil
         }
         return self
     }

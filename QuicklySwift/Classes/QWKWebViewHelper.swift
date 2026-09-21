@@ -29,6 +29,8 @@ public extension WKWebView {
 open class QWKWebViewHelper: NSObject {
     /// WKNavigationDelegate
     open var decidePolicyForNavigationActionDecisionHandler: ((_ webView: WKWebView, _ navAction: WKNavigationAction, _ complete: @escaping ((WKNavigationActionPolicy) -> Void)) -> Void)?
+    /// preferences 为 iOS 13+ `WKWebpagePreferences`，用 Any 擦除；设置后会优先于无 preferences 版本
+    open var decidePolicyForNavigationActionPreferencesDecisionHandler: ((_ webView: WKWebView, _ navAction: WKNavigationAction, _ preferences: Any, _ complete: @escaping ((WKNavigationActionPolicy, Any) -> Void)) -> Void)?
     open var decidePolicyForNavigationResponseDecisionHandler: ((_ webView: WKWebView, _ navResponse: WKNavigationResponse, _ complete: @escaping ((WKNavigationResponsePolicy) -> Void)) -> Void)?
     open var didStartProvisionalNavigation: ((_ webView: WKWebView, _ nav: WKNavigation) -> Void)?
     open var didReceiveServerRedirectForProvisionalNavigation: ((_ webView: WKWebView, _ nav: WKNavigation) -> Void)?
@@ -54,8 +56,12 @@ open class QWKWebViewHelper: NSObject {
     open var contextMenuWillPresentForElement: ((_ webView: WKWebView, _ info: Any) -> Void)?
     open var contextMenuForElementWillCommitWithAnimator: ((_ webView: WKWebView, _ info: Any, _ animator: Any) -> Void)?
     open var contextMenuDidEndForElement: ((_ webView: WKWebView, _ info: Any) -> Void)?
+    /// result 为 iOS 16+ `WKDialogResult`，用 Any 擦除
+    open var showLockdownModeFirstUseMessageCompletionHandler: ((_ webView: WKWebView, _ message: String, _ complete: @escaping ((Any) -> Void)) -> Void)?
     open var willPresentEditMenuWithAnimator: ((_ webView: WKWebView, _ animator: Any) -> Void)?
     open var willDismissEditMenuWithAnimator: ((_ webView: WKWebView, _ animator: Any) -> Void)?
+    /// parameters 为 iOS 18.4+ `WKOpenPanelParameters`，用 Any 擦除；仅在设置回调时 responds，避免覆盖系统默认文件选择
+    open var runOpenPanelWithParametersInitiatedByFrameCompletionHandler: ((_ webView: WKWebView, _ parameters: Any, _ frame: WKFrameInfo, _ complete: @escaping (([URL]?) -> Void)) -> Void)?
     
     // JS 桥
     open var userContentControllerDidReceiveMessage: ((_ controller: WKUserContentController, _ message: WKScriptMessage) -> Void)?
@@ -76,6 +82,20 @@ open class QWKWebViewHelper: NSObject {
             self?.jsContent = []
         }
     }
+    
+    open override func responds(to aSelector: Selector!) -> Bool {
+        if #available(iOS 13.0, *) {
+            if aSelector == #selector(webView(_:decidePolicyFor:preferences:decisionHandler:)) {
+                return decidePolicyForNavigationActionPreferencesDecisionHandler != nil
+            }
+        }
+        if #available(iOS 18.4, *) {
+            if aSelector == #selector(webView(_:runOpenPanelWith:initiatedByFrame:completionHandler:)) {
+                return runOpenPanelWithParametersInitiatedByFrameCompletionHandler != nil
+            }
+        }
+        return super.responds(to: aSelector)
+    }
 }
 // MARK: WKNavigationDelegate
 extension QWKWebViewHelper: WKNavigationDelegate {
@@ -86,6 +106,16 @@ extension QWKWebViewHelper: WKNavigationDelegate {
             })
         } else{
             decisionHandler(.allow)
+        }
+    }
+    @available(iOS 13.0, *)
+    public func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, preferences: WKWebpagePreferences, decisionHandler: @escaping @MainActor (WKNavigationActionPolicy, WKWebpagePreferences) -> Void) {
+        if let d = self.decidePolicyForNavigationActionPreferencesDecisionHandler {
+            d(webView, navigationAction, preferences, { policy, prefs in
+                decisionHandler(policy, (prefs as? WKWebpagePreferences) ?? preferences)
+            })
+        } else {
+            decisionHandler(.allow, preferences)
         }
     }
     public func webView(_ webView: WKWebView, decidePolicyFor navigationResponse: WKNavigationResponse, decisionHandler: @escaping @MainActor (WKNavigationResponsePolicy) -> Void) {
@@ -258,6 +288,21 @@ extension QWKWebViewHelper: WKUIDelegate {
         self.contextMenuDidEndForElement?(webView, elementInfo)
     }
     
+    @available(iOS 16.0, *)
+    public func webView(_ webView: WKWebView, showLockdownModeFirstUseMessage message: String, completionHandler: @escaping @MainActor (WKDialogResult) -> Void) {
+        if let r = self.showLockdownModeFirstUseMessageCompletionHandler {
+            r(webView, message, { result in
+                if let result = result as? WKDialogResult {
+                    completionHandler(result)
+                } else {
+                    completionHandler(.showDefault)
+                }
+            })
+        } else {
+            completionHandler(.showDefault)
+        }
+    }
+    
     @available(iOS 16.4, *)
     public func webView(_ webView: WKWebView, willPresentEditMenuWithAnimator animator: any UIEditMenuInteractionAnimating) {
         self.willPresentEditMenuWithAnimator?(webView, animator)
@@ -265,6 +310,17 @@ extension QWKWebViewHelper: WKUIDelegate {
     @available(iOS 16.4, *)
     public func webView(_ webView: WKWebView, willDismissEditMenuWithAnimator animator: any UIEditMenuInteractionAnimating) {
         self.willDismissEditMenuWithAnimator?(webView, animator)
+    }
+    
+    @available(iOS 18.4, *)
+    public func webView(_ webView: WKWebView, runOpenPanelWith parameters: WKOpenPanelParameters, initiatedByFrame frame: WKFrameInfo, completionHandler: @escaping @MainActor ([URL]?) -> Void) {
+        if let r = self.runOpenPanelWithParametersInitiatedByFrameCompletionHandler {
+            r(webView, parameters, frame, { urls in
+                completionHandler(urls)
+            })
+        } else {
+            completionHandler(nil)
+        }
     }
 }
 // MARK: 桥
