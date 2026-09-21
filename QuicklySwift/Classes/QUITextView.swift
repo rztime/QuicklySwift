@@ -158,6 +158,231 @@ public extension UITextView {
         self.qtextViewHelper.shouldInteractWithAttachment = should
         return self
     }
+    /// 多段选区同时替换时是否允许（iOS 26+）。设置后系统不再回调 qshouldChangeText
+    @discardableResult
+    @available(iOS 26.0, *)
+    func qshouldChangeTextInRanges(
+        _ changed: ((_ textView: UITextView, _ ranges: [NSValue], _ replaceText: String) -> Bool)?
+    ) -> Self {
+        self.qtextViewHelper.shouldChangeTextInRanges = changed
+        return self
+    }
+    /// 自定义编辑菜单（iOS 16+）。返回 nil 使用系统菜单
+    @discardableResult
+    @available(iOS 16.0, *)
+    func qeditMenuForText(
+        _ menu: ((_ textView: UITextView, _ range: NSRange, _ suggestedActions: [UIMenuElement]) -> UIMenu?)?
+    ) -> Self {
+        if let menu = menu {
+            self.qtextViewHelper.editMenuForText = { textView, range, actions in
+                let suggested = actions.compactMap { $0 as? UIMenuElement }
+                return menu(textView, range, suggested)
+            }
+        } else {
+            self.qtextViewHelper.editMenuForText = nil
+        }
+        return self
+    }
+    /// 多段选区的编辑菜单（iOS 26+）。设置后系统不再回调 qeditMenuForText
+    @discardableResult
+    @available(iOS 26.0, *)
+    func qeditMenuForTextInRanges(
+        _ menu: ((_ textView: UITextView, _ ranges: [NSValue], _ suggestedActions: [UIMenuElement]) -> UIMenu?)?
+    ) -> Self {
+        if let menu = menu {
+            self.qtextViewHelper.editMenuForTextInRanges = { textView, ranges, actions in
+                let suggested = actions.compactMap { $0 as? UIMenuElement }
+                return menu(textView, ranges, suggested)
+            }
+        } else {
+            self.qtextViewHelper.editMenuForTextInRanges = nil
+        }
+        return self
+    }
+    /// 编辑菜单即将出现（iOS 16+）
+    @discardableResult
+    @available(iOS 16.0, *)
+    func qwillPresentEditMenu(
+        _ present: ((_ textView: UITextView, _ animator: any UIEditMenuInteractionAnimating) -> Void)?
+    ) -> Self {
+        if let present = present {
+            self.qtextViewHelper.willPresentEditMenu = { textView, animator in
+                guard let animator = animator as? any UIEditMenuInteractionAnimating else { return }
+                present(textView, animator)
+            }
+        } else {
+            self.qtextViewHelper.willPresentEditMenu = nil
+        }
+        return self
+    }
+    /// 编辑菜单即将消失（iOS 16+）
+    @discardableResult
+    @available(iOS 16.0, *)
+    func qwillDismissEditMenu(
+        _ dismiss: ((_ textView: UITextView, _ animator: any UIEditMenuInteractionAnimating) -> Void)?
+    ) -> Self {
+        if let dismiss = dismiss {
+            self.qtextViewHelper.willDismissEditMenu = { textView, animator in
+                guard let animator = animator as? any UIEditMenuInteractionAnimating else { return }
+                dismiss(textView, animator)
+            }
+        } else {
+            self.qtextViewHelper.willDismissEditMenu = nil
+        }
+        return self
+    }
+    /// 点击链接、附件或自定义 tag 的主动作（iOS 17+）。返回 nil 不执行。
+    /// 未设置时不拦截，已有 shouldInteractWithURL / qshouldInteractWithAttachment 仍生效
+    @discardableResult
+    @available(iOS 17.0, *)
+    func qprimaryActionForTextItem(
+        _ action: ((_ textView: UITextView, _ textItem: UITextItem, _ defaultAction: UIAction) -> UIAction?)?
+    ) -> Self {
+        if let action = action {
+            self.qtextViewHelper.primaryActionForTextItem = { textView, textItem, defaultAction in
+                guard let textItem = textItem as? UITextItem, let defaultAction = defaultAction as? UIAction else {
+                    return defaultAction
+                }
+                return action(textView, textItem, defaultAction)
+            }
+        } else {
+            self.qtextViewHelper.primaryActionForTextItem = nil
+        }
+        return self
+    }
+    /// 文本项菜单配置（iOS 17+）。返回 nil 不展示菜单。未设置时走系统默认
+    @discardableResult
+    @available(iOS 17.0, *)
+    func qmenuConfigurationForTextItem(
+        _ config: (
+            (_ textView: UITextView, _ textItem: UITextItem, _ defaultMenu: UIMenu) -> UITextItem.MenuConfiguration?
+        )?
+    ) -> Self {
+        if let config = config {
+            self.qtextViewHelper.menuConfigurationForTextItem = { textView, textItem, defaultMenu in
+                guard let textItem = textItem as? UITextItem, let defaultMenu = defaultMenu as? UIMenu else {
+                    return defaultMenu
+                }
+                return config(textView, textItem, defaultMenu)
+            }
+        } else {
+            self.qtextViewHelper.menuConfigurationForTextItem = nil
+        }
+        return self
+    }
+    /// 文本项菜单即将显示（iOS 17+）
+    @discardableResult
+    @available(iOS 17.0, *)
+    func qtextItemMenuWillDisplay(
+        _ display: (
+            (_ textView: UITextView, _ textItem: UITextItem, _ animator: any UIContextMenuInteractionAnimating) -> Void
+        )?
+    ) -> Self {
+        if let display = display {
+            self.qtextViewHelper.textItemMenuWillDisplay = { textView, textItem, animator in
+                guard let textItem = textItem as? UITextItem,
+                      let animator = animator as? any UIContextMenuInteractionAnimating else { return }
+                display(textView, textItem, animator)
+            }
+        } else {
+            self.qtextViewHelper.textItemMenuWillDisplay = nil
+        }
+        return self
+    }
+    /// 文本项菜单即将结束（iOS 17+）
+    @discardableResult
+    @available(iOS 17.0, *)
+    func qtextItemMenuWillEnd(
+        _ end: (
+            (_ textView: UITextView, _ textItem: UITextItem, _ animator: any UIContextMenuInteractionAnimating) -> Void
+        )?
+    ) -> Self {
+        if let end = end {
+            self.qtextViewHelper.textItemMenuWillEnd = { textView, textItem, animator in
+                guard let textItem = textItem as? UITextItem,
+                      let animator = animator as? any UIContextMenuInteractionAnimating else { return }
+                end(textView, textItem, animator)
+            }
+        } else {
+            self.qtextViewHelper.textItemMenuWillEnd = nil
+        }
+        return self
+    }
+    /// Writing Tools 开始改写（iOS 18+）
+    @discardableResult
+    @available(iOS 18.0, *)
+    func qwritingToolsWillBegin(_ begin: ((_ textView: UITextView) -> Void)?) -> Self {
+        self.qtextViewHelper.writingToolsWillBegin = begin
+        return self
+    }
+    /// Writing Tools 结束改写（iOS 18+）
+    @discardableResult
+    @available(iOS 18.0, *)
+    func qwritingToolsDidEnd(_ end: ((_ textView: UITextView) -> Void)?) -> Self {
+        self.qtextViewHelper.writingToolsDidEnd = end
+        return self
+    }
+    /// Writing Tools 需要忽略的文本范围（iOS 18+）。未设置时不拦截系统默认
+    @discardableResult
+    @available(iOS 18.0, *)
+    func qwritingToolsIgnoredRanges(
+        _ ranges: ((_ textView: UITextView, _ enclosingRange: NSRange) -> [NSValue])?
+    ) -> Self {
+        self.qtextViewHelper.writingToolsIgnoredRanges = ranges
+        return self
+    }
+    /// 文本格式面板即将出现（iOS 18+）
+    @discardableResult
+    @available(iOS 18.0, *)
+    func qwillBeginFormatting(
+        _ begin: ((_ textView: UITextView, _ viewController: UITextFormattingViewController) -> Void)?
+    ) -> Self {
+        self.qtextViewHelper.willBeginFormatting = Self.qformattingHandler(begin)
+        return self
+    }
+    /// 文本格式面板已出现（iOS 18+）
+    @discardableResult
+    @available(iOS 18.0, *)
+    func qdidBeginFormatting(
+        _ begin: ((_ textView: UITextView, _ viewController: UITextFormattingViewController) -> Void)?
+    ) -> Self {
+        self.qtextViewHelper.didBeginFormatting = Self.qformattingHandler(begin)
+        return self
+    }
+    /// 文本格式面板即将关闭（iOS 18+）
+    @discardableResult
+    @available(iOS 18.0, *)
+    func qwillEndFormatting(
+        _ end: ((_ textView: UITextView, _ viewController: UITextFormattingViewController) -> Void)?
+    ) -> Self {
+        self.qtextViewHelper.willEndFormatting = Self.qformattingHandler(end)
+        return self
+    }
+    /// 文本格式面板已关闭（iOS 18+）
+    @discardableResult
+    @available(iOS 18.0, *)
+    func qdidEndFormatting(
+        _ end: ((_ textView: UITextView, _ viewController: UITextFormattingViewController) -> Void)?
+    ) -> Self {
+        self.qtextViewHelper.didEndFormatting = Self.qformattingHandler(end)
+        return self
+    }
+    /// 键盘交付输入建议时回调（iOS 18.4+）。未设置时不拦截系统插入
+    @discardableResult
+    @available(iOS 18.4, *)
+    func qinsertInputSuggestion(
+        _ insert: ((_ textView: UITextView, _ inputSuggestion: UIInputSuggestion) -> Void)?
+    ) -> Self {
+        if let insert = insert {
+            self.qtextViewHelper.insertInputSuggestion = { textView, inputSuggestion in
+                guard let inputSuggestion = inputSuggestion as? UIInputSuggestion else { return }
+                insert(textView, inputSuggestion)
+            }
+        } else {
+            self.qtextViewHelper.insertInputSuggestion = nil
+        }
+        return self
+    }
     /// 获取range所在区域第一排的位置
     func qfistRect(for range: NSRange) -> CGRect {
         let beginning = self.beginningOfDocument
@@ -181,6 +406,17 @@ public extension UITextView {
         let res = self.selectionRects(for: textRange)
         return res.map { $0.rect }
     }
+    /// 把 iOS 18 格式面板回调收成 Any，供 QTextViewHelper 存储
+    @available(iOS 18.0, *)
+    private static func qformattingHandler(
+        _ handler: ((_ textView: UITextView, _ viewController: UITextFormattingViewController) -> Void)?
+    ) -> ((_ textView: UITextView, _ viewController: Any) -> Void)? {
+        guard let handler = handler else { return nil }
+        return { textView, viewController in
+            guard let viewController = viewController as? UITextFormattingViewController else { return }
+            handler(textView, viewController)
+        }
+    }
 }
  
 open class QTextViewHelper: QScrollViewHelper {
@@ -194,6 +430,26 @@ open class QTextViewHelper: QScrollViewHelper {
     
     open var shouldInteractWithAttachment: ((_ textView: UITextView, _ textAttachment: NSTextAttachment, _ range: NSRange, _ interaction: Int) -> Bool)?
     open var shouldInteractWithURL: ((_ textView: UITextView, _ url: URL, _ range: NSRange, _ interaction: Int) -> Bool)?
+    /// 新系统类型用 Any 擦除，避免 iOS 12 部署目标无法存放 @available 存储属性
+    open var shouldChangeTextInRanges: ((_ textView: UITextView, _ ranges: [NSValue], _ replaceText: String) -> Bool)?
+    open var editMenuForText: ((_ textView: UITextView, _ range: NSRange, _ suggestedActions: [Any]) -> Any?)?
+    open var editMenuForTextInRanges: (
+        (_ textView: UITextView, _ ranges: [NSValue], _ suggestedActions: [Any]) -> Any?
+    )?
+    open var willPresentEditMenu: ((_ textView: UITextView, _ animator: Any) -> Void)?
+    open var willDismissEditMenu: ((_ textView: UITextView, _ animator: Any) -> Void)?
+    open var primaryActionForTextItem: ((_ textView: UITextView, _ textItem: Any, _ defaultAction: Any) -> Any?)?
+    open var menuConfigurationForTextItem: ((_ textView: UITextView, _ textItem: Any, _ defaultMenu: Any) -> Any?)?
+    open var textItemMenuWillDisplay: ((_ textView: UITextView, _ textItem: Any, _ animator: Any) -> Void)?
+    open var textItemMenuWillEnd: ((_ textView: UITextView, _ textItem: Any, _ animator: Any) -> Void)?
+    open var writingToolsWillBegin: ((_ textView: UITextView) -> Void)?
+    open var writingToolsDidEnd: ((_ textView: UITextView) -> Void)?
+    open var writingToolsIgnoredRanges: ((_ textView: UITextView, _ enclosingRange: NSRange) -> [NSValue])?
+    open var willBeginFormatting: ((_ textView: UITextView, _ viewController: Any) -> Void)?
+    open var didBeginFormatting: ((_ textView: UITextView, _ viewController: Any) -> Void)?
+    open var willEndFormatting: ((_ textView: UITextView, _ viewController: Any) -> Void)?
+    open var didEndFormatting: ((_ textView: UITextView, _ viewController: Any) -> Void)?
+    open var insertInputSuggestion: ((_ textView: UITextView, _ inputSuggestion: Any) -> Void)?
     
     /*
     // MARK: - maxCount  maxLength 的区别，
@@ -221,6 +477,36 @@ open class QTextViewHelper: QScrollViewHelper {
             setUpPlaceHolderLabel()
             self.placeHolderLabel?.attributedText = attributedPlaceholder
         }
+    }
+    /// 会改变默认行为的可选方法，仅在设置回调时响应，避免盖掉旧回调或系统默认
+    open override func responds(to aSelector: Selector!) -> Bool {
+        if #available(iOS 26.0, *) {
+            if aSelector == #selector(textView(_:shouldChangeTextInRanges:replacementText:)) {
+                return shouldChangeTextInRanges != nil
+            }
+            if aSelector == #selector(textView(_:editMenuForTextInRanges:suggestedActions:)) {
+                return editMenuForTextInRanges != nil
+            }
+        }
+        if #available(iOS 17.0, *) {
+            if aSelector == #selector(textView(_:primaryActionFor:defaultAction:)) {
+                return primaryActionForTextItem != nil
+            }
+            if aSelector == #selector(textView(_:menuConfigurationFor:defaultMenu:)) {
+                return menuConfigurationForTextItem != nil
+            }
+        }
+        if #available(iOS 18.0, *) {
+            if aSelector == #selector(textView(_:writingToolsIgnoredRangesInEnclosingRange:)) {
+                return writingToolsIgnoredRanges != nil
+            }
+        }
+        if #available(iOS 18.4, *) {
+            if aSelector == #selector(textView(_:insertInputSuggestion:)) {
+                return insertInputSuggestion != nil
+            }
+        }
+        return super.responds(to: aSelector)
     }
 }
 
@@ -292,6 +578,129 @@ extension QTextViewHelper: UITextViewDelegate {
     @available(iOS, introduced: 7.0, deprecated: 10.0)
     public func textView(_ textView: UITextView, shouldInteractWith textAttachment: NSTextAttachment, in characterRange: NSRange) -> Bool {
         return shouldInteractWithAttachment?(textView, textAttachment, characterRange, 0) ?? true
+    }
+    @available(iOS 26.0, *)
+    public func textView(
+        _ textView: UITextView,
+        shouldChangeTextInRanges ranges: [NSValue],
+        replacementText text: String
+    ) -> Bool {
+        return shouldChangeTextInRanges?(textView, ranges, text) ?? true
+    }
+    @available(iOS 16.0, *)
+    public func textView(
+        _ textView: UITextView,
+        editMenuForTextIn range: NSRange,
+        suggestedActions: [UIMenuElement]
+    ) -> UIMenu? {
+        guard let editMenuForText = editMenuForText else { return nil }
+        return editMenuForText(textView, range, suggestedActions) as? UIMenu
+    }
+    @available(iOS 26.0, *)
+    public func textView(
+        _ textView: UITextView,
+        editMenuForTextInRanges ranges: [NSValue],
+        suggestedActions: [UIMenuElement]
+    ) -> UIMenu? {
+        guard let editMenuForTextInRanges = editMenuForTextInRanges else { return nil }
+        return editMenuForTextInRanges(textView, ranges, suggestedActions) as? UIMenu
+    }
+    @available(iOS 16.0, *)
+    public func textView(
+        _ textView: UITextView,
+        willPresentEditMenuWith animator: any UIEditMenuInteractionAnimating
+    ) {
+        willPresentEditMenu?(textView, animator)
+    }
+    @available(iOS 16.0, *)
+    public func textView(
+        _ textView: UITextView,
+        willDismissEditMenuWith animator: any UIEditMenuInteractionAnimating
+    ) {
+        willDismissEditMenu?(textView, animator)
+    }
+    @available(iOS 17.0, *)
+    public func textView(
+        _ textView: UITextView,
+        primaryActionFor textItem: UITextItem,
+        defaultAction: UIAction
+    ) -> UIAction? {
+        guard let primaryActionForTextItem = primaryActionForTextItem else { return defaultAction }
+        return primaryActionForTextItem(textView, textItem, defaultAction) as? UIAction
+    }
+    @available(iOS 17.0, *)
+    public func textView(
+        _ textView: UITextView,
+        menuConfigurationFor textItem: UITextItem,
+        defaultMenu: UIMenu
+    ) -> UITextItem.MenuConfiguration? {
+        guard let menuConfigurationForTextItem = menuConfigurationForTextItem else {
+            return UITextItem.MenuConfiguration(menu: defaultMenu)
+        }
+        return menuConfigurationForTextItem(textView, textItem, defaultMenu) as? UITextItem.MenuConfiguration
+    }
+    @available(iOS 17.0, *)
+    public func textView(
+        _ textView: UITextView,
+        textItemMenuWillDisplayFor textItem: UITextItem,
+        animator: any UIContextMenuInteractionAnimating
+    ) {
+        textItemMenuWillDisplay?(textView, textItem, animator)
+    }
+    @available(iOS 17.0, *)
+    public func textView(
+        _ textView: UITextView,
+        textItemMenuWillEndFor textItem: UITextItem,
+        animator: any UIContextMenuInteractionAnimating
+    ) {
+        textItemMenuWillEnd?(textView, textItem, animator)
+    }
+    @available(iOS 18.0, *)
+    public func textViewWritingToolsWillBegin(_ textView: UITextView) {
+        writingToolsWillBegin?(textView)
+    }
+    @available(iOS 18.0, *)
+    public func textViewWritingToolsDidEnd(_ textView: UITextView) {
+        writingToolsDidEnd?(textView)
+    }
+    @available(iOS 18.0, *)
+    public func textView(
+        _ textView: UITextView,
+        writingToolsIgnoredRangesInEnclosingRange enclosingRange: NSRange
+    ) -> [NSValue] {
+        return writingToolsIgnoredRanges?(textView, enclosingRange) ?? []
+    }
+    @available(iOS 18.0, *)
+    public func textView(
+        _ textView: UITextView,
+        willBeginFormattingWith viewController: UITextFormattingViewController
+    ) {
+        willBeginFormatting?(textView, viewController)
+    }
+    @available(iOS 18.0, *)
+    public func textView(
+        _ textView: UITextView,
+        didBeginFormattingWith viewController: UITextFormattingViewController
+    ) {
+        didBeginFormatting?(textView, viewController)
+    }
+    @available(iOS 18.0, *)
+    public func textView(
+        _ textView: UITextView,
+        willEndFormattingWith viewController: UITextFormattingViewController
+    ) {
+        willEndFormatting?(textView, viewController)
+    }
+    @available(iOS 18.0, *)
+    public func textView(
+        _ textView: UITextView,
+        didEndFormattingWith viewController: UITextFormattingViewController
+    ) {
+        didEndFormatting?(textView, viewController)
+    }
+    @available(iOS 18.4, *)
+    public func textView(_ textView: UITextView, insertInputSuggestion inputSuggestion: UIInputSuggestion) {
+        insertInputSuggestion?(textView, inputSuggestion)
     }
 }
 public extension QTextViewHelper {
