@@ -47,6 +47,7 @@ QuicklySwift is available under the MIT license. See the LICENSE file for more i
 
 | 相关 | 说明 |
 |:----|:----|
+|v1.2.0|补全了UITableView、UICollectionView、webview、textView、textFiled、UISearchBar，以及|
 |v1.1.0|对UIImage、PHAsset等的方法扩展和优化，添加了swift package manager|
 |v1.0.0|新增时间选择，弹窗自主关闭，WKWebView的q方法|
 |v0.9.0|优化（颜色hexString的错误获取、TabController超出5个时，获取顶层vc），tableView新增预估高度的缓存避免刷新时跳动，以及其他优化|

@@ -31,6 +31,10 @@
 	<string>music 音乐</string>
 	<key>NSCalendarsUsageDescription</key>
 	<string>日历</string>
+	<key>NSRemindersFullAccessUsageDescription</key>
+	<string>111</string>
+	<key>NSRemindersUsageDescription</key>
+	<string>222</string>
 	<key>NSCameraUsageDescription</key>
 	<string>相机</string>
 	<key>NSContactsUsageDescription</key>

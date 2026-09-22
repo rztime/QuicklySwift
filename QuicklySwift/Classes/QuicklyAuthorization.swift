@@ -16,7 +16,7 @@ import CoreLocation
 import Contacts
 #endif
 
-#if Q_NSCalendarsUsageDescription
+#if Q_NSCalendarsUsageDescription || Q_NSRemindersUsageDescription || Q_Q_NSRemindersFullAccessUsageDescription
 import EventKit
 #endif
 
@@ -60,6 +60,7 @@ public enum QAuthorizationType: String {
     case events = "NSCalendarsUsageDescription"
     /// 提醒事项
     case reminder = "NSRemindersUsageDescription"
+    case reminderFull = "NSRemindersFullAccessUsageDescription"
     /// apple Music
     case appleMusic = "NSAppleMusicUsageDescription"
     /// 语言识别
@@ -136,7 +137,7 @@ public struct QuicklyAuthorization {
             break
         case .events:
             self.shared.requestEvents(type: .events, result: res)
-        case .reminder:
+        case .reminder, .reminderFull:
             self.shared.requestEvents(type: .reminder, result: res)
         case .appleMusic:
             self.shared.requestAppleMusic(result: res)
@@ -351,12 +352,12 @@ class QuicklyAuthorizationHelper {
 #endif
     /// 日历
     func requestEvents(type: QAuthorizationType, result: ((_ result: QAuthorizationResult) -> Void)?) {
-#if Q_NSCalendarsUsageDescription
+#if Q_NSCalendarsUsageDescription || Q_NSRemindersUsageDescription || Q_NSRemindersFullAccessUsageDescription
         let t : EKEntityType
         switch type {
         case .events:
             t = .event
-        case .reminder:
+        case .reminder, .reminderFull:
             t = .reminder
         default:
             t = .event
@@ -364,8 +365,23 @@ class QuicklyAuthorizationHelper {
         let status = EKEventStore.authorizationStatus(for: t)
         switch status {
         case .notDetermined:
-            EKEventStore().requestAccess(to: t) { [weak self] _, _ in
-                self?.requestEvents(type: type, result: result)
+            if #available(iOS 17.0, *) {
+                switch t {
+                case .event:
+                    EKEventStore().requestFullAccessToEvents { [weak self] granted, error in
+                        self?.requestEvents(type: type, result: result)
+                    }
+                case .reminder:
+                    EKEventStore().requestFullAccessToReminders { [weak self] granted, error in
+                        self?.requestEvents(type: type, result: result)
+                    }
+                @unknown default:
+                    break
+                }
+            } else {
+                EKEventStore().requestAccess(to: t) { [weak self] _, _ in
+                    self?.requestEvents(type: type, result: result)
+                }
             }
         case .restricted, .denied:
             let res = QAuthorizationResult.init(granted: false, limit: false, status: status)

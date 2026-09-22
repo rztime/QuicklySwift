@@ -18,7 +18,7 @@ class AssetViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        QuicklyAuthorization.result(with: .photoLibrary) { result in
+        QuicklyAuthorization.result(with: .reminderFull) { result in
             
         }
         self.view.backgroundColor = .white

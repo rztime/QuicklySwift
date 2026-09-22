@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'QuicklySwift'
-  s.version          = '1.1.0'
+  s.version          = '1.2.0'
   s.summary          = 'swift 常用方法扩展，便捷使用 qq交流群：580839749'
   
   s.description      = <<-DESC
@@ -30,7 +30,7 @@ Pod::Spec.new do |s|
       :name => 'pod compile before',
       :script => <<-'SH',
         ROOT_PATH=$(dirname "$SRCROOT")
-        auth_list=("NSCameraUsageDescription" "NSPhotoLibraryUsageDescription" "NSMicrophoneUsageDescription" "NSContactsUsageDescription" "NSLocationWhenInUseUsageDescription" "NSLocationAlwaysUsageDescription" "NSLocationAlwaysAndWhenInUseUsageDescription" "NSCalendarsUsageDescription" "NSRemindersUsageDescription" "NSAppleMusicUsageDescription" "NSSpeechRecognitionUsageDescription" "NSMotionUsageDescription" "NSSiriUsageDescription" "NSUserTrackingUsageDescription")
+        auth_list=("NSCameraUsageDescription" "NSPhotoLibraryUsageDescription" "NSMicrophoneUsageDescription" "NSContactsUsageDescription" "NSLocationWhenInUseUsageDescription" "NSLocationAlwaysUsageDescription" "NSLocationAlwaysAndWhenInUseUsageDescription" "NSCalendarsUsageDescription" "NSRemindersUsageDescription" "NSRemindersFullAccessUsageDescription" "NSAppleMusicUsageDescription" "NSSpeechRecognitionUsageDescription" "NSMotionUsageDescription" "NSSiriUsageDescription" "NSUserTrackingUsageDescription")
         # 收集所有相关的 Info.plist
         # 排除 Pods, .git, Tests 目录
         ALL_PLISTS=$(find "$ROOT_PATH" -name "Info.plist" -not -path "*/Pods/*" -not -path "*/.git/*" -not -path "*/Tests/*" -not -path "*.framework/*" -not -path "*.bundle/*")
