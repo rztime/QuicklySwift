@@ -22,6 +22,7 @@
 		B22C27472872892400B34EEF /* TransitionThreeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B22C27462872892400B34EEF /* TransitionThreeViewController.swift */; };
 		B2387EF62DA3695500567855 /* AssetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2387EF52DA3695500567855 /* AssetViewController.swift */; };
 		B23C355B2D013B37008C6CD3 /* QAlertTestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B23C355A2D013B37008C6CD3 /* QAlertTestViewController.swift */; };
+		B24618143062160100E728C1 /* SearchBarTestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24618133062160100E728C1 /* SearchBarTestViewController.swift */; };
 		B26C6A7F2850519E009512EC /* QuicklyDemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B26C6A7E2850519E009512EC /* QuicklyDemoViewController.swift */; };
 		B26C6A81285073CC009512EC /* TableViewDemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B26C6A80285073CC009512EC /* TableViewDemoViewController.swift */; };
 		B26FAB9A2C898B97000894E1 /* DatePickerTestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B26FAB992C898B97000894E1 /* DatePickerTestViewController.swift */; };
@@ -82,6 +83,7 @@
 		B22C27462872892400B34EEF /* TransitionThreeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransitionThreeViewController.swift; sourceTree = "<group>"; };
 		B2387EF52DA3695500567855 /* AssetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetViewController.swift; sourceTree = "<group>"; };
 		B23C355A2D013B37008C6CD3 /* QAlertTestViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QAlertTestViewController.swift; sourceTree = "<group>"; };
+		B24618133062160100E728C1 /* SearchBarTestViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBarTestViewController.swift; sourceTree = "<group>"; };
 		B26C6A7E2850519E009512EC /* QuicklyDemoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuicklyDemoViewController.swift; sourceTree = "<group>"; };
 		B26C6A80285073CC009512EC /* TableViewDemoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewDemoViewController.swift; sourceTree = "<group>"; };
 		B26FAB992C898B97000894E1 /* DatePickerTestViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatePickerTestViewController.swift; sourceTree = "<group>"; };
@@ -263,6 +265,7 @@
 				B23C355A2D013B37008C6CD3 /* QAlertTestViewController.swift */,
 				B293EC4D2D7E8183003EACAC /* WebViewController.swift */,
 				B2387EF52DA3695500567855 /* AssetViewController.swift */,
+				B24618133062160100E728C1 /* SearchBarTestViewController.swift */,
 			);
 			path = Demo;
 			sourceTree = "<group>";
@@ -503,6 +506,7 @@
 				B2D5CB3D2852DA5A00C6C6EF /* CollectionViewDemoViewController.swift in Sources */,
 				B26FAB9A2C898B97000894E1 /* DatePickerTestViewController.swift in Sources */,
 				B22C27472872892400B34EEF /* TransitionThreeViewController.swift in Sources */,
+				B24618143062160100E728C1 /* SearchBarTestViewController.swift in Sources */,
 				B22C27412872848900B34EEF /* TransitionOneViewController.swift in Sources */,
 				B27EEAE22857266B00C55EA5 /* QuickLayoutViewController.swift in Sources */,
 				B2921D60285C070E00CBC001 /* FriendDemoViewController.swift in Sources */,

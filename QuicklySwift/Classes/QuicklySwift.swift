@@ -40,6 +40,24 @@ public extension UITextField {
     }
 }
 
+private nonisolated(unsafe) var qsearchbarhelperkey: UInt8 = 1
+@MainActor
+public extension UISearchBar {
+    var qsearchBarHelper: QSearchBarHelper {
+        set {
+            objc_setAssociatedObject(self, &qsearchbarhelperkey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+        }
+        get {
+            if let v = objc_getAssociatedObject(self, &qsearchbarhelperkey) as? QSearchBarHelper {
+                return v
+            }
+            let v = QSearchBarHelper.init(target: self)
+            self.qsearchBarHelper = v
+            return v
+        }
+    }
+}
+
 private nonisolated(unsafe) var qscrollviewhelperkey : UInt8 = 1
 @MainActor
 public extension UIScrollView {

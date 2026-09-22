@@ -33,7 +33,8 @@ class IndexViewController: UIViewController {
         ("弹窗", QAlertTestViewController.self),
         ("webview", WebViewController.self),
         ("PHAsset", AssetViewController.self),
-        ("嵌套webview", TableWebViewController.self)
+        ("嵌套webview", TableWebViewController.self),
+        ("UISearchBar", SearchBarTestViewController.self)
     ]
     override func viewDidLoad() {
         super.viewDidLoad()

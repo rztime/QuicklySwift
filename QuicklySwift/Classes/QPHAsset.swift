@@ -46,7 +46,7 @@ public extension PHAsset {
             let isIcloud = self.qisIcloud
             DispatchQueue.main.async(execute: { [weak self] in
                 guard let self = self else { return }
-                p.accept(isIcloud)
+                self.qisIcloudPublish.accept(isIcloud)
             })
         }
         return p
